@@ -1,5 +1,6 @@
 import pygame.font
 
+
 class Button:
     """A class to create a button to start the game."""
 
