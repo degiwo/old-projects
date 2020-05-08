@@ -1,0 +1,18 @@
+# All available hooks: https://pre-commit.com/hooks.html
+# R specific hooks: https://github.com/lorenzwalthert/precommit
+repos:
+-   repo: https://github.com/lorenzwalthert/precommit
+    rev: v0.0.0.9048
+    hooks:
+    -   id: roxygenize
+    -   id: readme-rmd-rendered
+    -   id: parsable-R
+    -   id: no-browser-statement
+-   repo: local
+    hooks:
+    -   id: forbid-to-commit
+        name: Don't commit common R artifacts
+        entry: Cannot commit .Rhistory, .RData, .Rds or .rds.
+        language: fail
+        files: '\.Rhistory|\.RData|\.Rds|\.rds$'
+        # `exclude: <regex>` to allow committing specific files.
