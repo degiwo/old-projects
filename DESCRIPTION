@@ -14,7 +14,8 @@ Imports:
     config,
     golem,
     processx,
-    shiny
+    shiny,
+    shinydashboard
 Suggests: 
     covr,
     testthat
