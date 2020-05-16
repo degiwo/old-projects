@@ -10,8 +10,11 @@ ui_header <- function() {
 #'
 #' @importFrom shinydashboard dashboardSidebar
 #' @noRd
-ui_sidebar <- function() {
-  dashboardSidebar()
+ui_sidebar <- function(footer) {
+  dashboardSidebar(
+    # get_golem_version does not work during local build -> try
+    try({print_version_in_footer()})
+  )
 }
 
 #' Application UI body
