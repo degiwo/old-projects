@@ -1,0 +1,23 @@
+Package: owcontrolling
+Title: Shiny Controlling Application
+Version: 0.0.1
+Authors@R: 
+    person(given = "Detlef",
+           family = "Wong",
+           role = c("cre", "aut"),
+           email = "d.wong93@hotmail.de")
+Description: A Shiny web application for Controlling.
+License: MIT + file LICENSE
+URL: https://github.com/degiwo/owcontrolling.git
+BugReports: https://github.com/degiwo/owcontrolling.git/issues
+Imports: 
+    config,
+    golem,
+    processx,
+    shiny
+Suggests: 
+    covr,
+    testthat
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.1.0

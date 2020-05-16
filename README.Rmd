@@ -1,0 +1,42 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# owcontrolling
+
+<!-- badges: start -->
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+[![Travis build status](https://travis-ci.org/degiwo/owcontrolling.svg?branch=master)](https://travis-ci.org/degiwo/owcontrolling)
+[![Codecov test coverage](https://codecov.io/gh/degiwo/owcontrolling/branch/master/graph/badge.svg)](https://codecov.io/gh/degiwo/owcontrolling?branch=master)
+<!-- badges: end -->
+
+The goal of owcontrolling is to provide a Shiny application for Controlling.
+
+## Installation
+
+You cannot install the development version from [GitHub](https://github.com/) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("degiwo/owcontrolling", INSTALL_opts = c("--no-multiarch"))
+```
+## Run application
+
+You can run the application with:
+
+``` r
+# library("owcontrolling")
+owcontrolling::run_app()
+```
+
