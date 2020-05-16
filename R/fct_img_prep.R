@@ -1,5 +1,6 @@
 #' Parse a png file into a matrix with numbers
 #'
+#' @param img path to image
 #' @return a matrix
 #'
 #' @noRd

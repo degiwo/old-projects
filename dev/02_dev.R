@@ -23,7 +23,7 @@ golem::add_module( name = "file_upload" ) # Name of the module
 
 ## Add helper functions ----
 ## Creates ftc_* and utils_*
-golem::add_fct( "img_prep" )
+golem::add_fct( "prediction" )
 golem::add_utils( "helpers" )
 
 ## External resources
@@ -38,7 +38,7 @@ usethis::use_data_raw( name = "my_dataset", open = FALSE )
 
 ## Tests ----
 ## Add one line by test you want to create
-usethis::use_test( "img_prep" )
+usethis::use_test( "prediction" )
 
 # Documentation
 
