@@ -8,22 +8,37 @@ ui_header <- function() {
 
 #' Application UI sidebar
 #'
-#' @importFrom shinydashboard dashboardSidebar
+#' @importFrom shiny icon
+#' @importFrom shinydashboard dashboardSidebar sidebarMenu menuItem
 #' @noRd
 ui_sidebar <- function(footer) {
   dashboardSidebar(
+    sidebarMenu(
+      menuItem("Projektansicht",
+        tabName = "projectview_ui_1",
+        icon = icon("chart-line")
+      )
+    ),
+
     # get_golem_version does not work during local build -> try
-    try({print_version_in_footer()})
+    try({
+      print_version_in_footer()
+    })
   )
 }
 
 #' Application UI body
 #'
 #' @import shiny
-#' @importFrom shinydashboard dashboardBody
+#' @importFrom shinydashboard dashboardBody tabItems tabItem
 #' @noRd
 ui_body <- function() {
   dashboardBody(
-    p("Dummy text")
+    tabItems(
+      tabItem(
+        tabName = "projectview_ui_1",
+        mod_projectview_ui("projectview_ui_1")
+      )
+    )
   )
 }

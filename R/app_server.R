@@ -6,4 +6,5 @@
 #' @noRd
 app_server <- function(input, output, session) {
   # List the first level callModules here
+  callModule(mod_projectview_server, "projectview_ui_1")
 }
