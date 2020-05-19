@@ -39,7 +39,7 @@ usethis::use_data_raw( name = "timesheet_raw", open = FALSE )
 
 ## Tests ----
 ## Add one line by test you want to create
-usethis::use_test( "fct_ui" )
+usethis::use_test( "mod_projectview" )
 
 # Documentation
 

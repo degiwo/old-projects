@@ -17,6 +17,7 @@ Imports:
     golem,
     processx,
     shiny,
+    shinyWidgets,
     shinydashboard
 Suggests: 
     covr,

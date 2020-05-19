@@ -15,5 +15,10 @@ timesheet_raw <- data.frame(
   startdate = sample(startdates, size = n, replace = TRUE),
   duration = round(runif(n, min = 0.12, max = 8), 2)
 )
+timesheet_raw$workpackage <- paste0(
+  timesheet_raw$costcenter,
+  "_",
+  timesheet_raw$workpackage
+)
 
 usethis::use_data(timesheet_raw, overwrite = TRUE)
