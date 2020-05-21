@@ -24,7 +24,7 @@ golem::add_module( name = "name_of_module2" ) # Name of the module
 
 ## Add helper functions ----
 ## Creates ftc_* and utils_*
-golem::add_fct( "projectview" )
+golem::add_fct( "projectview_ui" )
 golem::add_utils( "ui" )
 
 ## External resources

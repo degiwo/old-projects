@@ -19,20 +19,8 @@ mod_projectview_ui <- function(id) {
 
     # UI body
     box(
-      # dropdown for costcenter
-      pickerInput(ns("sel_costcenter"),
-        label = "Projekt",
-        choices = NULL,
-        options = list(`live-search` = TRUE)
-      ),
-
-      # dropdown for workpackage
-      pickerInput(ns("sel_workpackage"),
-        label = "Arbeitspaket",
-        choices = NULL,
-        multiple = TRUE,
-        options = list(`actions-box` = TRUE, `live-search` = TRUE)
-      ),
+      create_costcenter_dropdown(ns),
+      create_workpackage_dropdown(ns),
 
       # box properties
       title = "Projektauswahl", width = 6, collapsible = TRUE
@@ -46,20 +34,6 @@ mod_projectview_ui <- function(id) {
 #' @import shinyWidgets
 #' @noRd
 mod_projectview_server <- function(input, output, session, data) {
-  observe({
-    choices <- unique(data()$costcenter)
-    updatePickerInput(session,
-      "sel_costcenter",
-      choices = sort(choices)
-    )
-  })
-
-  observe({
-    new_choices <- data()$workpackage[data()$costcenter == input$sel_costcenter]
-    updatePickerInput(session,
-      "sel_workpackage",
-      choices = sort(unique(new_choices)),
-      selected = unique(new_choices)
-    )
-  })
+  update_costcenter_dropdown(session, data)
+  update_workpackage_dropdown(input, session, data)
 }
