@@ -24,7 +24,7 @@ golem::add_module( name = "name_of_module2" ) # Name of the module
 
 ## Add helper functions ----
 ## Creates ftc_* and utils_*
-golem::add_fct( "projectview_ui" )
+golem::add_fct( "app_server" )
 golem::add_utils( "ui" )
 
 ## External resources
@@ -39,7 +39,7 @@ usethis::use_data_raw( name = "timesheet_raw", open = FALSE )
 
 ## Tests ----
 ## Add one line by test you want to create
-usethis::use_test( "mod_projectview" )
+usethis::use_test( "fct_projectview_server" )
 
 # Documentation
 

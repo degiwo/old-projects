@@ -7,8 +7,7 @@
 app_server <- function(input, output, session) {
   # load data in reactive functions to call it later in the modules/functions
   df_timesheet_raw <- reactive({
-    df <- timesheet_raw
-    df$workpackage[is.na(df$workpackage)] <- "OHNE AP"
+    df <- set_name_for_workpackages(timesheet_raw)
     
     return(df)
   })
