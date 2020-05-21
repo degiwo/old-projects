@@ -20,5 +20,6 @@ timesheet_raw$workpackage <- paste0(
   "_",
   timesheet_raw$workpackage
 )
+timesheet_raw$workpackage[1] <- NA
 
 usethis::use_data(timesheet_raw, overwrite = TRUE)
