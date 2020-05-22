@@ -1,9 +1,9 @@
 #' Automatically update the costcenter dropdown
 #'
 #' @noRd
-update_costcenter_dropdown <- function(session, data_timesheet) {
+update_costcenter_dropdown <- function(session, rct_timesheet) {
   observe({
-    choices <- unique(data_timesheet()$costcenter)
+    choices <- unique(rct_timesheet()$costcenter)
 
     updatePickerInput(session,
       "sel_costcenter",
@@ -15,9 +15,9 @@ update_costcenter_dropdown <- function(session, data_timesheet) {
 #' Automatically update the workpackage dropdown
 #'
 #' @noRd
-update_workpackage_dropdown <- function(input, session, data_timesheet) {
+update_workpackage_dropdown <- function(input, session, rct_timesheet) {
   observe({
-    new_choices <- data_timesheet()$workpackage[data_timesheet()$costcenter ==
+    new_choices <- rct_timesheet()$workpackage[rct_timesheet()$costcenter ==
       input$sel_costcenter]
 
     updatePickerInput(session,
@@ -26,4 +26,16 @@ update_workpackage_dropdown <- function(input, session, data_timesheet) {
       selected = unique(new_choices)
     )
   })
+}
+
+#' Summarize the duration by workpackage
+#'
+#' @import dplyr
+#' @noRd
+get_summarised_duration <- function(data_timesheet) {
+  df <- data_timesheet %>%
+    group_by(workpackage) %>%
+    summarise(sum_duration = sum(duration))
+  
+  return(df)
 }

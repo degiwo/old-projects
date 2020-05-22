@@ -5,9 +5,9 @@
 #' @import shiny
 #' @noRd
 app_server <- function(input, output, session) {
-  # load data in reactive functions to call it later in the modules/functions
-  df_timesheet_raw <- reactive({
-    df <- set_name_for_workpackages(timesheet_raw)
+  # load data in reactive function to call it later in the modules/functions
+  rct_timesheet <- reactive({
+    df <- set_name_for_workpackages(testdata_timesheet)
     
     return(df)
   })
@@ -15,6 +15,6 @@ app_server <- function(input, output, session) {
   # List the first level callModules here
   callModule(mod_projectview_server,
     "projectview_ui_1",
-    data = df_timesheet_raw
+    rct_timesheet = rct_timesheet
   )
 }

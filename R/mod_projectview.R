@@ -31,7 +31,7 @@ mod_projectview_ui <- function(id) {
     fluidRow(
       box(
         DT::DTOutput(ns("table_projectinformation")),
-        
+
         # box properties
         title = "Projektinformationen", width = 12, collapsible = TRUE
       )
@@ -42,17 +42,16 @@ mod_projectview_ui <- function(id) {
 #' projectview Server Function
 #'
 #' @import shiny
-#' @import shinyWidgets dplyr
+#' @import shinyWidgets
 #' @noRd
-mod_projectview_server <- function(input, output, session, data) {
-  update_costcenter_dropdown(session, data)
-  update_workpackage_dropdown(input, session, data)
+mod_projectview_server <- function(input, output, session, rct_timesheet) {
+  update_costcenter_dropdown(session, rct_timesheet)
+  update_workpackage_dropdown(input, session, rct_timesheet)
 
   output$table_projectinformation <- DT::renderDT({
-    data() %>%
-      group_by(workpackage) %>%
-      summarise(sum_duration = sum(duration)) %>%
-      select(Arbeitspaket = workpackage,
-             `kumul. Stunden` = sum_duration)
+    tbl <- get_summarised_duration(rct_timesheet())
+    names(tbl) <- c("Arbeitspaket", "kumul. Stunden")
+    
+    return(tbl)
   })
 }

@@ -15,3 +15,19 @@ test_that("entries without workpackage get a dummy workpackage", {
 
   expect_equal(result, expected_result)
 })
+
+test_that("duration is summarized correctly", {
+  test_data <- data.frame(
+    workpackage = c("abc", "abc", "def", "abc"),
+    duration = c(1, 2.3, 4.9, 7.2),
+    stringsAsFactors = FALSE
+  )
+  result <- get_summarised_duration(test_data)
+  expected_result <- data.frame(
+    workpackage = c("abc", "def"),
+    sum_duration = c(1+2.3+7.2, 4.9),
+    stringsAsFactors = FALSE
+  )
+  
+  expect_equal(result, expected_result)
+})
