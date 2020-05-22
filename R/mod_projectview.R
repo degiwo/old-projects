@@ -18,12 +18,23 @@ mod_projectview_ui <- function(id) {
     h2("Projektansicht"),
 
     # UI body
-    box(
-      create_costcenter_dropdown(ns),
-      create_workpackage_dropdown(ns),
+    fluidRow(
+      box(
+        create_costcenter_dropdown(ns),
+        create_workpackage_dropdown(ns),
 
-      # box properties
-      title = "Projektauswahl", width = 6, collapsible = TRUE
+        # box properties
+        title = "Projektauswahl", width = 6, collapsible = TRUE
+      )
+    ),
+
+    fluidRow(
+      box(
+        DT::DTOutput(ns("table_projectinformation")),
+        
+        # box properties
+        title = "Projektinformationen", width = 12, collapsible = TRUE
+      )
     )
   )
 }
@@ -31,9 +42,17 @@ mod_projectview_ui <- function(id) {
 #' projectview Server Function
 #'
 #' @import shiny
-#' @import shinyWidgets
+#' @import shinyWidgets dplyr
 #' @noRd
 mod_projectview_server <- function(input, output, session, data) {
   update_costcenter_dropdown(session, data)
   update_workpackage_dropdown(input, session, data)
+
+  output$table_projectinformation <- DT::renderDT({
+    data() %>%
+      group_by(workpackage) %>%
+      summarise(sum_duration = sum(duration)) %>%
+      select(Arbeitspaket = workpackage,
+             `kumul. Stunden` = sum_duration)
+  })
 }

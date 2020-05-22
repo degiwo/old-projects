@@ -13,7 +13,9 @@ BugReports: https://github.com/degiwo/owcontrolling.git/issues
 Depends: 
     R (>= 2.10)
 Imports: 
+    DT,
     config,
+    dplyr,
     golem,
     processx,
     shiny,
