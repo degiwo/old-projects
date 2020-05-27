@@ -16,6 +16,7 @@ Imports:
     DT,
     config,
     dplyr,
+    ggplot2,
     golem,
     processx,
     shiny,

@@ -7,7 +7,8 @@
 app_server <- function(input, output, session) {
   # load data in reactive function to call it later in the modules/functions
   rct_timesheet <- reactive({
-    df <- set_name_for_workpackages(testdata_timesheet)
+    df <- set_name_for_workpackages(timesheet_raw)
+    df <- df[order(df$startdate),]
     
     return(df)
   })
