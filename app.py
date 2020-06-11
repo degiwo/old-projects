@@ -1,6 +1,6 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QLabel
-from PyQt5.QtCore import QTimer, QDateTime
+from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout
+from widgets import DateTimeLabel
 
 
 class Window(QWidget):
@@ -8,15 +8,7 @@ class Window(QWidget):
         super().__init__()
         self.layout = QVBoxLayout()
 
-        self.lbl = QLabel('Test')
-        self.layout.addWidget(self.lbl)
-        self.timer = QTimer(self)
-        self.timer.timeout.connect(self.update_time)
-        self.timer.start(1000)
-        self.update_time()
-
-    def update_time(self):
-        self.lbl.setText(QDateTime.currentDateTime().toString())
+        self.layout.addWidget(DateTimeLabel(self))
 
     def draw(self):
         self.setLayout(self.layout)
