@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QLabel, QComboBox
+from PyQt5.QtWidgets import QLabel, QComboBox, QPushButton
 from PyQt5.QtCore import QTimer, QDateTime
 
 
@@ -18,3 +18,11 @@ class WorkpackageCombobox(QComboBox):
     def __init__(self):
         super().__init__()
         self.addItems(['AP1', 'AP2'])
+
+class StartButton(QPushButton):
+    def __init__(self):
+        super().__init__('Start')
+        self.clicked.connect(self.set_start)
+
+    def set_start(self):
+        print(QDateTime.currentDateTime().toString())

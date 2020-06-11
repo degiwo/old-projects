@@ -1,6 +1,6 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QComboBox
-from widgets import DateTimeLabel, WorkpackageCombobox
+from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout
+from widgets import DateTimeLabel, WorkpackageCombobox, StartButton
 
 
 class Window(QWidget):
@@ -10,6 +10,7 @@ class Window(QWidget):
 
         self.layout.addWidget(DateTimeLabel())
         self.layout.addWidget(WorkpackageCombobox())
+        self.layout.addWidget(StartButton())
 
     def draw(self):
         self.setLayout(self.layout)
