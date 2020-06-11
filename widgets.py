@@ -1,5 +1,6 @@
 from PyQt5.QtWidgets import QLabel, QComboBox, QPushButton
-from PyQt5.QtCore import QTimer, QDateTime
+from PyQt5.QtCore import QTimer, QDateTime, QDate
+from data import TimesheetData, RecordData
 
 
 class DateTimeLabel(QLabel):
@@ -17,14 +18,21 @@ class DateTimeLabel(QLabel):
 class WorkpackageCombobox(QComboBox):
     def __init__(self):
         super().__init__()
-        self.addItems(['AP1', 'AP2'])
+
+        lst = TimesheetData().lst_workpackages
+        self.addItems(lst)
 
 
 class StartStopButton(QPushButton):
     def __init__(self):
         super().__init__('Start')
+        self.record_data = RecordData(QDate.currentDate().toString())
+
+        self.starttime = None
+
+        # order is important!
+        self.clicked.connect(self.save_record)
         self.clicked.connect(self.set_text)
-        self.clicked.connect(self.get_time)
 
     def set_text(self):
         if self.text() == 'Start':
@@ -32,9 +40,12 @@ class StartStopButton(QPushButton):
         else:
             self.setText('Start')
 
-    def get_time(self):
+    def save_record(self):
         if self.text() == 'Start':
-            txt = 'Endtime:'
+            self.starttime = QDateTime.currentDateTime().toString()
         else:
-            txt = 'Starttime:'
-        print(txt, QDateTime.currentDateTime().toString())
+            new_row = {'starttime': self.starttime,
+                       'endtime': QDateTime.currentDateTime().toString(),
+                       'workpackage': [1]}
+            self.record_data.records = self.record_data.records.append(new_row, ignore_index=True)
+            print(self.record_data.records)
