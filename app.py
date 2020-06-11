@@ -1,6 +1,6 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout
-from widgets import DateTimeLabel
+from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QComboBox
+from widgets import DateTimeLabel, WorkpackageCombobox
 
 
 class Window(QWidget):
@@ -8,7 +8,8 @@ class Window(QWidget):
         super().__init__()
         self.layout = QVBoxLayout()
 
-        self.layout.addWidget(DateTimeLabel(self))
+        self.layout.addWidget(DateTimeLabel())
+        self.layout.addWidget(WorkpackageCombobox())
 
     def draw(self):
         self.setLayout(self.layout)
