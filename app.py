@@ -8,9 +8,21 @@ class Window(QWidget):
         super().__init__()
         self.layout = QVBoxLayout()
 
-        self.layout.addWidget(DateTimeLabel())
-        self.layout.addWidget(WorkpackageCombobox())
-        self.layout.addWidget(StartStopButton())
+        self.lbl = DateTimeLabel()
+        self.cmbox = WorkpackageCombobox()
+        self.btn = StartStopButton()
+
+        self.layout.addWidget(self.lbl)
+        self.layout.addWidget(self.cmbox)
+        self.layout.addWidget(self.btn)
+
+        self.btn.clicked.connect(self.disable_cmbox)
+
+    def disable_cmbox(self):
+        if self.btn.text() == 'Start':
+            self.cmbox.setEnabled(True)
+        else:
+            self.cmbox.setEnabled(False)
 
     def draw(self):
         self.setLayout(self.layout)
