@@ -19,10 +19,22 @@ class WorkpackageCombobox(QComboBox):
         super().__init__()
         self.addItems(['AP1', 'AP2'])
 
-class StartButton(QPushButton):
+
+class StartStopButton(QPushButton):
     def __init__(self):
         super().__init__('Start')
-        self.clicked.connect(self.set_start)
+        self.clicked.connect(self.set_text)
+        self.clicked.connect(self.get_time)
 
-    def set_start(self):
-        print(QDateTime.currentDateTime().toString())
+    def set_text(self):
+        if self.text() == 'Start':
+            self.setText('Stop')
+        else:
+            self.setText('Start')
+
+    def get_time(self):
+        if self.text() == 'Start':
+            txt = 'Endtime:'
+        else:
+            txt = 'Starttime:'
+        print(txt, QDateTime.currentDateTime().toString())
