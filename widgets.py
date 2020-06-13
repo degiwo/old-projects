@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QLabel, QComboBox, QPushButton
+from PyQt5.QtWidgets import QLabel, QComboBox, QPushButton, QTextEdit
 from PyQt5.QtCore import QTimer, QDateTime, QDate
 from data import TimesheetData, RecordData
 
@@ -22,6 +22,12 @@ class WorkpackageCombobox(QComboBox):
         self.addItems(self.lst)
 
 
+class DescriptionTextbox(QTextEdit):
+    def __init__(self):
+        super().__init__()
+        self.setReadOnly(False)
+
+
 class StartStopButton(QPushButton):
     def __init__(self):
         super().__init__('Start')
@@ -29,6 +35,7 @@ class StartStopButton(QPushButton):
 
         self.starttime = None
         self.workpackage = None
+        self.description = None
 
         # order is important!
         self.clicked.connect(self.save_record)
@@ -46,5 +53,6 @@ class StartStopButton(QPushButton):
         else:
             new_record = {'starttime': [self.starttime],
                           'endtime': [QDateTime.currentDateTime().toString()],
-                          'workpackage': [self.workpackage]}
+                          'workpackage': [self.workpackage],
+                          'description': [self.description]}
             self.record_data.log_record(new_record)
