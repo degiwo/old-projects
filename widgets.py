@@ -25,7 +25,7 @@ class WorkpackageCombobox(QComboBox):
 class StartStopButton(QPushButton):
     def __init__(self):
         super().__init__('Start')
-        self.record_data = RecordData(QDate.currentDate().toString())
+        self.record_data = RecordData(QDate.currentDate())
 
         self.starttime = None
         self.workpackage = None
@@ -44,8 +44,7 @@ class StartStopButton(QPushButton):
         if self.text() == 'Start':
             self.starttime = QDateTime.currentDateTime().toString()
         else:
-            new_row = {'starttime': self.starttime,
-                       'endtime': QDateTime.currentDateTime().toString(),
-                       'workpackage': self.workpackage}
-            self.record_data.records = self.record_data.records.append(new_row, ignore_index=True)
-            print(self.record_data.records)
+            new_record = {'starttime': [self.starttime],
+                          'endtime': [QDateTime.currentDateTime().toString()],
+                          'workpackage': [self.workpackage]}
+            self.record_data.log_record(new_record)

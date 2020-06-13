@@ -10,4 +10,8 @@ class TimesheetData:
 class RecordData:
     def __init__(self, date):
         self.date = date
-        self.records = pd.DataFrame(columns=['starttime', 'endtime', 'workpackage'])
+        self.records = pd.DataFrame()
+
+    def log_record(self, data):
+        self.records = pd.DataFrame(data=data)
+        self.records.to_csv('data/{}.csv'.format(self.date.toString('yyyyMMdd')), mode='a', index=False, header=False)
