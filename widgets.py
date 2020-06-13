@@ -18,9 +18,8 @@ class DateTimeLabel(QLabel):
 class WorkpackageCombobox(QComboBox):
     def __init__(self):
         super().__init__()
-
-        lst = TimesheetData().lst_workpackages
-        self.addItems(lst)
+        self.lst = TimesheetData().lst_workpackages
+        self.addItems(self.lst)
 
 
 class StartStopButton(QPushButton):
@@ -29,6 +28,7 @@ class StartStopButton(QPushButton):
         self.record_data = RecordData(QDate.currentDate().toString())
 
         self.starttime = None
+        self.workpackage = None
 
         # order is important!
         self.clicked.connect(self.save_record)
@@ -46,6 +46,6 @@ class StartStopButton(QPushButton):
         else:
             new_row = {'starttime': self.starttime,
                        'endtime': QDateTime.currentDateTime().toString(),
-                       'workpackage': [1]}
+                       'workpackage': self.workpackage}
             self.record_data.records = self.record_data.records.append(new_row, ignore_index=True)
             print(self.record_data.records)

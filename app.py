@@ -17,12 +17,16 @@ class Window(QWidget):
         self.layout.addWidget(self.btn)
 
         self.btn.clicked.connect(self.disable_cmbox)
+        self.btn.clicked.connect(self.pass_workpackage)
 
     def disable_cmbox(self):
         if self.btn.text() == 'Start':
             self.cmbox.setEnabled(True)
         else:
             self.cmbox.setEnabled(False)
+
+    def pass_workpackage(self):
+        self.btn.workpackage = self.cmbox.currentText()
 
     def draw(self):
         self.setLayout(self.layout)
