@@ -20,6 +20,7 @@ class Window(QWidget):
 
         self.btn.clicked.connect(self.disable_cmbox)
         self.btn.clicked.connect(self.pass_data)
+        self.btn.clicked.connect(self.clear_textbox)
 
     def disable_cmbox(self):
         if self.btn.text() == 'Start':
@@ -30,6 +31,10 @@ class Window(QWidget):
     def pass_data(self):
         self.btn.workpackage = self.cmbox.currentText()
         self.btn.description = self.txt.toPlainText()
+
+    def clear_textbox(self):
+        if self.btn.text() == 'Start':
+            self.txt.clear()
 
     def draw(self):
         self.setLayout(self.layout)
