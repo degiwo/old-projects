@@ -8,6 +8,7 @@ import pyinputplus as pyip
 
 
 class API:
+    """Do the Timesheet work."""
     def __init__(self, workpackages, records):
         self.profile = FirefoxProfile()
         self.browser = webdriver.Firefox(firefox_profile=self.profile)
@@ -35,9 +36,11 @@ class API:
         entries = self.workpackages.loc[self.workpackages['workpackage'] == workpackage].reset_index()
         for i in range(entries.shape[0]):
             if i == 0:
+                # project hierarchy level
                 Select(self.browser.find_element_by_id('ProjectList')).select_by_value(entries['value'][i])
             else:
-                pass
+                # workpackage hierarchy level
+                Select(self.browser.find_element_by_id('selectPackage' + str(i))).select_by_value(entries['value'][i])
 
     def add_entry(self):
         Select(self.browser.find_element_by_name('timeEndHour')).select_by_value('17')
@@ -54,7 +57,7 @@ if __name__ == '__main__':
     api = API(workpackages=workpackages, records=records)
     api.login()
     api.open_sheet()
-    api.choose_workpackage('Operative Leitung')
+    api.choose_workpackage('Konzeption')
     api.add_entry()
 
     api.logout()
