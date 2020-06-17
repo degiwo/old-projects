@@ -1,6 +1,7 @@
 # req: selenium==2.53.6, Firefox==46.0.1
 
 import pandas as pd
+from datetime import datetime
 from selenium import webdriver
 from selenium.webdriver.firefox.firefox_profile import FirefoxProfile
 from selenium.webdriver.support.ui import Select
@@ -33,7 +34,8 @@ class API:
         self.browser.find_element_by_xpath('//*[@title="Neuen Eintrag hinzufügen"]').click()
 
     def choose_workpackage(self, workpackage):
-        entries = self.workpackages.loc[self.workpackages['workpackage'] == workpackage].reset_index()
+        entries = self.workpackages.loc[self.workpackages['workpackage'] == workpackage].\
+            sort_values(by=['step']).reset_index()
         for i in range(entries.shape[0]):
             if i == 0:
                 # project hierarchy level
@@ -42,8 +44,18 @@ class API:
                 # workpackage hierarchy level
                 Select(self.browser.find_element_by_id('selectPackage' + str(i))).select_by_value(entries['value'][i])
 
-    def add_entry(self):
-        Select(self.browser.find_element_by_name('timeEndHour')).select_by_value('17')
+    def add_entry(self, start, end):
+        start = datetime.strptime(start, '%d.%m.%Y %H:%M')
+        end = datetime.strptime(end, '%d.%m.%Y %H:%M')
+
+        # minute: round to nearest to 5
+        start_minute = 5 * round(start.minute / 5)
+        end_minute = 5 * round(end.minute / 5)
+
+        Select(self.browser.find_element_by_name('timeStartHour')).select_by_value(str(start.hour))
+        Select(self.browser.find_element_by_name('timeStartMinute')).select_by_value(str(start_minute))
+        Select(self.browser.find_element_by_name('timeEndHour')).select_by_value(str(end.hour))
+        Select(self.browser.find_element_by_name('timeEndMinute')).select_by_value(str(end_minute))
         self.browser.find_element_by_id('Submit').click()
 
     def logout(self):
@@ -58,6 +70,6 @@ if __name__ == '__main__':
     api.login()
     api.open_sheet()
     api.choose_workpackage('Konzeption')
-    api.add_entry()
+    api.add_entry('20.06.2020 08:43', '20.06.2020 13:38')
 
     api.logout()

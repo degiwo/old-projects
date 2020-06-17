@@ -49,10 +49,10 @@ class StartStopButton(QPushButton):
 
     def save_record(self):
         if self.text() == 'Start':
-            self.starttime = QDateTime.currentDateTime().toString()
+            self.starttime = QDateTime.currentDateTime().toString('dd.MM.yyyy hh:mm')
         else:
             new_record = {'starttime': [self.starttime],
-                          'endtime': [QDateTime.currentDateTime().toString()],
+                          'endtime': [QDateTime.currentDateTime().toString('dd.MM.yyyy hh:mm')],
                           'workpackage': [self.workpackage],
                           'description': [self.description]}
             self.record_data.log_record(new_record)
