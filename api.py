@@ -10,12 +10,11 @@ import pyinputplus as pyip
 
 class API:
     """Do the Timesheet work."""
-    def __init__(self, workpackages, records):
+    def __init__(self, workpackages):
         self.profile = FirefoxProfile()
         self.browser = webdriver.Firefox(firefox_profile=self.profile)
 
         self.workpackages = workpackages
-        self.records = records
 
     def login(self):
         self.browser.get('http://timesheet.optware.de/timesheet/')
@@ -64,12 +63,14 @@ class API:
 
 if __name__ == '__main__':
     workpackages = pd.read_csv('data/workpackages.csv', names=['workpackage', 'step', 'value', 'comment'])
-    records = pd.read_csv('data/20200616.csv', header=None, names=['start', 'end', 'workpackage', 'description'])
+    records = pd.read_csv('data/20200617.csv', header=None, names=['start', 'end', 'workpackage', 'description'])
 
-    api = API(workpackages=workpackages, records=records)
+    api = API(workpackages=workpackages)
     api.login()
-    api.open_sheet()
-    api.choose_workpackage('Konzeption')
-    api.add_entry('20.06.2020 08:43', '20.06.2020 13:38')
+
+    for i in range(records.shape[0]):
+        api.open_sheet()
+        api.choose_workpackage(records['workpackage'][i])
+        api.add_entry(records['start'][i], records['end'][i])
 
     api.logout()
