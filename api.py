@@ -43,7 +43,7 @@ class API:
                 # workpackage hierarchy level
                 Select(self.browser.find_element_by_id('selectPackage' + str(i))).select_by_value(entries['value'][i])
 
-    def add_entry(self, start, end):
+    def add_entry(self, start, end, description):
         start = datetime.strptime(start, '%d.%m.%Y %H:%M')
         end = datetime.strptime(end, '%d.%m.%Y %H:%M')
 
@@ -55,6 +55,7 @@ class API:
         Select(self.browser.find_element_by_name('timeStartMinute')).select_by_value(str(start_minute))
         Select(self.browser.find_element_by_name('timeEndHour')).select_by_value(str(end.hour))
         Select(self.browser.find_element_by_name('timeEndMinute')).select_by_value(str(end_minute))
+        self.browser.find_element_by_id('wdescription').send_keys(description)
         self.browser.find_element_by_id('Submit').click()
 
     def logout(self):
@@ -71,6 +72,6 @@ if __name__ == '__main__':
     for i in range(records.shape[0]):
         api.open_sheet()
         api.choose_workpackage(records['workpackage'][i])
-        api.add_entry(records['start'][i], records['end'][i])
+        api.add_entry(records['start'][i], records['end'][i], records['description'][i])
 
     api.logout()
