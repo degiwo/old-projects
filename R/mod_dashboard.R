@@ -16,10 +16,17 @@ mod_dashboard_ui <- function(id){
     
 #' dashboard Server Function
 #'
+#' @import dplyr
 #' @noRd 
-mod_dashboard_server <- function(input, output, session){
+mod_dashboard_server <- function(input, output, session, df_timesheet){
   ns <- session$ns
   
+  observe({
+    df_timesheet() %>%
+      group_by(cost_center) %>%
+      summarise(sum_duration = sum(duration)) %>%
+      print()
+  })
 }
     
 ## To be copied in the UI
