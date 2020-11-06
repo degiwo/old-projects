@@ -2,12 +2,14 @@
 #' 
 #' @param input,output,session Internal parameters for {shiny}. 
 #'     DO NOT REMOVE.
-#' @import shiny
+#' @import shiny magrittr
 #' @noRd
 app_server <- function( input, output, session ) {
-  df_timesheet <- reactiveVal(
-    transform_timesheet_data(read_all_timesheet_files("/Users/dwon/Desktop/Timesheet"))
-  )
+  df_timesheet <- "/Users/dwon/Desktop/Timesheet" %>%
+    read_all_timesheet_files() %>%
+    join_project_names() %>%
+    transform_timesheet_data() %>%
+    reactiveVal()
   # List the first level callModules here
   callModule(mod_dashboard_server, "tab_dashboard", df_timesheet = df_timesheet)
 }

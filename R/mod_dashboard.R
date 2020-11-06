@@ -10,22 +10,29 @@
 mod_dashboard_ui <- function(id){
   ns <- NS(id)
   tagList(
-    h1("Dashboard")
+    h1("Dashboard"),
+    plotOutput(ns("chart_project_bars"))
   )
 }
     
 #' dashboard Server Function
 #'
-#' @import dplyr
+#' @import dplyr ggplot2
 #' @noRd 
 mod_dashboard_server <- function(input, output, session, df_timesheet){
   ns <- session$ns
   
-  observe({
-    df_timesheet() %>%
-      group_by(cost_center) %>%
-      summarise(sum_duration = sum(duration)) %>%
-      print()
+  output$chart_project_bars <- renderPlot({
+    df_project_durations <- df_timesheet() %>%
+      group_by(Projekt = project_name) %>%
+      summarise(PT = round(sum(duration_d), 2))
+    p <- ggplot(df_project_durations, aes(x = reorder(Projekt, PT),
+                                          y = PT,
+                                          fill = Projekt)) +
+      geom_bar(stat = "identity") +
+      coord_flip() +
+      labs(x = "Projekt", y = "Personentage gesamt")
+    print(p)
   })
 }
     
