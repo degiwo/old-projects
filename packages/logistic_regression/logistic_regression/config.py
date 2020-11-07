@@ -1,10 +1,13 @@
-# pipeline
-PIPELINE_NAME = 'logistic regression'
-TEST_SIZE_RATIO = 0.25
+import pathlib
 
-# data
-DATA_FILE_PATH = "titanic.csv"
+# paths
+PACKAGE_ROOT = pathlib.Path(__file__).resolve().parent
+PIPELINE_NAME = PACKAGE_ROOT / 'logistic regression'
+DATA_FILE_PATH = PACKAGE_ROOT / "datasets/titanic.csv"
+
+# model
 TARGET = "Survived"
+TEST_SIZE_RATIO = 0.25
 
 # features
 DROP_FEATURES = [
