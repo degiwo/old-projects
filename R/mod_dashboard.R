@@ -6,12 +6,12 @@
 #'
 #' @noRd 
 #'
-#' @importFrom shiny NS tagList 
+#' @import shiny
 #' @importFrom plotly plotlyOutput
 mod_dashboard_ui <- function(id){
   ns <- NS(id)
   tagList(
-    h1("Dashboard"),
+    h1("Übersicht"),
     plotlyOutput(ns("chart_project_bars"))
   )
 }

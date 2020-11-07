@@ -12,4 +12,5 @@ app_server <- function( input, output, session ) {
     reactiveVal()
   # List the first level callModules here
   callModule(mod_dashboard_server, "tab_dashboard", df_timesheet = df_timesheet)
+  callModule(mod_projects_server, "tab_projects", df_timesheet = df_timesheet)
 }

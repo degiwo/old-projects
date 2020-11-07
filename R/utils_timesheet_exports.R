@@ -9,7 +9,7 @@ read_all_timesheet_files <- function(path) {
   for(i in seq(files)) {
     list_df[[i]] <- file.path(path, files[i]) %>%
       read.csv2(stringsAsFactors = FALSE) %>%
-      mutate(workpackage = coalesce(workpackage, "NA")) %>%
+      mutate(workpackage = coalesce(trimws(workpackage), "NA")) %>%
       mutate(cost_center = as.character(str_extract(files[i], "[^_]+")))
   }
   df <- do.call(rbind, list_df)

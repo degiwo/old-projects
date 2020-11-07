@@ -13,12 +13,14 @@ app_ui <- function(request) {
       dashboardHeader(title = "timesheet"),
       dashboardSidebar(
         sidebarMenu(
-          menuItem("Dashboard", tabName = "tab_dashboard", icon = icon("dashboard"))
+          menuItem("Übersicht", tabName = "tab_dashboard", icon = icon("dashboard")),
+          menuItem("Projekte", tabName = "tab_projects", icon = icon("chart-bar"))
         )
       ),
       dashboardBody(
         tabItems(
-          tabItem(tabName = "tab_dashboard", mod_dashboard_ui("tab_dashboard"))
+          tabItem(tabName = "tab_dashboard", mod_dashboard_ui("tab_dashboard")),
+          tabItem(tabName = "tab_projects", mod_projects_ui("tab_projects"))
         )
       )
     )
