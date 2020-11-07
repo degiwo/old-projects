@@ -7,32 +7,34 @@
 #' @noRd 
 #'
 #' @importFrom shiny NS tagList 
+#' @importFrom plotly plotlyOutput
 mod_dashboard_ui <- function(id){
   ns <- NS(id)
   tagList(
     h1("Dashboard"),
-    plotOutput(ns("chart_project_bars"))
+    plotlyOutput(ns("chart_project_bars"))
   )
 }
     
 #' dashboard Server Function
 #'
 #' @import dplyr ggplot2
+#' @importFrom plotly renderPlotly ggplotly
 #' @noRd 
 mod_dashboard_server <- function(input, output, session, df_timesheet){
   ns <- session$ns
   
-  output$chart_project_bars <- renderPlot({
+  output$chart_project_bars <- renderPlotly({
     df_project_durations <- df_timesheet() %>%
-      group_by(Projekt = project_name) %>%
-      summarise(PT = round(sum(duration_d), 2))
-    p <- ggplot(df_project_durations, aes(x = reorder(Projekt, PT),
-                                          y = PT,
-                                          fill = Projekt)) +
+      group_by(month = format(startdate, "%Y-%m"), project_name) %>%
+      summarise(sum_duration_h = round(sum(duration_h), 2)) %>%
+      ungroup() %>%
+      group_by(month) %>%
+      mutate(prop_duration = round(100 * sum_duration_h / sum(sum_duration_h), 2))
+    p <- ggplot(df_project_durations, aes(x = month, y = prop_duration, fill = project_name)) +
       geom_bar(stat = "identity") +
-      coord_flip() +
-      labs(x = "Projekt", y = "Personentage gesamt")
-    print(p)
+      labs(x = "Monat", y = "Anteil in %", fill = "Projekt")
+    ggplotly(p)
   })
 }
     
