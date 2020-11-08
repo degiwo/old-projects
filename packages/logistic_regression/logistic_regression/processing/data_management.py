@@ -11,10 +11,12 @@ _logger = logging.getLogger(__name__)
 
 def read_train_data():
     data_path = config.DATA_PATH / config.DATA_NAME
+    _logger.info(f"use train data from: {data_path}")
     return pd.read_csv(data_path)
 
 def read_test_data():
     data_path = config.TEST_PATH / config.TEST_NAME
+    _logger.info(f"use test data from: {data_path}")
     return pd.read_csv(data_path)
 
 def get_X_y_from_data(data):
@@ -34,7 +36,7 @@ def save_pipeline(pipeline):
 
     remove_old_pipelines(files_to_keep=save_file_name)
     joblib.dump(pipeline, save_path)
-    _logger.info(f"saves pipeline: {save_file_name}")
+    _logger.info(f"saves pipeline: {save_file_name} in {save_path}")
 
 def load_pipeline():
     load_file_name = f"{config.PIPELINE_NAME}_v{_version}.pkl"
