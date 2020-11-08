@@ -3,12 +3,19 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 import joblib
 
-import config
+from logistic_regression.config import config
 import pipeline
 
-def run_training():
-    data = pd.read_csv(config.DATA_FILE_PATH)
-    
+def read_data():
+    data_path = config.DATA_PATH / config.DATA_NAME
+    return pd.read_csv(data_path)
+
+def save_pipeline(pipeline):
+    save_path = config.PIPELINE_PATH / config.PIPELINE_NAME
+    joblib.dump(pipeline, save_path)
+
+def run_model():
+    data = read_data()
     X = data.drop(config.TARGET, axis=1)
     y = data[config.TARGET]
 
@@ -16,7 +23,8 @@ def run_training():
         X, y, test_size=config.TEST_SIZE_RATIO, random_state=0)
 
     pipeline.model_pipeline.fit(x_train, y_train)
-    joblib.dump(pipeline.model_pipeline, config.PIPELINE_NAME)
+    save_pipeline(pipeline.model_pipeline)
+
 
 if __name__ == '__main__':
-    run_training()
+    run_model()

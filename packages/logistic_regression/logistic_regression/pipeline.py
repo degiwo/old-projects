@@ -1,8 +1,8 @@
 from sklearn.pipeline import Pipeline
 
-import preprocessors as pp
+from logistic_regression.processing import preprocessors as pp
 import model
-import config
+from logistic_regression.config import config
 
 model_pipeline = Pipeline(
     [

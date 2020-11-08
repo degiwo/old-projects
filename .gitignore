@@ -106,6 +106,9 @@ venv.bak/
 # pycharm
 .idea/
 
+# vscode
+.vscode/
+
 # pickle files
 *.pkl
 

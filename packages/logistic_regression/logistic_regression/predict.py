@@ -1,7 +1,7 @@
 import pandas as pd
 import joblib
 
-import config
+from logistic_regression.config import config
 
 def make_prediction(X):
     _pipeline = joblib.load(filename=config.PIPELINE_NAME)
