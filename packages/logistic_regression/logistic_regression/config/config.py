@@ -7,6 +7,8 @@ PIPELINE_PATH = PACKAGE_ROOT / "trained_models"
 PIPELINE_NAME = "logistic_regression.pkl"
 DATA_PATH = PACKAGE_ROOT / "datasets"
 DATA_NAME = "titanic.csv"
+TEST_PATH = PACKAGE_ROOT / "datasets"
+TEST_NAME = "test.csv"
 
 # model
 TARGET = "Survived"
