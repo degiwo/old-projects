@@ -4,7 +4,7 @@ import logistic_regression
 # paths
 PACKAGE_ROOT = pathlib.Path(logistic_regression.__file__).resolve().parent
 PIPELINE_PATH = PACKAGE_ROOT / "trained_models"
-PIPELINE_NAME = "logistic_regression.pkl"
+PIPELINE_NAME = "logistic_regression"
 DATA_PATH = PACKAGE_ROOT / "datasets"
 DATA_NAME = "titanic.csv"
 TEST_PATH = PACKAGE_ROOT / "datasets"
