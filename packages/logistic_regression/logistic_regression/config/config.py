@@ -15,6 +15,10 @@ TARGET = "Survived"
 TEST_SIZE_RATIO = 0.25
 
 # features
+NA_NOT_ALLOWED = [
+    "Fare"
+]
+
 DROP_FEATURES = [
     "PassengerId", "Name", "Cabin",
     "Ticket", "Pclass", "Sex", "Embarked"

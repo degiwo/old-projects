@@ -1,20 +1,16 @@
-import pandas as pd
-import joblib
+from logistic_regression.processing import validation, data_management
 
-from logistic_regression.config import config
+def make_prediction():
+    data = data_management.read_test_data()
+    X, y = data_management.get_X_y_from_data(data)
 
-def make_prediction(X):
-    pipeline_path = config.PIPELINE_PATH / config.PIPELINE_NAME
-    _pipeline = joblib.load(filename=pipeline_path)
-    results = _pipeline.predict(X)
+    _pipeline = data_management.load_pipeline()
+    validated_data = validation.validate_inputs(X)
+    results = _pipeline.predict(validated_data)
 
     return results
 
 
 if __name__ == '__main__':
-    data = pd.read_csv(config.TEST_PATH / config.TEST_NAME)
-    X = data.drop(config.TARGET, axis=1)
-    y = data[config.TARGET]
-
-    pred = make_prediction(X)
+    pred = make_prediction()
     print(pred)
