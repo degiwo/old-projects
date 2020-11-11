@@ -24,8 +24,7 @@ golem::add_module( name = "projects" ) # Name of the module
 
 ## Add helper functions ----
 ## Creates ftc_* and utils_*
-golem::add_fct( "helpers" ) 
-golem::add_utils( "ui" )
+golem::add_utils( "server" )
 
 ## External resources
 ## Creates .js and .css files at inst/app/www
