@@ -17,7 +17,9 @@ mod_projects_ui <- function(id){
                  multiple = TRUE),
     airDatepickerInput(ns("sel_daterange"), label = "Zeitraum",
                        range = TRUE, dateFormat = "dd.mm.yyyy", update_on = "close"),
-    DTOutput(ns("tbl_prj_wp"))
+    radioButtons(ns("sel_timegroup"), label = "Aufteilung", choices = NA),
+    DTOutput(ns("tbl_prj_wp")),
+    DTOutput(ns("tbl_wp_emp"))
   )
 }
     
@@ -45,32 +47,31 @@ mod_projects_server <- function(input, output, session, df_timesheet){
     updateAirDateInput(session, "sel_daterange", value = c(min(df_timesheet()$startdate), Sys.Date()))
   })
   
+  observe({
+    choicenames <- c("Woche", "Monat", "Jahr", "Gesamt")
+    choicevalues <- c("week", "month", "year", "all")
+    updateRadioButtons(session, "sel_timegroup", selected = "month",
+                       choiceNames = choicenames, choiceValues = choicevalues)
+  })
+  
   output$tbl_prj_wp <- renderDT({
-    .start <- req(input$sel_daterange[1])
-    .end <- req(input$sel_daterange[2])
-    
     df_timesheet() %>%
-      filter(startdate >= .start & startdate <= .end) %>%
-      filter(project_name %in% input$sel_project) %>%
-      filter(workpackage %in% input$sel_workpackage) %>%
-      get_sum_per_month() %>%
+      get_filtered_data(input_vars = input) %>%
+      get_converted_date(format_var = input$sel_timegroup) %>%
+      get_sum_by_group(target = duration_h, project_name, workpackage, new_startdate) %>%
       rename(Projekt = project_name, Arbeitspaket = workpackage) %>%
-      spread(key = "month", value = "sum_duration")
+      spread(key = "new_startdate", value = "sum_target")
+  })
+  
+  output$tbl_wp_emp <- renderDT({
+    df_timesheet() %>%
+      get_filtered_data(input_vars = input) %>%
+      get_converted_date(format_var = input$sel_timegroup) %>%
+      get_sum_by_group(target = duration_h, employee, new_startdate) %>%
+      spread(key = "new_startdate", value = "sum_target")
   })
 }
 
-#' calculate sum of duration_d for each project_name, workpackage, month
-#'
-#' @noRd
-#' @import dplyr
-get_sum_per_month <- function(df_input) {
-  df_input %>%
-    mutate(month = format(startdate, "%Y-%m")) %>%
-    group_by(project_name, workpackage, month) %>%
-    summarise(sum_duration = round(sum(duration_h), 2)) %>%
-    ungroup()
-}
-    
 ## To be copied in the UI
 # mod_projects_ui("projects_ui_1")
     
