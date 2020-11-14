@@ -23,6 +23,7 @@ mod_projects_ui <- function(id){
     DTOutput(ns("tbl_prj_wp")),
     DTOutput(ns("tbl_prj_wp_detail")),
     plotlyOutput(ns("plt_prj_wp_line")),
+    plotlyOutput(ns("plt_prj_wp_bar")),
     DTOutput(ns("tbl_wp_emp")),
     DTOutput(ns("tbl_wp_emp_detail"))
   )
@@ -40,7 +41,7 @@ mod_projects_server <- function(input, output, session, df_timesheet){
   
   observe({
     choices <- unique(df_timesheet()$project_name)
-    updatePickerInput(session, "sel_project", choices = choices)
+    updatePickerInput(session, "sel_project", choices = choices, selected = choices[1])
   })
 
   observe({
@@ -118,6 +119,19 @@ mod_projects_server <- function(input, output, session, df_timesheet){
     p <- ggplot(df, aes(x = new_startdate, y = sum_target, color = new_workpackage)) +
       geom_line(group = 1) +
       labs(x = "", y = "Stunden gesamt", color = "Arbeitspaket")
+    ggplotly(p)
+  })
+  
+  output$plt_prj_wp_bar <- renderPlotly({
+    df <- df_timesheet() %>%
+      mutate(new_workpackage = ifelse(workpackage %in% selected_wp(), 1, 0)) %>%
+      get_filtered_data(input_vars = input) %>%
+      get_converted_date(format_var = input$sel_timegroup) %>%
+      get_sum_by_group(target = duration_h, new_workpackage, new_startdate) %>%
+      mutate(new_workpackage = ifelse(new_workpackage == 1, "ausgewählt", "nicht ausgewählt"))
+    p <- ggplot(df, aes(x = new_startdate, y = sum_target, fill = new_workpackage)) +
+      geom_bar(position = "fill", stat = "identity") +
+      labs(x = "", y = "Anteil", fill = "Arbeitspaket")
     ggplotly(p)
   })
 }

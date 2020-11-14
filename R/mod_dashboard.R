@@ -26,14 +26,12 @@ mod_dashboard_server <- function(input, output, session, df_timesheet){
   
   output$chart_project_bars <- renderPlotly({
     df_project_durations <- df_timesheet() %>%
-      group_by(month = format(startdate, "%Y-%m"), project_name) %>%
-      summarise(sum_duration_h = round(sum(duration_h), 2)) %>%
-      ungroup() %>%
-      group_by(month) %>%
-      mutate(prop_duration = round(100 * sum_duration_h / sum(sum_duration_h), 2))
-    p <- ggplot(df_project_durations, aes(x = month, y = prop_duration, fill = project_name)) +
-      geom_bar(stat = "identity") +
-      labs(x = "Monat", y = "Anteil in %", fill = "Projekt")
+      get_converted_date("month") %>%
+      get_sum_by_group(target = duration_h, project_name, new_startdate)
+    p <- ggplot(df_project_durations,
+                aes(x = new_startdate, y = sum_target, fill = reorder(project_name, -sum_target))) +
+      geom_bar(position = "fill", stat = "identity") +
+      labs(x = "Monat", y = "Anteil", fill = "Projekt")
     ggplotly(p)
   })
 }
