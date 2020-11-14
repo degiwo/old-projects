@@ -8,27 +8,33 @@
 #'
 #' @import shiny shinyWidgets
 #' @importFrom DT DTOutput
+#' @importFrom plotly plotlyOutput
 mod_projects_ui <- function(id){
   ns <- NS(id)
   tagList(
     h1("Projekte"),
-    pickerInput_(ns("sel_project"), label = "Projekt"),
+    pickerInput_(ns("sel_project"), label = "Projekt",
+                 multiple = TRUE),
     pickerInput_(ns("sel_workpackage"), label = "Arbeitspaket",
                  multiple = TRUE),
     airDatepickerInput(ns("sel_daterange"), label = "Zeitraum",
                        range = TRUE, dateFormat = "dd.mm.yyyy", update_on = "close"),
     radioButtons(ns("sel_timegroup"), label = "Aufteilung", choices = NA),
     DTOutput(ns("tbl_prj_wp")),
-    DTOutput(ns("tbl_wp_emp"))
+    DTOutput(ns("tbl_prj_wp_detail")),
+    plotlyOutput(ns("plt_prj_wp_line")),
+    DTOutput(ns("tbl_wp_emp")),
+    DTOutput(ns("tbl_wp_emp_detail"))
   )
 }
     
 #' projects Server Function
 #'
 #' @noRd
-#' @import shiny shinyWidgets dplyr
+#' @import shiny shinyWidgets dplyr ggplot2
 #' @importFrom DT renderDT
 #' @importFrom tidyr spread
+#' @importFrom plotly renderPlotly ggplotly
 mod_projects_server <- function(input, output, session, df_timesheet){
   ns <- session$ns
   
@@ -54,13 +60,21 @@ mod_projects_server <- function(input, output, session, df_timesheet){
                        choiceNames = choicenames, choiceValues = choicevalues)
   })
   
-  output$tbl_prj_wp <- renderDT({
+  tbl_prj_wp_fct <- reactive({
     df_timesheet() %>%
       get_filtered_data(input_vars = input) %>%
       get_converted_date(format_var = input$sel_timegroup) %>%
       get_sum_by_group(target = duration_h, project_name, workpackage, new_startdate) %>%
-      rename(Projekt = project_name, Arbeitspaket = workpackage) %>%
       spread(key = "new_startdate", value = "sum_target")
+  })
+  
+  selected_wp <- reactive({
+    tbl_prj_wp_fct()$workpackage[input$tbl_prj_wp_rows_selected]
+  })
+  
+  output$tbl_prj_wp <- renderDT({
+    tbl_prj_wp_fct() %>%
+      rename(Projekt = project_name, Arbeitspaket = workpackage)
   })
   
   output$tbl_wp_emp <- renderDT({
@@ -68,7 +82,43 @@ mod_projects_server <- function(input, output, session, df_timesheet){
       get_filtered_data(input_vars = input) %>%
       get_converted_date(format_var = input$sel_timegroup) %>%
       get_sum_by_group(target = duration_h, employee, new_startdate) %>%
-      spread(key = "new_startdate", value = "sum_target")
+      spread(key = "new_startdate", value = "sum_target") %>%
+      rename(Mitarbeiter = employee)
+  })
+  
+  output$tbl_prj_wp_detail <- renderDT({
+    df_timesheet() %>%
+      mutate(new_workpackage = ifelse(workpackage %in% selected_wp(), 1, 0)) %>%
+      get_filtered_data(input_vars = input) %>%
+      get_converted_date(format_var = input$sel_timegroup) %>%
+      get_sum_by_group(target = duration_h, new_workpackage, new_startdate) %>%
+      spread(key = "new_startdate", value = "sum_target") %>%
+      mutate(new_workpackage = ifelse(new_workpackage == 1, "ausgewählt", "nicht ausgewählt")) %>%
+      rename(Arbeitspaket = new_workpackage)
+  })
+  
+  output$tbl_wp_emp_detail <- renderDT({
+    df_timesheet() %>%
+      mutate(new_workpackage = ifelse(workpackage %in% selected_wp(), 1, 0)) %>%
+      get_filtered_data(input_vars = input) %>%
+      get_converted_date(format_var = input$sel_timegroup) %>%
+      get_sum_by_group(target = duration_h, employee, new_workpackage, new_startdate) %>%
+      spread(key = "new_startdate", value = "sum_target") %>%
+      mutate(new_workpackage = ifelse(new_workpackage == 1, "ausgewählt", "nicht ausgewählt")) %>%
+      rename(Mitarbeiter = employee, Arbeitspaket = new_workpackage)
+  })
+  
+  output$plt_prj_wp_line <- renderPlotly({
+    df <- df_timesheet() %>%
+      mutate(new_workpackage = ifelse(workpackage %in% selected_wp(), 1, 0)) %>%
+      get_filtered_data(input_vars = input) %>%
+      get_converted_date(format_var = input$sel_timegroup) %>%
+      get_sum_by_group(target = duration_h, new_workpackage, new_startdate) %>%
+      mutate(new_workpackage = ifelse(new_workpackage == 1, "ausgewählt", "nicht ausgewählt"))
+    p <- ggplot(df, aes(x = new_startdate, y = sum_target, color = new_workpackage)) +
+      geom_line(group = 1) +
+      labs(x = "", y = "Stunden gesamt", color = "Arbeitspaket")
+    ggplotly(p)
   })
 }
 
