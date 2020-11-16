@@ -1,0 +1,3 @@
+flask==1.1.2
+
+-e "C:\Users\dwong\Desktop\Projekte\titanic\packages\logistic_regression"
