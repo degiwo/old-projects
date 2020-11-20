@@ -13,4 +13,5 @@ app_server <- function( input, output, session ) {
   # List the first level callModules here
   callModule(mod_dashboard_server, "tab_dashboard", df_timesheet = df_timesheet)
   callModule(mod_projects_server, "tab_projects", df_timesheet = df_timesheet)
+  callModule(mod_detail_server, "tab_detail", df_timesheet = df_timesheet)
 }
