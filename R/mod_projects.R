@@ -20,6 +20,8 @@ mod_projects_ui <- function(id){
     airDatepickerInput(ns("sel_daterange"), label = "Zeitraum",
                        range = TRUE, dateFormat = "dd.mm.yyyy", update_on = "close"),
     radioButtons(ns("sel_timegroup"), label = "Aufteilung", choices = NA),
+    materialSwitch(ns("sel_cumul_toggle"), label = "kumuliert", status = "primary"),
+    
     DTOutput(ns("tbl_prj_wp")),
     DTOutput(ns("tbl_prj_wp_detail")),
     plotlyOutput(ns("plt_prj_wp_line")),
@@ -62,10 +64,17 @@ mod_projects_server <- function(input, output, session, df_timesheet){
   })
   
   tbl_prj_wp_fct <- reactive({
-    df_timesheet() %>%
+    df <- df_timesheet() %>%
       get_filtered_data(input_vars = input) %>%
       get_converted_date(format_var = input$sel_timegroup) %>%
-      get_sum_by_group(target = duration_h, project_name, workpackage, new_startdate) %>%
+      get_sum_by_group(target = duration_h, project_name, workpackage, new_startdate)
+    if (input$sel_cumul_toggle) {
+      df <- df %>%
+        get_cumulated_duration_by_group(target = sum_target, sort = new_startdate, project_name, workpackage) %>%
+        mutate(sum_target = cumsum_target) %>%
+        select(-cumsum_target)
+    }
+    df %>%
       spread(key = "new_startdate", value = "sum_target")
   })
   
@@ -79,31 +88,52 @@ mod_projects_server <- function(input, output, session, df_timesheet){
   })
   
   output$tbl_wp_emp <- renderDT({
-    df_timesheet() %>%
+    df <- df_timesheet() %>%
       get_filtered_data(input_vars = input) %>%
       get_converted_date(format_var = input$sel_timegroup) %>%
-      get_sum_by_group(target = duration_h, employee, new_startdate) %>%
+      get_sum_by_group(target = duration_h, employee, new_startdate)
+    if (input$sel_cumul_toggle) {
+      df <- df %>%
+        get_cumulated_duration_by_group(target = sum_target, sort = new_startdate, employee) %>%
+        mutate(sum_target = cumsum_target) %>%
+        select(-cumsum_target)
+    }
+    df %>%
       spread(key = "new_startdate", value = "sum_target") %>%
       rename(Mitarbeiter = employee)
   })
   
   output$tbl_prj_wp_detail <- renderDT({
-    df_timesheet() %>%
+    df <- df_timesheet() %>%
       mutate(new_workpackage = ifelse(workpackage %in% selected_wp(), 1, 0)) %>%
       get_filtered_data(input_vars = input) %>%
       get_converted_date(format_var = input$sel_timegroup) %>%
-      get_sum_by_group(target = duration_h, new_workpackage, new_startdate) %>%
+      get_sum_by_group(target = duration_h, new_workpackage, new_startdate)
+    if (input$sel_cumul_toggle) {
+      df <- df %>%
+        get_cumulated_duration_by_group(target = sum_target, sort = new_startdate, new_workpackage) %>%
+        mutate(sum_target = cumsum_target) %>%
+        select(-cumsum_target)
+    }
+    df %>%
       spread(key = "new_startdate", value = "sum_target") %>%
       mutate(new_workpackage = ifelse(new_workpackage == 1, "ausgewählt", "nicht ausgewählt")) %>%
       rename(Arbeitspaket = new_workpackage)
   })
   
   output$tbl_wp_emp_detail <- renderDT({
-    df_timesheet() %>%
+    df <- df_timesheet() %>%
       mutate(new_workpackage = ifelse(workpackage %in% selected_wp(), 1, 0)) %>%
       get_filtered_data(input_vars = input) %>%
       get_converted_date(format_var = input$sel_timegroup) %>%
-      get_sum_by_group(target = duration_h, employee, new_workpackage, new_startdate) %>%
+      get_sum_by_group(target = duration_h, employee, new_workpackage, new_startdate)
+    if (input$sel_cumul_toggle) {
+      df <- df %>%
+        get_cumulated_duration_by_group(target = sum_target, sort = new_startdate, employee, new_workpackage) %>%
+        mutate(sum_target = cumsum_target) %>%
+        select(-cumsum_target)
+    }
+    df %>%
       spread(key = "new_startdate", value = "sum_target") %>%
       mutate(new_workpackage = ifelse(new_workpackage == 1, "ausgewählt", "nicht ausgewählt")) %>%
       rename(Mitarbeiter = employee, Arbeitspaket = new_workpackage)
@@ -114,7 +144,14 @@ mod_projects_server <- function(input, output, session, df_timesheet){
       mutate(new_workpackage = ifelse(workpackage %in% selected_wp(), 1, 0)) %>%
       get_filtered_data(input_vars = input) %>%
       get_converted_date(format_var = input$sel_timegroup) %>%
-      get_sum_by_group(target = duration_h, new_workpackage, new_startdate) %>%
+      get_sum_by_group(target = duration_h, new_workpackage, new_startdate)
+    if (input$sel_cumul_toggle) {
+      df <- df %>%
+        get_cumulated_duration_by_group(target = sum_target, sort = new_startdate, new_workpackage) %>%
+        mutate(sum_target = cumsum_target) %>%
+        select(-cumsum_target)
+    }
+    df <- df %>%
       mutate(new_workpackage = ifelse(new_workpackage == 1, "ausgewählt", "nicht ausgewählt"))
     p <- ggplot(df, aes(x = new_startdate, y = sum_target, color = new_workpackage)) +
       geom_line(group = 1) +
@@ -127,7 +164,14 @@ mod_projects_server <- function(input, output, session, df_timesheet){
       mutate(new_workpackage = ifelse(workpackage %in% selected_wp(), 1, 0)) %>%
       get_filtered_data(input_vars = input) %>%
       get_converted_date(format_var = input$sel_timegroup) %>%
-      get_sum_by_group(target = duration_h, new_workpackage, new_startdate) %>%
+      get_sum_by_group(target = duration_h, new_workpackage, new_startdate)
+    if (input$sel_cumul_toggle) {
+      df <- df %>%
+        get_cumulated_duration_by_group(target = sum_target, sort = new_startdate, new_workpackage) %>%
+        mutate(sum_target = cumsum_target) %>%
+        select(-cumsum_target)
+    }
+    df <- df %>%
       mutate(new_workpackage = ifelse(new_workpackage == 1, "ausgewählt", "nicht ausgewählt"))
     p <- ggplot(df, aes(x = new_startdate, y = sum_target, fill = new_workpackage)) +
       geom_bar(position = "fill", stat = "identity") +

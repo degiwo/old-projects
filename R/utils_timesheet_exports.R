@@ -22,11 +22,7 @@ read_all_timesheet_files <- function(path) {
 #' @import dplyr
 #' @noRd
 join_project_names <- function(input_df) {
-  df_project_name <- data.frame(
-    cost_center = c("60160417", "80160353", "80160282", "80000000", "80010000"),
-    project_name = c("PLUTO Design", "BMW Motorrad", "IFCM", "BA Allgemein", "BA oL"),
-    stringsAsFactors = FALSE
-  )
+  df_project_name <- read.csv2("data/project_names.csv", colClasses = "character")
   df <- input_df %>%
     left_join(df_project_name, by = "cost_center") %>%
     mutate(project_name = coalesce(project_name, cost_center))

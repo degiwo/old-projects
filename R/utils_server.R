@@ -48,3 +48,18 @@ get_sum_by_group <- function(df_input, target, ...) {
     summarise(sum_target = round(sum(!! target_var), 2)) %>%
     ungroup()
 }
+
+#' calculate cumsum of target for each ... arrange by sort
+#'
+#' @noRd
+#' @import dplyr
+get_cumulated_duration_by_group <- function(df_input, target, sort, ...) {
+  target_var <- enquo(target)
+  sort_var <- enquo(sort)
+  group_var <- quos(...)
+  df_input %>%
+    arrange(!! sort_var, !!! group_var) %>%
+    group_by(!!! group_var) %>%
+    mutate(cumsum_target = round(cumsum(!! target_var), 2)) %>%
+    ungroup()
+}
