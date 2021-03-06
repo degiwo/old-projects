@@ -53,7 +53,7 @@ mod_projects_server <- function(input, output, session, df_timesheet){
   })
   
   observe({
-    updateAirDateInput(session, "sel_daterange", value = c(min(df_timesheet()$startdate), Sys.Date()))
+    updateAirDateInput(session, "sel_daterange", value = c(Sys.Date() - months(6), Sys.Date()))
   })
   
   observe({
