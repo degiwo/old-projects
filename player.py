@@ -2,10 +2,13 @@ import random
 
 def get_target(player, target_list):
     possible_target_list = [t for t in target_list if t != player]
-    return possible_target_list[random.randint(0, len(possible_target_list)-1)]
+    target_index = min(9, max(0, round(target_list.index(player) + random.normalvariate(0, 2))))
+    return possible_target_list[target_index]
 
-def get_opponent(player, opponent_list):
-    return opponent_list[random.randint(0, 2)]
+def get_opponent(player, team_list, opponent_list):
+    possible_opponent_list = opponent_list[1:]
+    opponent_index = min(9, max(0, round(team_list.index(player) + random.normalvariate(0, 2))))
+    return possible_opponent_list[-opponent_index]
 
 def get_team_in_possession(player_in_possession, team1, team2):
     if player_in_possession in team1:
