@@ -2,7 +2,7 @@ import random
 
 from teams import team1, team2
 from actions import get_possession_after_pass, get_possession_after_shot, get_possession_after_dribbling
-from player import get_target, get_opponent, get_team_in_possession
+from player import get_target, get_opponent, get_team_in_possession, get_action
 
 class Game:
     def __init__(self):
@@ -18,12 +18,12 @@ class Game:
         self.team_in_possession, self.team_in_defense = get_team_in_possession(self.player_in_possession, self.team1, self.team2)
     
     def make_action(self):
-        rand = random.randint(0, 10)
-        if rand <= 6:
+        action = get_action(self.player_in_possession, self.team_in_possession)
+        if action == "pass":
             target = get_target(self.player_in_possession, self.team_in_possession)
             opponent = get_opponent(self.player_in_possession, self.team_in_possession, self.team_in_defense)
             self.make_pass(target, opponent)
-        elif rand <= 9:
+        elif action == "dribble":
             opponent = get_opponent(self.player_in_possession, self.team_in_possession, self.team_in_defense)
             self.make_dribbling(opponent)
         else:
