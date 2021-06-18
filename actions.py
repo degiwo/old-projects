@@ -1,12 +1,8 @@
 import random
 
 def get_possession_after_pass(passer, target, opponent):
-    rand = random.randint(0, 10)
-    if rand <= 7:
-        result = "Success"
-    else:
-        result = "Fail"
-    print(passer + " passes to " + target + ": " + result)
+    result = random.choices(["Success", "Fail"], weights=[passer["pas"], 50])[0]
+    print(passer["name"] + " passes to " + target["name"] + ": " + result)
     if result == "Success":
         return target
     else:
@@ -20,7 +16,7 @@ def get_possession_after_shot(shooter, team_in_defense):
     else:
         result = "Fail"
         player_in_possession = team_in_defense[0] # goalkeeper
-    print(shooter + " shoots: " + result)
+    print(shooter['name'] + " shoots: " + result)
     return player_in_possession
 
 def get_possession_after_dribbling(dribbler, opponent):
@@ -29,8 +25,8 @@ def get_possession_after_dribbling(dribbler, opponent):
         result = "Success"
     else:
         result = "Fail"
-    print(dribbler + " dribbles against " + opponent + ": " + result)
+    print(dribbler["name"] + " dribbles against " + opponent["name"] + ": " + result)
     if result != "Success":
-        return  opponent
+        return opponent
     else:
         return dribbler
