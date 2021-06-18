@@ -1,7 +1,7 @@
 import random
 
 from actions import get_possession_after_pass, get_result_after_shot, get_possession_after_dribbling
-from player import get_target, get_opponent
+from player import get_target, get_opponent, get_team_in_possession
 
 class Game:
     def __init__(self):
@@ -15,24 +15,18 @@ class Game:
     def make_action(self):
         rand = random.randint(0, 10)
         if rand <= 6:
-            if self.player_in_possession in self.team1:
-                target = get_target(self.player_in_possession, self.team1)
-                opponent = get_opponent(self.player_in_possession, self.team2)
-            else:
-                target = get_target(self.player_in_possession, self.team2)
-                opponent = get_opponent(self.player_in_possession, self.team1)
+            target = get_target(self.player_in_possession, self.team_in_possession)
+            opponent = get_opponent(self.player_in_possession, self.team_in_defense)
             self.make_pass(target, opponent)
         elif rand <= 9:
-            if self.player_in_possession in self.team1:
-                opponent = get_opponent(self.player_in_possession, self.team2)
-            else:
-                opponent = get_opponent(self.player_in_possession, self.team1)
+            opponent = get_opponent(self.player_in_possession, self.team_in_defense)
             self.make_dribbling(opponent)
         else:
             self.make_shot()
 
     def make_pass(self, target, opponent):
         self.player_in_possession = get_possession_after_pass(self.player_in_possession, target, opponent)
+        self.team_in_possession, self.team_in_defense = get_team_in_possession(self.player_in_possession, self.team1, self.team2)
     
     def make_shot(self):
         get_result_after_shot(self.player_in_possession)
@@ -40,9 +34,11 @@ class Game:
             self.player_in_possession = self.team2[random.randint(0, 2)]
         else:
             self.player_in_possession = self.team1[random.randint(0, 2)]
+        self.team_in_possession, self.team_in_defense = get_team_in_possession(self.player_in_possession, self.team1, self.team2)
     
     def make_dribbling(self, opponent):
         self.player_in_possession = get_possession_after_dribbling(self.player_in_possession, opponent)
+        self.team_in_possession, self.team_in_defense = get_team_in_possession(self.player_in_possession, self.team1, self.team2)
 
 if __name__ == '__main__':
     game = Game()
