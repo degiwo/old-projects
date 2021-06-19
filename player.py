@@ -20,28 +20,31 @@ def get_team_in_possession(player_in_possession, team1, team2):
     return team_in_possession, team_in_defense
 
 def get_action(player, team_list):
-    rand = random.randint(0, 10)
+    rand = random.randint(0, 100)
     player_index = team_list.index(player)
     if player_index == 0: # goalkeeper
-        return "pass"
-    elif player_index <= 5: # defenders
-        if rand <= 6:
+        if rand <= 98:
             return "pass"
-        elif rand <= 9:
+        else:
+            return "dribble"
+    elif player_index <= 5: # defenders
+        if rand <= 70:
+            return "pass"
+        elif rand <= 99:
             return "dribble"
         else:
             return "shoot"
     elif player_index <= 9: # non-striker
-        if rand <= 5:
+        if rand <= 60:
             return "pass"
-        elif rand <= 7:
+        elif rand <= 97:
             return "dribble"
         else:
             return "shoot"
     else:
-        if rand <= 3:
+        if rand <= 50:
             return "pass"
-        elif rand <= 6:
+        elif rand <= 95:
             return "dribble"
         else:
             return "shoot"

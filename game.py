@@ -43,5 +43,5 @@ class Game:
 
 if __name__ == '__main__':
     game = Game()
-    for i in range(100):
+    for i in range(500):
         game.make_action()
