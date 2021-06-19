@@ -11,9 +11,9 @@ class Game:
 
         rand = random.randint(0, 1)
         if rand == 0:
-            self.player_in_possession = team1[-1]
+            self.player_in_possession = team1[0] # start with goalkeeper
         else:
-            self.player_in_possession = team2[-1]
+            self.player_in_possession = team2[0]
 
         self.team_in_possession, self.team_in_defense = get_team_in_possession(self.player_in_possession, self.team1, self.team2)
     
@@ -43,5 +43,5 @@ class Game:
 
 if __name__ == '__main__':
     game = Game()
-    for i in range(20):
+    for i in range(100):
         game.make_action()

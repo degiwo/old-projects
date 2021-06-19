@@ -1,3 +1,5 @@
+# TODO: let goalkeeper have other stats
+
 team1 = [
     {"name": "TW", "pac": 100, "sho": 100, "pas": 100, "dri": 100, "def": 100, "phy": 100},
     {"name": "RV", "pac": 100, "sho": 100, "pas": 100, "dri": 100, "def": 100, "phy": 100},
