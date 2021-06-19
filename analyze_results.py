@@ -10,3 +10,4 @@ team1_player_names = [t["name"] for t in team1]
 df_results["team"] = np.where(df_results["player"].isin(team1_player_names), 1, 2)
 
 df_results.groupby(["team", "action", "result"]).size()
+ 
