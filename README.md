@@ -18,6 +18,11 @@ elaborate MLOps
 git clone https://github.com/degiwo/mlops.git
 ```
 
+### Create own branch
+```sh
+git branch own-feature-branch
+```
+
 ### Rebase feature branch from main
 ```sh
 git checkout main
@@ -35,7 +40,7 @@ git merge feature-branch
 
 ### Squash commit messages
 ```sh
-git rebase -i HEAD~20
+git rebase -i HEAD~20 # in the interactive editor: ESC > :wq!
 git commit --amend
 git push -f
 ```
