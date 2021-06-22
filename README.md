@@ -18,6 +18,11 @@ elaborate MLOps
 git clone https://github.com/degiwo/mlops.git
 ```
 
+### Create own branch
+```sh
+git branch own-feature-branch
+```
+
 ### Rebase feature branch from main
 ```sh
 git checkout main
