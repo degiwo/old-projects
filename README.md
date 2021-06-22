@@ -35,7 +35,7 @@ git merge feature-branch
 
 ### Squash commit messages
 ```sh
-git rebase -i HEAD~20
+git rebase -i HEAD~20 # in the interactive editor: ESC > :wq!
 git commit --amend
 git push -f
 ```
