@@ -2,7 +2,7 @@
 elaborate MLOps
 
 ## Content
-- [Code Versioning](##code-versioning)
+- [Code Versioning](#code-versioning)
 - Data Versioning
 - Data Pipeline
 - Model Versioning
