@@ -7,7 +7,7 @@ elaborate MLOps
 - Data Pipeline
 - Model Versioning
 - Model Comparison
-- Continous Integration
+- [Continous Integration](#continous-integration)
 - Testing
 - Performance Monitoring
 - API
@@ -68,4 +68,45 @@ git add data.csv.dvc
 ### Pull data from remote
 ```sh
 dvc pull data.csv
+```
+
+## Continous Integration
+
+### Set up Github Actions
+```sh
+mkdir .github/workflows/
+cat > .\.github\workflows\cml.yaml
+```
+
+Copy the following into cml.yaml:
+```yaml
+name: your-workflow-name
+on: [push]
+jobs:
+  run:
+    runs-on: [ubuntu-latest]
+    # optionally use a convenient Ubuntu LTS + CUDA + DVC + CML image
+    # container: docker://dvcorg/cml:0-dvc2-base1-gpu
+    steps:
+      - uses: actions/checkout@v2
+      # may need to setup NodeJS & Python3 on e.g. self-hosted
+      # - uses: actions/setup-node@v2
+      #   with:
+      #     node-version: '12'
+      # - uses: actions/setup-python@v2
+      #   with:
+      #     python-version: '3.x'
+      - uses: iterative/setup-cml@v1
+      - name: Train model
+        run: |
+          # Your ML workflow goes here
+          pip install -r requirements.txt
+          python train.py
+      - name: Write CML report
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Post reports as comments in GitHub PRs
+          cat results.txt >> report.md
+          cml-send-comment report.md
 ```
