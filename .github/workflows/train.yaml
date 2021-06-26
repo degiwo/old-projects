@@ -10,4 +10,4 @@ jobs:
         env:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          dvc repro
+          echo "Test"
