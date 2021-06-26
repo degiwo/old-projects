@@ -1,0 +1,7 @@
+stages:
+  get_data:
+    cmd: dvc pull data.csv
+  train_model:
+    cmd: echo "Training..."
+    deps:
+      - data.csv

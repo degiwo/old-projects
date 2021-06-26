@@ -79,14 +79,50 @@ dvc pull data.csv
 
 ## Model Pipeline
 
+### Set up DVC pipeline
+```sh
+cat > dvc.yaml
+```
 
+Copy the following into dvc.yaml:
+```yaml
+stages:
+  get_data:
+    cmd: python get_data.py
+    deps:
+    - get_data.py
+    outs:
+    - data_raw.csv  
+  process:
+    cmd: python process_data.py
+    deps:
+    - process_data.py
+    - data_raw.csv
+    outs:
+    - data_processed.csv
+  train:
+    cmd: python train.py
+    deps:
+    - train.py
+    - data_processed.csv
+    outs:
+    - by_region.png
+    metrics:
+    - metrics.json:
+        cache: false
+```
+
+### Reproduce pipeline
+```sh
+dvc repro
+```
 
 ## Continous Integration
 
 ### Set up Github Actions
 ```sh
 mkdir .github/workflows/
-cat > .\.github\workflows\cml.yaml
+cat > ./.github/workflows/cml.yaml
 ```
 
 Copy the following into cml.yaml:
