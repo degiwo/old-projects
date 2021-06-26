@@ -5,6 +5,7 @@ elaborate MLOps
 - [Code Versioning](#code-versioning)
 - [Data Versioning](#data-versioning)
 - Data Pipeline
+- [Model Pipeline](#model-pipeline)
 - Model Versioning
 - Model Comparison
 - [Continous Integration](#continous-integration)
@@ -46,6 +47,12 @@ git rebase -i HEAD~20 # in the interactive editor: ESC > :wq!
 git commit --amend
 git push -f
 ```
+
+### Fetch from remote
+```sh
+git fetch --prune
+```
+
 ## Data Versioning
 
 ### Initialize DVC
@@ -69,6 +76,10 @@ git add data.csv.dvc
 ```sh
 dvc pull data.csv
 ```
+
+## Model Pipeline
+
+
 
 ## Continous Integration
 
