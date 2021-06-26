@@ -10,4 +10,5 @@ jobs:
         env:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          echo "Test"
+          dvc pull data.csv
+          dvc repro
