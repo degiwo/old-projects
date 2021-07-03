@@ -2,6 +2,7 @@ library(shiny)
 library(shinydashboard)
 
 # TODO: without source?
+source("utils/process_data.R")
 source("teambuilder.R")
 
 myApp <- function(...) {
