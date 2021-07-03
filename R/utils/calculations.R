@@ -1,3 +1,5 @@
+defense_type_effects <- get_defense_type_effects()
+
 get_weaknesses <- function(type1, type2) {
     weak1 <- unlist(defense_type_effects$weaknesses[defense_type_effects$name == type1])
     weak2 <- unlist(defense_type_effects$weaknesses[defense_type_effects$name == type2])

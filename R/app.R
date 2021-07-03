@@ -1,5 +1,6 @@
 library(shiny)
 library(shinydashboard)
+library(jsonlite)
 
 # TODO: without source?
 source("utils/process_data.R")
@@ -21,7 +22,10 @@ myApp <- function(...) {
         )
     )
     server <- function(input, output, session) {
-        callModule(teambuilderServer, "tab_teambuilder")
+        pokedex <- reactive({
+            get_pokedex()
+        })
+        teambuilderServer("tab_teambuilder", pokedex = pokedex)
     }
     shinyApp(ui, server, ...)
 }

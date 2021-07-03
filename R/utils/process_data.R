@@ -1,19 +1,27 @@
 library(jsonlite)
 
-pokedex <- fromJSON(readLines("../data/pokedex.json"), flatten = TRUE)
+get_pokedex <- function() {
+    pokedex <- fromJSON(readLines("../data/pokedex.json"), flatten = TRUE)
+    
+    pokedex$type1 <- apply(pokedex, 1, function(x) {
+        if(length(x$type) == 1)
+            x$type
+        else
+            x$type[1]
+    })
+    pokedex$type2 <- apply(pokedex, 1, function(x) {
+        if(length(x$type) == 1)
+            NA
+        else
+            x$type[2]
+    })
+    
+    return(pokedex)
+}
 
-pokedex$type1 <- apply(pokedex, 1, function(x) {
-    if(length(x$type) == 1)
-        x$type
-    else
-        x$type[1]
-})
-pokedex$type2 <- apply(pokedex, 1, function(x) {
-    if(length(x$type) == 1)
-        NA
-    else
-        x$type[2]
-})
+get_defense_type_effects <- function() {
+    defense_type_effects <- fromJSON(readLines("../data/defense_type_effects.json"), flatten = TRUE)
+    
+    return(defense_type_effects)
+}
 
-
-defense_type_effects <- fromJSON(readLines("../data/defense_type_effects.json"), flatten = TRUE)
