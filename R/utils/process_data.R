@@ -14,3 +14,6 @@ pokedex$type2 <- apply(pokedex, 1, function(x) {
     else
         x$type[2]
 })
+
+
+defense_type_effects <- fromJSON(readLines("../data/defense_type_effects.json"), flatten = TRUE)

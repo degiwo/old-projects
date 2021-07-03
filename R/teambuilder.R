@@ -11,6 +11,7 @@ teambuilderUI <- function(id) {
 teambuilderServer <- function(input, output, session) {
     output$tbl_pkmn <- renderTable({
         df <- pokedex[pokedex$name.english == input$sel_pkmn, c("name.english", "type1", "type2")]
+        df$weaknesses <- paste(unique(get_weaknesses(df$type1[1], df$type2[1])), collapse = ", ")
         t(df)
     }, rownames = TRUE, colnames = FALSE)
 }
