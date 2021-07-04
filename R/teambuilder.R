@@ -68,7 +68,8 @@ teambuilderServer <- function(id) {
         })
 
         output$tbl_types_defense <- renderTable({
-            req(input$sel_pkmn1)
+            x <- reactiveValuesToList(input)
+            req(any(x[grep("sel_pkmn", names(x))] != ""))
             df <- pkmn_team$pkmn1[["defense"]]
             df$weak <- ifelse(df$multiplicator > 1, 1, 0)
             df$resist <- ifelse(df$multiplicator < 1 & df$multiplicator > 0, 1, 0)
