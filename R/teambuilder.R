@@ -23,9 +23,6 @@ teambuilderServer <- function(id) {
         pokedex <- reactive({
             get_pokedex()
         })
-        types <- reactive({
-            get_types()
-        })
         
         pkmn_team <- reactiveValues()
         

@@ -26,8 +26,8 @@ get_defense_type_effects <- function() {
     return(defense_type_effects)
 }
 
-get_types <- function() {
-    types <- fromJSON(readLines("../data/types.json"), flatten = TRUE)
+get_offense_type_effects <- function() {
+    offense_type_effects <- fromJSON(readLines("../data/offense_type_effects.json"), flatten = TRUE)
     
-    return(types)
+    return(offense_type_effects)
 }
