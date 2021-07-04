@@ -70,11 +70,13 @@ teambuilderServer <- function(id) {
         output$tbl_types_defense <- renderTable({
             x <- reactiveValuesToList(input)
             req(any(x[grep("sel_pkmn", names(x))] != ""))
-            df <- pkmn_team$pkmn1[["defense"]]
-            df$weak <- ifelse(df$multiplicator > 1, 1, 0)
-            df$resist <- ifelse(df$multiplicator < 1 & df$multiplicator > 0, 1, 0)
-            df$immune <- ifelse(df$multiplicator == 0, 1, 0)
-            df$multiplicator <- NULL
+            
+            list_mult <- lapply(reactiveValuesToList(pkmn_team), function(x) x[["defense"]])
+            df <- Reduce(function(x, y) merge(x, y, by = "type"), list_mult)
+            df$weak <- apply(df[, grep("multiplicator", names(df))], 1, function(x) sum(x > 1))
+            df$resist <- apply(df[, grep("multiplicator", names(df))], 1, function(x) sum(x < 1 & x > 0))
+            df$immune <- apply(df[, grep("multiplicator", names(df))], 1, function(x) sum(x == 0))
+            df <- subset(df, select = -c(grep("multiplicator", names(df))))
             t(df)
         }, rownames = TRUE, colnames = FALSE)
     })
