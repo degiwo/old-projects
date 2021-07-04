@@ -4,21 +4,13 @@ teambuilderUI <- function(id) {
     tagList(
         h2("Teambuilder"),
         fluidRow(
-            column(
-                width = 4,
-                selectizeInput(ns("sel_pkmn1"), "Choose Pok\u00E9mon", choices = NULL),
-                tableOutput(ns("tbl_pkmn1"))
-            ),
-            column(
-                width = 4,
-                selectizeInput(ns("sel_pkmn2"), "Choose Pok\u00E9mon", choices = NULL),
-                tableOutput(ns("tbl_pkmn2"))
-            ),
-            column(
-                width = 4,
-                selectizeInput(ns("sel_pkmn3"), "Choose Pok\u00E9mon", choices = NULL),
-                tableOutput(ns("tbl_pkmn3"))
-            )
+            lapply(1:3, function(i) {
+                column(
+                    width = 4,
+                    selectizeInput(ns(paste0("sel_pkmn", i)), "Choose Pok\u00E9mon", choices = NULL),
+                    tableOutput(ns(paste0("tbl_pkmn", i)))
+                )
+            })
         ),
         tableOutput(ns("tbl_types_defense"))
     )
@@ -39,7 +31,9 @@ teambuilderServer <- function(id) {
         
         lapply(1:3, function(i) {
             observe({
-                updateSelectizeInput(inputId = paste0("sel_pkmn", i), choices = pokedex()$name)
+                updateSelectizeInput(inputId = paste0("sel_pkmn", i), choices = pokedex()$name, options = list(
+                    onInitialize = I('function() { this.setValue(""); }')
+                ))
             })
         })
         
