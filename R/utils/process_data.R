@@ -16,6 +16,7 @@ get_pokedex <- function() {
             x$type[2]
     })
     
+    names(pokedex)[names(pokedex) == "name.english"] <- "name"
     return(pokedex)
 }
 

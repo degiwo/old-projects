@@ -1,31 +1,27 @@
-defense_type_effects <- get_defense_type_effects()
-
-get_weaknesses <- function(type1, type2) {
-    weak1 <- unlist(defense_type_effects$weaknesses[defense_type_effects$name == type1])
-    weak2 <- unlist(defense_type_effects$weaknesses[defense_type_effects$name == type2])
-    immune1 <- unlist(defense_type_effects$immunes[defense_type_effects$name == type1])
-    immune2 <- unlist(defense_type_effects$immunes[defense_type_effects$name == type2])
-    resist1 <- unlist(defense_type_effects$resists[defense_type_effects$name == type1])
-    resist2 <- unlist(defense_type_effects$resists[defense_type_effects$name == type2])
-
-    weak_types <- setdiff(c(weak1, weak2), c(immune1, immune2, resist1, resist2))
-    return(weak_types)
-}
-
-get_resistances <- function(type1, type2) {
-    weak1 <- unlist(defense_type_effects$weaknesses[defense_type_effects$name == type1])
-    weak2 <- unlist(defense_type_effects$weaknesses[defense_type_effects$name == type2])
-    resist1 <- unlist(defense_type_effects$resists[defense_type_effects$name == type1])
-    resist2 <- unlist(defense_type_effects$resists[defense_type_effects$name == type2])
-
-    resist_types <- setdiff(c(resist1, resist2), c(weak1, weak2))
-    return(resist_types)
-}
-
-get_immunities <- function(type1, type2) {
-    immune1 <- unlist(defense_type_effects$immunes[defense_type_effects$name == type1])
-    immune2 <- unlist(defense_type_effects$immunes[defense_type_effects$name == type2])
-
-    immune_types <- c(immune1, immune2)
-    return(immune_types)
+get_defense_multiplicators <- function(type1, type2) {
+    df_def <- get_defense_type_effects()
+    df_mult <- data.frame(
+        type = unique(df_def$name)
+    )
+    df_mult$type1 <- ifelse(
+        df_mult$type %in% unlist(df_def$weaknesses[df_def$name == type1]), 2,
+        ifelse(
+            df_mult$type %in% unlist(df_def$resists[df_def$name == type1]), 0.5,
+            ifelse(
+                df_mult$type %in% unlist(df_def$immunes[df_def$name == type1]), 0, 1
+            )
+        )
+    )
+    df_mult$type2 <- ifelse(
+        df_mult$type %in% unlist(df_def$weaknesses[df_def$name == type2]), 2,
+        ifelse(
+            df_mult$type %in% unlist(df_def$resists[df_def$name == type2]), 0.5,
+            ifelse(
+                df_mult$type %in% unlist(df_def$immunes[df_def$name == type2]), 0, 1
+            )
+        )
+    )
+    df_mult$multiplicator <- df_mult$type1 * df_mult$type2
+    df_mult <- subset(df_mult, select = -c(type1, type2))
+    return(df_mult)
 }

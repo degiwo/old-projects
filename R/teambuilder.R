@@ -9,33 +9,56 @@ teambuilderUI <- function(id) {
     )
 }
 
-teambuilderServer <- function(id, pokedex, types) {
+teambuilderServer <- function(id) {
     moduleServer(id, function(input, output, session) {
-        observe({
-            updateSelectizeInput(inputId = "sel_pkmn", choices = pokedex()$name.english)
+        # Data management ---------------------------------------------------------
+
+        pokedex <- reactive({
+            get_pokedex()
         })
+        types <- reactive({
+            get_types()
+        })
+        
+        pkmn_team <- reactiveValues()
+        
+        observe({
+            updateSelectizeInput(inputId = "sel_pkmn", choices = pokedex()$name)
+        })
+        
+        observeEvent(input$sel_pkmn, {
+            pokedex <- pokedex()
+            df <- pokedex[pokedex$name == input$sel_pkmn, c("name", "type", "type1", "type2")]
+            
+            pkmn_team$pkmn1[["name"]] <- input$sel_pkmn
+            pkmn_team$pkmn1[["type"]] <- df$type
+            pkmn_team$pkmn1[["defense"]] <- get_defense_multiplicators(df$type1[1], df$type2[1])
+        })
+
+        
+        # Render output elements --------------------------------------------------
 
         output$tbl_pkmn <- renderTable({
             req(input$sel_pkmn)
-            pokedex <- pokedex()
-            df <- pokedex[pokedex$name.english == input$sel_pkmn, c("name.english", "type1", "type2")]
-            df$weaknesses <- paste(unique(get_weaknesses(df$type1[1], df$type2[1])), collapse = ", ")
-            df$resistances <- paste(unique(get_resistances(df$type1[1], df$type2[1])), collapse = ", ")
-            df$immunities <- paste(unique(get_immunities(df$type1[1], df$type2[1])), collapse = ", ")
+            df_def <- pkmn_team$pkmn1[["defense"]]
+            df <- data.frame(
+                name = pkmn_team$pkmn1[["name"]],
+                type = paste(pkmn_team$pkmn1[["type"]], collapse = ","),
+                weak = paste(df_def$type[df_def$multiplicator > 1], collapse = ","),
+                resists = paste(df_def$type[df_def$multiplicator < 1 & df_def$multiplicator > 0], collapse = ","),
+                immune = paste(df_def$type[df_def$multiplicator == 0], collapse = ",")
+            )
             t(df)
         }, rownames = TRUE, colnames = FALSE)
 
         output$tbl_types_defense <- renderTable({
             req(input$sel_pkmn)
-            pokedex <- pokedex()
-            type1 <- pokedex$type1[pokedex$name.english == input$sel_pkmn]
-            type2 <- pokedex$type2[pokedex$name.english == input$sel_pkmn]
-            weaks <- get_weaknesses(type1, type2)
-            
-            df <- sapply(types()$english, function(x) sum(x %in% weaks))
-            df <- data.frame(df)
-            names(df) <- c("weak")
+            df <- pkmn_team$pkmn1[["defense"]]
+            df$weak <- ifelse(df$multiplicator > 1, 1, 0)
+            df$resist <- ifelse(df$multiplicator < 1 & df$multiplicator > 0, 1, 0)
+            df$immune <- ifelse(df$multiplicator == 0, 1, 0)
+            df$multiplicator <- NULL
             t(df)
-        }, rownames = TRUE)
+        }, rownames = TRUE, colnames = FALSE)
     })
 }

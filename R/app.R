@@ -22,13 +22,7 @@ myApp <- function(...) {
         )
     )
     server <- function(input, output, session) {
-        pokedex <- reactive({
-            get_pokedex()
-        })
-        types <- reactive({
-            get_types()
-        })
-        teambuilderServer("tab_teambuilder", pokedex = pokedex, types = types)
+        teambuilderServer("tab_teambuilder")
     }
     shinyApp(ui, server, ...)
 }
