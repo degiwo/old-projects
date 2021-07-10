@@ -18,4 +18,24 @@ test_that("defense multiplicators are calculated correctly",  {
     expect_equal(df_mult$multiplicator[df_mult$type == "Flying"], 1)
 })
 
+test_that("types defense table has the right columns and coverage values", {
+    pkmn_team <- list()
+    pkmn_team[["pkmn1"]][["name"]] <- "Ivysaur"
+    pkmn_team[["pkmn1"]][["type"]] <- list(c("Grass", "Poison"))
+    pkmn_team[["pkmn1"]][["defense"]] <- data.frame(
+        type = c("Normal", "Fire", "Water"),
+        multiplicator = c(1.0, 2.0, 0.5)
+    )
+    pkmn_team[["pkmn2"]][["name"]] <- "Charizard"
+    pkmn_team[["pkmn2"]][["type"]] <- list(c("Fire", "Flying"))
+    pkmn_team[["pkmn2"]][["defense"]] <- data.frame(
+        type = c("Normal", "Fire", "Water"),
+        multiplicator = c(1.0, 0.5, 2.0)
+    )
+    df <- get_types_defense_table(pkmn_team)
+    expect_true(all(c("weak", "resist", "immune", "coverage") %in% names(df)))
+    expect_true(all(unique(df$coverage) %in% c("good", "bad", "neutral")))
+})
+
+
 setwd(wd)

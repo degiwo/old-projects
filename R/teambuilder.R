@@ -88,18 +88,8 @@ teambuilderServer <- function(id) {
             x <- reactiveValuesToList(input)
             req(any(x[grep("sel_pkmn", names(x))] != ""))
             
-            # create table: rows = types, columns = team_pkmn
-            list_mult <- lapply(reactiveValuesToList(pkmn_team), function(x) x[["defense"]])
-            df <- Reduce(function(x, y) merge(x, y, by = "type"), list_mult)
-            df$weak <- apply(df[, grep("multiplicator", names(df))], 1, function(x) sum(x > 1))
-            df$resist <- apply(df[, grep("multiplicator", names(df))], 1, function(x) sum(x < 1 & x > 0))
-            df$immune <- apply(df[, grep("multiplicator", names(df))], 1, function(x) sum(x == 0))
-            
-            # calculate coverage
-            df$coverage <- df$weak * 2 - df$resist * 2 - df$immune * 4
-            df$coverage <- ifelse(df$coverage > 0, "bad",
-                                  ifelse(df$coverage > 0 | df$resist > 0 | df$immune > 0, "good", "neutral"))
-            
+            df <- get_types_defense_table(pkmn_team)
+                        
             # customize appearance of table
             rownames(df) <- df$type
             df$type <- NULL

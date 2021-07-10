@@ -26,6 +26,24 @@ get_defense_multiplicators <- function(type1, type2) {
     return(df_mult)
 }
 
+get_types_defense_table <- function(pkmn_team) {
+    # create table: rows = types, columns = pkmn
+    if(is.reactivevalues(pkmn_team)) {
+        pkmn_team <- reactiveValuesToList(pkmn_team)
+    }
+    list_mult <- lapply(pkmn_team, function(x) x[["defense"]])
+    df <- Reduce(function(x, y) merge(x, y, by = "type"), list_mult)
+    df$weak <- apply(df[, grep("multiplicator", names(df))], 1, function(x) sum(x > 1))
+    df$resist <- apply(df[, grep("multiplicator", names(df))], 1, function(x) sum(x < 1 & x > 0))
+    df$immune <- apply(df[, grep("multiplicator", names(df))], 1, function(x) sum(x == 0))
+    
+    # calculate coverage
+    df$coverage <- df$weak * 2 - df$resist * 2 - df$immune * 4
+    df$coverage <- ifelse(df$coverage > 0, "bad",
+                          ifelse(df$coverage > 0 | df$resist > 0 | df$immune > 0, "good", "neutral"))
+    return(df)
+}
+
 get_recommended_additions <- function(pkmn_team) {
     return("Poison")
 }
