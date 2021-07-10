@@ -62,7 +62,10 @@ get_recommended_additions <- function(pkmn_team) {
 
 get_recommended_pkmn <- function(recommended_additions) {
     df_pokedex <- get_pokedex()
-    types <- names(sort(-recommended_additions()))
+    if (is.reactive(recommended_additions)) {
+        recommended_additions <- recommended_additions()
+    }
+    types <- names(sort(-recommended_additions))
     list_pkmn <- list()
     for (i in seq(types)) {
         temp <- df_pokedex[df_pokedex$type1 == types[i] | (!is.na(df_pokedex$type2) & df_pokedex$type2 == types[i]), ]

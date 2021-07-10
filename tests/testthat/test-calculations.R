@@ -37,5 +37,29 @@ test_that("types defense table has the right columns and coverage values", {
     expect_true(all(unique(df$coverage) %in% c("good", "bad", "neutral")))
 })
 
+test_that("recommended types are correct", {
+    pkmn_team <- list()
+    pkmn_team[["pkmn1"]][["name"]] <- "Test1"
+    pkmn_team[["pkmn1"]][["type"]] <- list(c("Grass"))
+    pkmn_team[["pkmn1"]][["defense"]] <- data.frame(
+        type = c("Normal", "Fire", "Water", "Grass", "Flying"),
+        multiplicator = c(1.0, 2.0, 0.5, 0.5, 2.0)
+    )
+    pkmn_team[["pkmn2"]][["name"]] <- "Test2"
+    pkmn_team[["pkmn2"]][["type"]] <- list(c("Fire"))
+    pkmn_team[["pkmn2"]][["defense"]] <- data.frame(
+        type = c("Normal", "Fire", "Water", "Grass", "Flying"),
+        multiplicator = c(1.0, 0.5, 2.0, 0.5, 1.0)
+    )
+    recs <- get_recommended_additions(pkmn_team)
+    expect_true(all(c("Steel", "Electric", "Rock") %in% names(recs)))
+})
+
+test_that("recommended pokemon are correct", {
+    recs <- as.vector(data.frame(Steel = 3, Electric = 1))
+    df_pkmn <- get_recommended_pkmn(recs)
+    
+    expect_true(all(df_pkmn$type1 %in% c("Steel", "Electric") | df_pkmn$type2 %in% c("Steel", "Electric")))
+})
 
 setwd(wd)
