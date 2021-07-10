@@ -2,7 +2,6 @@ library(shiny)
 library(shinydashboard)
 library(jsonlite)
 
-# TODO: without source?
 source("utils/process_data.R")
 source("utils/calculations.R")
 source("teambuilder.R")
