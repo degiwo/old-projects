@@ -1,5 +1,6 @@
 library(shiny)
 library(shinydashboard)
+library(DT)
 library(jsonlite)
 
 source("utils/process_data.R")

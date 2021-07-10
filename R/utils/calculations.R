@@ -57,5 +57,9 @@ get_recommended_additions <- function(pkmn_team) {
         new_recs <- c(resists, immunes)
         recommended_types <- append(recommended_types, new_recs)
     }
-    return(names(sort(-table(recommended_types))))
+    return(table(recommended_types))
+}
+
+get_recommended_pkmn <- function(recommended_additions) {
+    
 }

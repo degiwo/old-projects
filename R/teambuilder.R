@@ -29,7 +29,17 @@ teambuilderUI <- function(id) {
         # type table --------------------------------------------------------------
 
         tableOutput(ns("tbl_types_defense")),
-        textOutput(ns("recommended_additions"))
+        textOutput(ns("recommended_additions")),
+        tags$br(),
+        box(
+            title = "Pok\u00E9mon recommendations",
+            status = "primary",
+            solidHeader = TRUE,
+            width = 12,
+            collapsible = TRUE,
+            collapsed = TRUE,
+            DTOutput(ns("tbl_recommended_pkmn"))
+        )
     )
 }
 
@@ -42,6 +52,7 @@ teambuilderServer <- function(id) {
         })
         
         pkmn_team <- reactiveValues()
+        recommended_additions <- reactiveVal()
         
         lapply(1:6, function(i) {
             observe({
@@ -51,6 +62,7 @@ teambuilderServer <- function(id) {
             })
         })
         
+        # add selected pkmn to pkmn_team
         lapply(1:6, function(i) {
             observeEvent(input[[paste0("sel_pkmn", i)]], {
                 pkmn <- input[[paste0("sel_pkmn", i)]]
@@ -64,6 +76,17 @@ teambuilderServer <- function(id) {
                 # rename columns to prevent merge warnings
                 df <- pkmn_team[[paste0("pkmn", i)]][["defense"]]
                 names(pkmn_team[[paste0("pkmn", i)]][["defense"]])[names(df) != "type"] <- paste(names(df)[names(df) != "type"], i)
+            })
+        })
+        
+        # get recommended additions
+        lapply(1:6, function(i) {
+            observeEvent(input[[paste0("sel_pkmn", i)]], {
+                x <- reactiveValuesToList(input)
+                req(any(x[grep("sel_pkmn", names(x))] != ""))
+                
+                # store recommended additions as a table in a reactiveVal
+                recommended_additions(get_recommended_additions(pkmn_team))
             })
         })
 
@@ -100,10 +123,25 @@ teambuilderServer <- function(id) {
         output$recommended_additions <- renderText({
             x <- reactiveValuesToList(input)
             req(any(x[grep("sel_pkmn", names(x))] != "") && !all(x[grep("sel_pkmn", names(x))] != ""))
+            rec_types <- names(sort(-recommended_additions()))
             paste0(
                 "Recommended Addtitions: ",
-                paste0(get_recommended_additions(pkmn_team), collapse = ",")
+                paste0(rec_types, collapse = ",")
             )
+        })
+        
+        output$tbl_recommended_pkmn <- renderDT({
+            # render table if selection is made
+            input$sel_pkmn1
+            input$sel_pkmn2
+            input$sel_pkmn3
+            input$sel_pkmn4
+            input$sel_pkmn5
+            input$sel_pkmn6
+            
+            print(1)
+            get_recommended_pkmn(recommended_additions)
+            
         })
     })
 }

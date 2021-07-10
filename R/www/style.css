@@ -6,3 +6,8 @@ body {
 .content-wrapper, .right-side {
     background-color: #353c42;
 }
+
+/* DT table*/
+.box-body {
+    background-color: #d1ede1;
+}
