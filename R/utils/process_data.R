@@ -15,6 +15,8 @@ get_pokedex <- function() {
         else
             x$type[2]
     })
+    pokedex$total <- pokedex$base.HP + pokedex$base.Attack + pokedex$base.Defense +
+        pokedex$`base.Sp. Attack` + pokedex$`base.Sp. Defense` + pokedex$base.Speed
     
     names(pokedex)[names(pokedex) == "name.english"] <- "name"
     return(pokedex)
