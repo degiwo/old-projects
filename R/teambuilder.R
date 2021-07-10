@@ -102,7 +102,7 @@ teambuilderServer <- function(id) {
             req(any(x[grep("sel_pkmn", names(x))] != "") && !all(x[grep("sel_pkmn", names(x))] != ""))
             paste0(
                 "Recommended Addtitions: ",
-                get_recommended_additions(pkmn_team)
+                paste0(get_recommended_additions(pkmn_team), collapse = ",")
             )
         })
     })

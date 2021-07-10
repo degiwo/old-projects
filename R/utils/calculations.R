@@ -28,7 +28,7 @@ get_defense_multiplicators <- function(type1, type2) {
 
 get_types_defense_table <- function(pkmn_team) {
     # create table: rows = types, columns = pkmn
-    if(is.reactivevalues(pkmn_team)) {
+    if (is.reactivevalues(pkmn_team)) {
         pkmn_team <- reactiveValuesToList(pkmn_team)
     }
     list_mult <- lapply(pkmn_team, function(x) x[["defense"]])
@@ -45,5 +45,17 @@ get_types_defense_table <- function(pkmn_team) {
 }
 
 get_recommended_additions <- function(pkmn_team) {
-    return("Poison")
+    df_defense <- get_types_defense_table(pkmn_team)
+    bad_types <- df_defense$type[df_defense$coverage == "bad"]
+    df_off <- get_offense_type_effects()
+    
+    recommended_types <- c()
+    for (i in seq(bad_types)) {
+        resists <- unlist(df_off$resisted_by[df_off$name == bad_types[i]])
+        # weight immunity by double
+        immunes <- rep(unlist(df_off$immuned_by[df_off$name == bad_types[i]]), 2)
+        new_recs <- c(resists, immunes)
+        recommended_types <- append(recommended_types, new_recs)
+    }
+    return(names(sort(-table(recommended_types))))
 }
