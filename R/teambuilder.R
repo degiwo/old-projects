@@ -67,7 +67,6 @@ teambuilderServer <- function(id) {
                 req(input[[paste0("sel_pkmn", i)]])
                 df_def <- pkmn_team[[paste0("pkmn", i)]][["defense"]]
                 df <- data.frame(
-                    name = pkmn_team[[paste0("pkmn", i)]][["name"]],
                     type = paste(unlist(pkmn_team[[paste0("pkmn", i)]][["type"]]), collapse = ","),
                     weak = paste(df_def$type[df_def$multiplicator > 1], collapse = ","),
                     resists = paste(df_def$type[df_def$multiplicator < 1 & df_def$multiplicator > 0], collapse = ","),
