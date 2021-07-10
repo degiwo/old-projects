@@ -1,0 +1,8 @@
+body {
+    color: white; /* text color */
+}
+
+/* body */
+.content-wrapper, .right-side {
+    background-color: #353c42;
+}

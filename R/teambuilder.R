@@ -67,8 +67,7 @@ teambuilderServer <- function(id) {
                 req(input[[paste0("sel_pkmn", i)]])
                 df_def <- pkmn_team[[paste0("pkmn", i)]][["defense"]]
                 df <- data.frame(
-                    name = pkmn_team[[paste0("pkmn", i)]][["name"]],
-                    type = paste(pkmn_team[[paste0("pkmn", i)]][["type"]], collapse = ","),
+                    type = paste(unlist(pkmn_team[[paste0("pkmn", i)]][["type"]]), collapse = ","),
                     weak = paste(df_def$type[df_def$multiplicator > 1], collapse = ","),
                     resists = paste(df_def$type[df_def$multiplicator < 1 & df_def$multiplicator > 0], collapse = ","),
                     immune = paste(df_def$type[df_def$multiplicator == 0], collapse = ",")
@@ -86,8 +85,10 @@ teambuilderServer <- function(id) {
             df$weak <- apply(df[, grep("multiplicator", names(df))], 1, function(x) sum(x > 1))
             df$resist <- apply(df[, grep("multiplicator", names(df))], 1, function(x) sum(x < 1 & x > 0))
             df$immune <- apply(df[, grep("multiplicator", names(df))], 1, function(x) sum(x == 0))
-            df <- subset(df, select = -c(grep("multiplicator", names(df))))
+            rownames(df) <- df$type
+            df$type <- NULL
+            df <- subset(df, select = -grep("multiplicator", names(df)))
             t(df)
-        }, rownames = TRUE, colnames = FALSE)
+        }, rownames = TRUE, colnames = TRUE)
     })
 }
