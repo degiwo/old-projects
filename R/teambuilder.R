@@ -139,9 +139,12 @@ teambuilderServer <- function(id) {
             input$sel_pkmn5
             input$sel_pkmn6
             
-            print(1)
-            get_recommended_pkmn(recommended_additions)
-            
+            df <- get_recommended_pkmn(recommended_additions)
+            df <- subset(df, select = c("name", "type", "total",
+                                        "base.HP", "base.Attack",
+                                        "base.Defense", "base.Sp. Attack",
+                                        "base.Sp. Defense", "base.Speed"))
+            datatable(df)
         })
     })
 }

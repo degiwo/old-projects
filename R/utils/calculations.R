@@ -52,8 +52,8 @@ get_recommended_additions <- function(pkmn_team) {
     recommended_types <- c()
     for (i in seq(bad_types)) {
         resists <- unlist(df_off$resisted_by[df_off$name == bad_types[i]])
-        # weight immunity by double
-        immunes <- rep(unlist(df_off$immuned_by[df_off$name == bad_types[i]]), 2)
+        # weight immunity by 1.5
+        immunes <- rep(unlist(df_off$immuned_by[df_off$name == bad_types[i]]), 1.5)
         new_recs <- c(resists, immunes)
         recommended_types <- append(recommended_types, new_recs)
     }
@@ -61,5 +61,14 @@ get_recommended_additions <- function(pkmn_team) {
 }
 
 get_recommended_pkmn <- function(recommended_additions) {
+    df_pokedex <- get_pokedex()
+    types <- names(sort(-recommended_additions()))
+    list_pkmn <- list()
+    for (i in seq(types)) {
+        temp <- df_pokedex[df_pokedex$type1 == types[i] | (!is.na(df_pokedex$type2) & df_pokedex$type2 == types[i]), ]
+        list_pkmn[[i]] <- temp[order(-temp$total), ]
+    }
+    df_pkmn <- unique(do.call(rbind, list_pkmn))
     
+    return(df_pkmn)
 }
