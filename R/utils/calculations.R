@@ -25,3 +25,7 @@ get_defense_multiplicators <- function(type1, type2) {
     df_mult <- subset(df_mult, select = -c(type1, type2))
     return(df_mult)
 }
+
+get_recommended_additions <- function(pkmn_team) {
+    return("Poison")
+}

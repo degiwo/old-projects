@@ -28,7 +28,8 @@ teambuilderUI <- function(id) {
 
         # type table --------------------------------------------------------------
 
-        tableOutput(ns("tbl_types_defense"))
+        tableOutput(ns("tbl_types_defense")),
+        textOutput(ns("recommended_additions"))
     )
 }
 
@@ -105,5 +106,14 @@ teambuilderServer <- function(id) {
             df <- subset(df, select = -grep("multiplicator", names(df)))
             t(df)
         }, rownames = TRUE, colnames = TRUE)
+        
+        output$recommended_additions <- renderText({
+            x <- reactiveValuesToList(input)
+            req(any(x[grep("sel_pkmn", names(x))] != "") && !all(x[grep("sel_pkmn", names(x))] != ""))
+            paste0(
+                "Recommended Addtitions: ",
+                get_recommended_additions(pkmn_team)
+            )
+        })
     })
 }
