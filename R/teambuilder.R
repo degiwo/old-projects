@@ -5,12 +5,13 @@ teambuilderUI <- function(id) {
         h2("Teambuilder"),
 
         # pkmn selections ---------------------------------------------------------
-
+        
+        actionButton(ns("clear_pkmn"), label = "Clear all"),
         fluidRow(
             lapply(1:3, function(i) {
                 column(
                     width = 4,
-                    selectizeInput(ns(paste0("sel_pkmn", i)), "Choose Pok\u00E9mon", choices = NULL),
+                    selectizeInput(ns(paste0("sel_pkmn", i)), "", choices = NULL),
                     tableOutput(ns(paste0("tbl_pkmn", i)))
                 )
             })
@@ -19,7 +20,7 @@ teambuilderUI <- function(id) {
             lapply(4:6, function(i) {
                 column(
                     width = 4,
-                    selectizeInput(ns(paste0("sel_pkmn", i)), "Choose Pok\u00E9mon", choices = NULL),
+                    selectizeInput(ns(paste0("sel_pkmn", i)), "", choices = NULL),
                     tableOutput(ns(paste0("tbl_pkmn", i)))
                 )
             })
@@ -89,6 +90,17 @@ teambuilderServer <- function(id) {
                 recommended_additions(get_recommended_additions(pkmn_team))
             })
         })
+        
+        # clear all button
+        observeEvent(input$clear_pkmn, {
+            lapply(1:6, function(i) {
+                observe({
+                    updateSelectizeInput(inputId = paste0("sel_pkmn", i), choices = pokedex()$name, selected = NULL, options = list(
+                        onInitialize = I('function() { this.setValue(""); }')
+                    ))
+                })
+            })
+        })
 
 
         # Render output elements --------------------------------------------------
@@ -140,11 +152,13 @@ teambuilderServer <- function(id) {
             input$sel_pkmn6
             
             df <- get_recommended_pkmn(recommended_additions)
+            # convert type from list to string to be searchable
+            df$type <- apply(df, 1, function(x) paste0(c(x$type1, x$type2), collapse = ","))
             df <- subset(df, select = c("name", "type", "total",
                                         "base.HP", "base.Attack",
                                         "base.Defense", "base.Sp. Attack",
                                         "base.Sp. Defense", "base.Speed"))
-            datatable(df)
+            datatable(df, filter = "top")
         })
     })
 }
