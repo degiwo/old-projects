@@ -16,6 +16,11 @@ myApp <- function(...) {
             )
         ),
         body = dashboardBody(
+            # Include the custom styling
+            tags$head(
+                tags$link(rel = "stylesheet", type = "text/css", href = "style.css")
+            ),
+            
             tabItems(
                 tabItem(tabName = "tab_teambuilder", teambuilderUI("tab_teambuilder"))
             )
