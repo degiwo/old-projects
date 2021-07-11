@@ -14,6 +14,7 @@ get_legendaries <- function() {
 
 get_pokedex <- function() {
     pokedex <- fromJSON(readLines("../data/pokedex.json"), flatten = TRUE)
+    #df <- fromJSON("data/pokemon.json")
     
     # modify columns: type1, type2, total
     pokedex$type1 <- apply(pokedex, 1, function(x) {
