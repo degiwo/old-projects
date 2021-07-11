@@ -22,7 +22,16 @@ get_pokedex <- function() {
     legendaries <- get_legendaries()
     pokedex$legend <- ifelse(pokedex$id %in% legendaries$id, 1, 0)
     
+    # remove gmax pokemon
+    pokedex <- pokedex[!grepl("-Gmax", pokedex$name), ]
+    
     pokedex <- subset(pokedex, select = c(id, name, type, type1, type2, gen, legend, total, base.HP, base.Attack, base.Defense, `base.Sp. Attack`, `base.Sp. Defense`, base.Speed))
+    
+    # remove other pokemon
+    pokedex <- pokedex[!grepl("Pikachu-", pokedex$name), ]
+    pokedex <- pokedex[!grepl("Pichu-", pokedex$name), ]
+    pokedex <- pokedex[!grepl("Castform-", pokedex$name), ]
+    pokedex <- pokedex[!grepl("-Totem", pokedex$name), ]
     pokedex <- pokedex[!pokedex$name == "MissingNo.", ]
     return(pokedex)
 }
