@@ -6,7 +6,22 @@ teambuilderUI <- function(id) {
 
         # pkmn selections ---------------------------------------------------------
 
-        actionButton(ns("clear_pkmn"), label = "Clear all"),
+        fluidRow(
+            column(
+                width = 1,
+                actionButton(ns("clear_pkmn"), label = "Clear all")
+            ),
+            column(
+                width = 11,
+                checkboxGroupButtons(ns("btn_choose_gen"),
+                                     choices = paste("Gen", as.roman(1:9)),
+                                     selected = paste("Gen", as.roman(1:9)),
+                                     checkIcon = list(
+                                         yes = icon("check-square"),
+                                         no = icon("square-o"))
+                                     )
+            )
+        ),
         fluidRow(
             lapply(1:3, function(i) {
                 column(
