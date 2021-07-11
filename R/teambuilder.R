@@ -164,7 +164,7 @@ teambuilderServer <- function(id) {
         
         output$recommended_additions <- renderText({
             x <- reactiveValuesToList(input)
-            req(any(x[grep("sel_pkmn", names(x))] != "") && !all(x[grep("sel_pkmn", names(x))] != ""))
+            req(any(x[grep("sel_pkmn", names(x))] != ""))
             rec_types <- names(sort(-recommended_additions()))
             paste0(
                 "Recommended Addtitions: ",
