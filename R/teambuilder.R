@@ -5,7 +5,7 @@ teambuilderUI <- function(id) {
         h2("Teambuilder"),
 
         # pkmn selections ---------------------------------------------------------
-        
+
         actionButton(ns("clear_pkmn"), label = "Clear all"),
         fluidRow(
             lapply(1:3, function(i) {
@@ -105,6 +105,7 @@ teambuilderServer <- function(id) {
 
         # Render output elements --------------------------------------------------
 
+        
         lapply(1:6, function(i) {
             output[[paste0("tbl_pkmn", i)]] <- renderTable({
                 req(input[[paste0("sel_pkmn", i)]])
@@ -151,9 +152,17 @@ teambuilderServer <- function(id) {
             input$sel_pkmn5
             input$sel_pkmn6
             
+            req(recommended_additions())
             df <- get_recommended_pkmn(recommended_additions)
             # convert type from list to string to be searchable
-            df$type <- apply(df, 1, function(x) paste0(c(x$type1, x$type2), collapse = ","))
+            fun <- function(x) {
+                if (is.na(x$type2)) {
+                    return(x$type1)
+                } else {
+                    return(paste0(c(x$type1, x$type2), collapse = ","))
+                }
+            }
+            df$type <- apply(df, 1, fun)
             df <- subset(df, select = c("name", "type", "total",
                                         "base.HP", "base.Attack",
                                         "base.Defense", "base.Sp. Attack",
