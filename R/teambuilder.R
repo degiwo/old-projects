@@ -54,6 +54,7 @@ teambuilderUI <- function(id) {
             width = 12,
             collapsible = TRUE,
             collapsed = TRUE,
+            materialSwitch(ns("show_legendaries"), label = "Include Legendaries", value = TRUE, status = "primary"),
             DTOutput(ns("tbl_recommended_pkmn"))
         )
     )
@@ -178,9 +179,15 @@ teambuilderServer <- function(id) {
             input$sel_pkmn4
             input$sel_pkmn5
             input$sel_pkmn6
+            input$show_legendaries
             
             req(recommended_additions())
             df <- get_recommended_pkmn(recommended_additions)
+            # filter legendaries
+            if (!input$show_legendaries) {
+                df <- df[df$legend == 0, ]
+            }
+            
             # convert type from list to string to be searchable
             fun <- function(x) {
                 if (is.na(x$type2)) {

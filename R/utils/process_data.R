@@ -6,6 +6,12 @@ get_generations <- function() {
     return(gen)
 }
 
+get_legendaries <- function() {
+    legendaries <- read.csv2("../data/legendaries.csv")
+    names(legendaries)[1] <- "id"
+    return(legendaries)
+}
+
 get_pokedex <- function() {
     pokedex <- fromJSON(readLines("../data/pokedex.json"), flatten = TRUE)
     
@@ -28,6 +34,10 @@ get_pokedex <- function() {
     # add information about generation
     pokedex$gen <- cut(pokedex$id, c(1, 152, 252, 387, 494, 650, 722, 810, Inf),
                        labels = 1:8, include.lowest = TRUE, right = FALSE)
+    
+    # add information about legendaries
+    legendaries <- get_legendaries()
+    pokedex$legend <- ifelse(pokedex$id %in% legendaries$id, 1, 0)
     
     names(pokedex)[names(pokedex) == "name.english"] <- "name"
     return(pokedex)

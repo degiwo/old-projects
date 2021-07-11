@@ -11,3 +11,8 @@ body {
 .box-body {
     background-color: #d1ede1;
 }
+
+/* Switch Legendaries */
+.material-switch {
+    color: black;
+}

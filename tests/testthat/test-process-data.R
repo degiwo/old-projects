@@ -2,9 +2,14 @@ source("R/utils/process_data.R")
 wd <- getwd()
 setwd("R")
 
-test_that("pokedex has all needed columns",  {
+test_that("legendaries has the needed columns", {
+    legendaries <- get_legendaries()
+    expect_true("id" %in% names(legendaries))
+})
+
+test_that("pokedex has all needed columns", {
     pokedex <- get_pokedex()
-    expect_true(all(c("name", "type", "type1", "type2", "base.HP", "base.Attack", "gen") %in% names(pokedex)))
+    expect_true(all(c("name", "type", "type1", "type2", "base.HP", "base.Attack", "gen", "legend") %in% names(pokedex)))
 })
 
 test_that("gen is correct", {
@@ -12,12 +17,12 @@ test_that("gen is correct", {
     expect_true(all(pokedex$gen %in% 1:8))
 })
 
-test_that("defense_type_effects has all needed columns",  {
+test_that("defense_type_effects has all needed columns", {
     defense_type_effects <- get_defense_type_effects()
     expect_true(all(c("name", "weaknesses", "resists", "immunes") %in% names(defense_type_effects)))
 })
 
-test_that("offense_type_effects has all needed columns",  {
+test_that("offense_type_effects has all needed columns", {
     offense_type_effects <- get_offense_type_effects()
     expect_true(all(c("name", "immuned_by", "resisted_by", "effective") %in% names(offense_type_effects)))
 })
