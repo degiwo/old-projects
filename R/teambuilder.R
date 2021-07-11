@@ -13,9 +13,9 @@ teambuilderUI <- function(id) {
             ),
             column(
                 width = 11,
-                checkboxGroupButtons(ns("btn_choose_gen"),
-                                     choices = paste("Gen", as.roman(1:9)),
-                                     selected = paste("Gen", as.roman(1:9)),
+                checkboxGroupButtons(ns("btns_choose_gen"),
+                                     choices = get_generations(),
+                                     selected = 1:8,
                                      checkIcon = list(
                                          yes = icon("check-square"),
                                          no = icon("square-o"))
@@ -113,6 +113,18 @@ teambuilderServer <- function(id) {
                     updateSelectizeInput(inputId = paste0("sel_pkmn", i), choices = pokedex()$name, selected = NULL, options = list(
                         onInitialize = I('function() { this.setValue(""); }')
                     ))
+                })
+            })
+        })
+        
+        # filter pokemon of chosen generations
+        observeEvent(input$btns_choose_gen, {
+            filtered_pkmn <- pokedex()$name[pokedex()$gen %in% input$btns_choose_gen]
+            lapply(1:6, function(i) {
+                observe({
+                    updateSelectizeInput(inputId = paste0("sel_pkmn", i),
+                                         choices = filtered_pkmn,
+                    )
                 })
             })
         })

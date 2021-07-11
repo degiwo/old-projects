@@ -4,7 +4,12 @@ setwd("R")
 
 test_that("pokedex has all needed columns",  {
     pokedex <- get_pokedex()
-    expect_true(all(c("name", "type", "type1", "type2", "base.HP", "base.Attack") %in% names(pokedex)))
+    expect_true(all(c("name", "type", "type1", "type2", "base.HP", "base.Attack", "gen") %in% names(pokedex)))
+})
+
+test_that("gen is correct", {
+    pokedex <- get_pokedex()
+    expect_true(all(pokedex$gen %in% 1:8))
 })
 
 test_that("defense_type_effects has all needed columns",  {

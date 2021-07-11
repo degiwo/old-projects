@@ -1,8 +1,15 @@
 library(jsonlite)
 
+get_generations <- function() {
+    gen <- 1:8
+    names(gen) <- paste("Gen", as.roman(gen))
+    return(gen)
+}
+
 get_pokedex <- function() {
     pokedex <- fromJSON(readLines("../data/pokedex.json"), flatten = TRUE)
     
+    # modify columns: type1, type2, total
     pokedex$type1 <- apply(pokedex, 1, function(x) {
         if(length(x$type) == 1)
             x$type
@@ -17,6 +24,10 @@ get_pokedex <- function() {
     })
     pokedex$total <- pokedex$base.HP + pokedex$base.Attack + pokedex$base.Defense +
         pokedex$`base.Sp. Attack` + pokedex$`base.Sp. Defense` + pokedex$base.Speed
+    
+    # add information about generation
+    pokedex$gen <- cut(pokedex$id, c(1, 152, 252, 387, 494, 650, 722, 810, Inf),
+                       labels = 1:8, include.lowest = TRUE, right = FALSE)
     
     names(pokedex)[names(pokedex) == "name.english"] <- "name"
     return(pokedex)
