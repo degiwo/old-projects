@@ -200,10 +200,10 @@ teambuilderServer <- function(id) {
             
             # convert type from list to string to be searchable
             fun <- function(x) {
-                if (is.na(x$type2)) {
-                    return(x$type1)
+                if (is.na(x["type2"])) {
+                    return(x["type1"])
                 } else {
-                    return(paste0(c(x$type1, x$type2), collapse = ","))
+                    return(paste0(c(x["type1"], x["type2"]), collapse = ","))
                 }
             }
             df$type <- apply(df, 1, fun)
