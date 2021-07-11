@@ -125,6 +125,7 @@ teambuilderServer <- function(id) {
                 observe({
                     updateSelectizeInput(inputId = paste0("sel_pkmn", i),
                                          choices = filtered_pkmn,
+                                         selected = isolate(pkmn_team[[paste0("pkmn", i)]][["name"]])
                     )
                 })
             })
@@ -183,6 +184,9 @@ teambuilderServer <- function(id) {
             
             req(recommended_additions())
             df <- get_recommended_pkmn(recommended_additions)
+            # filter generations
+            df <- df[df$gen %in% input$btns_choose_gen, ]
+            
             # filter legendaries
             if (!input$show_legendaries) {
                 df <- df[df$legend == 0, ]
