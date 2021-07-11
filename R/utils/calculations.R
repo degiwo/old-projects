@@ -51,11 +51,18 @@ get_recommended_additions <- function(pkmn_team) {
     
     recommended_types <- c()
     for (i in seq(bad_types)) {
-        resists <- unlist(df_off$resisted_by[df_off$name == bad_types[i]])
+        resists <- rep(unlist(df_off$resisted_by[df_off$name == bad_types[i]]), 2)
         # weight immunity by 1.5
-        immunes <- rep(unlist(df_off$immuned_by[df_off$name == bad_types[i]]), 1.5)
+        immunes <- rep(unlist(df_off$immuned_by[df_off$name == bad_types[i]]), 3)
         new_recs <- c(resists, immunes)
         recommended_types <- append(recommended_types, new_recs)
+    }
+    # consider existing weaknesses, remove 1 entry
+    for (i in seq(bad_types)) {
+        weaks <- unlist(df_off$effective[df_off$name == bad_types[i]])
+        for (j in seq(weaks)) {
+            recommended_types[recommended_types %in% weaks[j]][1] <- NA
+        }
     }
     return(table(recommended_types))
 }
