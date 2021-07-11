@@ -13,22 +13,31 @@ get_legendaries <- function() {
 }
 
 get_pokedex <- function() {
-    pokedex <- fromJSON(readLines("../data/pokedex.json"), flatten = TRUE)
-    #df <- fromJSON("data/pokemon.json")
+    #pokedex <- fromJSON(readLines("../data/pokedex.json"), flatten = TRUE)
+    json <- fromJSON("../data/pokemon.json")
+    
+    collapsed_df <- tibble::enframe(unlist(json))
+    collapsed_df$header <- apply(collapsed_df, 1, function(x) regmatches(x, regexpr("\\.", x), invert = TRUE)[[1]][1])
+    collapsed_df$colname <- apply(collapsed_df, 1, function(x) regmatches(x, regexpr("\\.", x), invert = TRUE)[[1]][2])
+    
+    pokedex <- pivot_wider(collapsed_df[, c("value", "header", "colname")], names_from = colname, values_from = value)
     
     # modify columns: type1, type2, total
     pokedex$type1 <- apply(pokedex, 1, function(x) {
-        if(length(x$type) == 1)
-            x$type
+        if(!is.na(x["types"]))
+            x["types"]
         else
-            x$type[1]
+            x["types1"]
     })
-    pokedex$type2 <- apply(pokedex, 1, function(x) {
-        if(length(x$type) == 1)
-            NA
-        else
-            x$type[2]
-    })
+    pokedex$type2 <- pokedex$types2
+    pokedex$type <- pokedex$types
+    pokedex$base.HP <- as.integer(pokedex$baseStats.hp)
+    pokedex$base.Attack <- as.integer(pokedex$baseStats.atk)
+    pokedex$base.Defense <- as.integer(pokedex$baseStats.def)
+    pokedex$`base.Sp. Attack` <- as.integer(pokedex$baseStats.spa)
+    pokedex$`base.Sp. Defense` <- as.integer(pokedex$baseStats.spd)
+    pokedex$base.Speed <- as.integer(pokedex$baseStats.spe)
+    pokedex$id <- as.integer(pokedex$num)
     pokedex$total <- pokedex$base.HP + pokedex$base.Attack + pokedex$base.Defense +
         pokedex$`base.Sp. Attack` + pokedex$`base.Sp. Defense` + pokedex$base.Speed
     
@@ -40,7 +49,9 @@ get_pokedex <- function() {
     legendaries <- get_legendaries()
     pokedex$legend <- ifelse(pokedex$id %in% legendaries$id, 1, 0)
     
-    names(pokedex)[names(pokedex) == "name.english"] <- "name"
+    #names(pokedex)[names(pokedex) == "name.english"] <- "name"
+    pokedex <- subset(pokedex, select = c(id, name, type, type1, type2, gen, legend, total, base.HP, base.Attack, base.Defense, `base.Sp. Attack`, `base.Sp. Defense`, base.Speed))
+    pokedex <- pokedex[!pokedex$name == "MissingNo.", ]
     return(pokedex)
 }
 
