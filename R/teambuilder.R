@@ -85,6 +85,20 @@ teambuilderServer <- function(id) {
             get_pokedex()
         })
         
+        recommended_pkmn <- reactive({
+            # render table if selection is made
+            input$sel_pkmn1
+            input$sel_pkmn2
+            input$sel_pkmn3
+            input$sel_pkmn4
+            input$sel_pkmn5
+            input$sel_pkmn6
+            input$show_legendaries
+            
+            req(recommended_additions())
+            df <- get_recommended_pkmn(recommended_additions, input$show_allpkmn)
+        })
+        
         pkmn_team <- reactiveValues()
         recommended_additions <- reactiveVal()
         
@@ -196,17 +210,7 @@ teambuilderServer <- function(id) {
         })
         
         output$tbl_recommended_pkmn <- renderDT({
-            # render table if selection is made
-            input$sel_pkmn1
-            input$sel_pkmn2
-            input$sel_pkmn3
-            input$sel_pkmn4
-            input$sel_pkmn5
-            input$sel_pkmn6
-            input$show_legendaries
-            
-            req(recommended_additions())
-            df <- get_recommended_pkmn(recommended_additions, input$show_allpkmn)
+            df <- recommended_pkmn()
             # filter generations
             df <- df[df$gen %in% input$btns_choose_gen, ]
             
