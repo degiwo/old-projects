@@ -51,27 +51,46 @@ get_recommended_additions <- function(pkmn_team) {
     
     recommended_types <- c()
     for (i in seq(bad_types)) {
-        resists <- unlist(df_off$resisted_by[df_off$name == bad_types[i]])
+        resists <- rep(unlist(df_off$resisted_by[df_off$name == bad_types[i]]), 2)
         # weight immunity by 1.5
-        immunes <- rep(unlist(df_off$immuned_by[df_off$name == bad_types[i]]), 1.5)
+        immunes <- rep(unlist(df_off$immuned_by[df_off$name == bad_types[i]]), 3)
         new_recs <- c(resists, immunes)
         recommended_types <- append(recommended_types, new_recs)
+    }
+    # consider existing weaknesses, remove 1 entry
+    for (i in seq(bad_types)) {
+        weaks <- unlist(df_off$effective[df_off$name == bad_types[i]])
+        for (j in seq(weaks)) {
+            recommended_types[recommended_types %in% weaks[j]][1] <- NA
+        }
     }
     return(table(recommended_types))
 }
 
-get_recommended_pkmn <- function(recommended_additions) {
+get_recommended_pkmn <- function(recommended_additions, show_onlyrectypes) {
     df_pokedex <- get_pokedex()
     if (is.reactive(recommended_additions)) {
         recommended_additions <- recommended_additions()
     }
     types <- names(sort(-recommended_additions))
-    list_pkmn <- list()
-    for (i in seq(types)) {
-        temp <- df_pokedex[df_pokedex$type1 == types[i] | (!is.na(df_pokedex$type2) & df_pokedex$type2 == types[i]), ]
-        list_pkmn[[i]] <- temp[order(-temp$total), ]
+    
+    if (!show_onlyrectypes) {
+        df_pkmn <- df_pokedex
+    } else {
+        list_pkmn <- list()
+        for (i in seq(types)) {
+            temp <- df_pokedex[df_pokedex$type1 == types[i] | (!is.na(df_pokedex$type2) & df_pokedex$type2 == types[i]), ]
+            list_pkmn[[i]] <- temp
+        }
+        df_pkmn <- unique(do.call(rbind, list_pkmn))
     }
-    df_pkmn <- unique(do.call(rbind, list_pkmn))
+    
+    # prio for pkmn with more than one matching recommended type
+    # recommended_additions is a table: higher the value => more resistances
+    df_pkmn$prio_type <- apply(df_pkmn, 1, function(x) {
+        sum(c(recommended_additions[x["type1"]], recommended_additions[x["type2"]]), na.rm = TRUE)
+    })
+    df_pkmn <- df_pkmn[order(df_pkmn$prio_type, df_pkmn$total, decreasing = TRUE), ]
     
     return(df_pkmn)
 }

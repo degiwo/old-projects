@@ -54,7 +54,24 @@ teambuilderUI <- function(id) {
             width = 12,
             collapsible = TRUE,
             collapsed = TRUE,
-            materialSwitch(ns("show_legendaries"), label = "Include Legendaries", value = TRUE, status = "primary"),
+            fluidRow(
+                column(
+                    width = 3,
+                    materialSwitch(ns("show_legendaries"), label = "Include Legendaries", value = TRUE, status = "primary")
+                ),
+                column(
+                    width = 3,
+                    materialSwitch(ns("show_megas"), label = "Include Megas", value = TRUE, status = "primary")
+                ),
+                column(
+                    width = 3,
+                    materialSwitch(ns("show_onlyfullevo"), label = "Only fully evolved", value = TRUE, status = "primary")
+                ),
+                column(
+                    width = 3,
+                    materialSwitch(ns("show_onlyrectypes"), label = "Only recommended types", value = TRUE, status = "primary")
+                )
+            ),
             DTOutput(ns("tbl_recommended_pkmn"))
         )
     )
@@ -68,14 +85,30 @@ teambuilderServer <- function(id) {
             get_pokedex()
         })
         
+        recommended_pkmn <- reactive({
+            # render table if selection is made
+            input$sel_pkmn1
+            input$sel_pkmn2
+            input$sel_pkmn3
+            input$sel_pkmn4
+            input$sel_pkmn5
+            input$sel_pkmn6
+            input$show_legendaries
+            
+            req(recommended_additions())
+            df <- get_recommended_pkmn(recommended_additions, input$show_onlyrectypes)
+        })
+        
         pkmn_team <- reactiveValues()
         recommended_additions <- reactiveVal()
         
         lapply(1:6, function(i) {
             observe({
-                updateSelectizeInput(inputId = paste0("sel_pkmn", i), choices = pokedex()$name, options = list(
-                    onInitialize = I('function() { this.setValue(""); }')
-                ))
+                updateSelectizeInput(inputId = paste0("sel_pkmn", i),
+                                     choices = pokedex()$name,
+                                     server = TRUE, # server side, see Performance note
+                                     options = list(onInitialize = I('function() { this.setValue(""); }'))
+                )
             })
         })
         
@@ -111,9 +144,11 @@ teambuilderServer <- function(id) {
         observeEvent(input$clear_pkmn, {
             lapply(1:6, function(i) {
                 observe({
-                    updateSelectizeInput(inputId = paste0("sel_pkmn", i), choices = pokedex()$name, selected = NULL, options = list(
-                        onInitialize = I('function() { this.setValue(""); }')
-                    ))
+                    updateSelectizeInput(inputId = paste0("sel_pkmn", i),
+                                         choices = pokedex()$name,
+                                         selected = NULL,
+                                         options = list(onInitialize = I('function() { this.setValue(""); }'))
+                    )
                 })
             })
         })
@@ -125,7 +160,9 @@ teambuilderServer <- function(id) {
                 observe({
                     updateSelectizeInput(inputId = paste0("sel_pkmn", i),
                                          choices = filtered_pkmn,
-                                         selected = isolate(pkmn_team[[paste0("pkmn", i)]][["name"]])
+                                         selected = isolate(pkmn_team[[paste0("pkmn", i)]][["name"]]),
+                                         options = list(onInitialize = I('function() { this.setValue(""); }')),
+                                         server = TRUE # server side, see Performance note
                     )
                 })
             })
@@ -173,17 +210,7 @@ teambuilderServer <- function(id) {
         })
         
         output$tbl_recommended_pkmn <- renderDT({
-            # render table if selection is made
-            input$sel_pkmn1
-            input$sel_pkmn2
-            input$sel_pkmn3
-            input$sel_pkmn4
-            input$sel_pkmn5
-            input$sel_pkmn6
-            input$show_legendaries
-            
-            req(recommended_additions())
-            df <- get_recommended_pkmn(recommended_additions)
+            df <- recommended_pkmn()
             # filter generations
             df <- df[df$gen %in% input$btns_choose_gen, ]
             
@@ -192,15 +219,16 @@ teambuilderServer <- function(id) {
                 df <- df[df$legend == 0, ]
             }
             
-            # convert type from list to string to be searchable
-            fun <- function(x) {
-                if (is.na(x$type2)) {
-                    return(x$type1)
-                } else {
-                    return(paste0(c(x$type1, x$type2), collapse = ","))
-                }
+            # filter megas
+            if (!input$show_megas) {
+                df <- df[!grepl("-Mega", df$name), ]
             }
-            df$type <- apply(df, 1, fun)
+            
+            # filter not fully evolved
+            if (input$show_onlyfullevo) {
+                df <- df[is.na(df$evos), ]
+            }
+            
             df <- subset(df, select = c("name", "type", "total",
                                         "base.HP", "base.Attack",
                                         "base.Defense", "base.Sp. Attack",
