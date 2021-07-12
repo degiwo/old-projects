@@ -76,9 +76,16 @@ get_recommended_pkmn <- function(recommended_additions) {
     list_pkmn <- list()
     for (i in seq(types)) {
         temp <- df_pokedex[df_pokedex$type1 == types[i] | (!is.na(df_pokedex$type2) & df_pokedex$type2 == types[i]), ]
-        list_pkmn[[i]] <- temp[order(-temp$total), ]
+        list_pkmn[[i]] <- temp
     }
     df_pkmn <- unique(do.call(rbind, list_pkmn))
+    
+    # prio for pkmn with more than one matching recommended type
+    # recommended_additions is a table: higher the value => more resistances
+    df_pkmn$prio_type <- apply(df_pkmn, 1, function(x) {
+        sum(c(recommended_additions[x["type1"]], recommended_additions[x["type2"]]), na.rm = TRUE)
+    })
+    df_pkmn <- df_pkmn[order(df_pkmn$prio_type, df_pkmn$total, decreasing = TRUE), ]
     
     return(df_pkmn)
 }
