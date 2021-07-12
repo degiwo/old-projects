@@ -25,7 +25,14 @@ get_pokedex <- function() {
     # remove gmax pokemon
     pokedex <- pokedex[!grepl("-Gmax", pokedex$name), ]
     
-    pokedex <- subset(pokedex, select = c(id, name, type, type1, type2, gen, legend, total, base.HP, base.Attack, base.Defense, `base.Sp. Attack`, `base.Sp. Defense`, base.Speed))
+    pokedex <- subset(pokedex,
+                      select = c(id, name, type, type1, type2, gen, legend, total,
+                                 base.HP, base.Attack, base.Defense,
+                                 `base.Sp. Attack`, `base.Sp. Defense`, base.Speed,
+                                 abilities.0, abilities.1, abilities.H, abilities.S,
+                                 evos
+                                 )
+                      )
     
     # remove other pokemon
     pokedex <- pokedex[!grepl("Pikachu-", pokedex$name), ]

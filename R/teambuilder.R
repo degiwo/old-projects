@@ -63,6 +63,10 @@ teambuilderUI <- function(id) {
                     width = 3,
                     materialSwitch(ns("show_megas"), label = "Include Megas", value = TRUE, status = "primary")
                 ),
+                column(
+                    width = 3,
+                    materialSwitch(ns("show_onlyfullyevolved"), label = "Only fully evolved", value = TRUE, status = "primary")
+                )
             ),
             DTOutput(ns("tbl_recommended_pkmn"))
         )
@@ -210,6 +214,11 @@ teambuilderServer <- function(id) {
             # filter megas
             if (!input$show_megas) {
                 df <- df[!grepl("-Mega", df$name), ]
+            }
+            
+            # filter not fully evolved
+            if (!input$show_onlyfullyevolved) {
+                df <- df[is.na(df$evos), ]
             }
             
             df <- subset(df, select = c("name", "type", "total",
