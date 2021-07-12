@@ -66,6 +66,10 @@ teambuilderUI <- function(id) {
                 column(
                     width = 3,
                     materialSwitch(ns("show_onlyfullyevolved"), label = "Only fully evolved", value = TRUE, status = "primary")
+                ),
+                column(
+                    width = 3,
+                    materialSwitch(ns("show_allpkmn"), label = "All availables", value = TRUE, status = "primary")
                 )
             ),
             DTOutput(ns("tbl_recommended_pkmn"))
@@ -202,7 +206,7 @@ teambuilderServer <- function(id) {
             input$show_legendaries
             
             req(recommended_additions())
-            df <- get_recommended_pkmn(recommended_additions)
+            df <- get_recommended_pkmn(recommended_additions, input$show_allpkmn)
             # filter generations
             df <- df[df$gen %in% input$btns_choose_gen, ]
             

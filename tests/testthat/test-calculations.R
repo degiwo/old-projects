@@ -56,10 +56,18 @@ test_that("recommended types are correct", {
 })
 
 test_that("recommended pokemon are correct", {
-    recs <- as.vector(data.frame(Steel = 3, Electric = 1))
-    df_pkmn <- get_recommended_pkmn(recs)
+    temp <- c("Steel", "Steel", "Steel", "Electric")
+    recs <- table(temp)
+    df_pkmn <- get_recommended_pkmn(recs, 0)
     
     expect_true(all(df_pkmn$type1 %in% c("Steel", "Electric") | df_pkmn$type2 %in% c("Steel", "Electric")))
+})
+
+test_that("all pokemon are possible in recommended pokemon", {
+    df_pokedex <- get_pokedex()
+    temp <- c("Fire", "Water")
+    df_pkmn <- get_recommended_pkmn(table(temp), TRUE)
+    expect_equal(nrow(df_pkmn), nrow(df_pokedex))
 })
 
 setwd(wd)

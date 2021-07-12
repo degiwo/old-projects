@@ -67,18 +67,23 @@ get_recommended_additions <- function(pkmn_team) {
     return(table(recommended_types))
 }
 
-get_recommended_pkmn <- function(recommended_additions) {
+get_recommended_pkmn <- function(recommended_additions, show_allpkmn) {
     df_pokedex <- get_pokedex()
     if (is.reactive(recommended_additions)) {
         recommended_additions <- recommended_additions()
     }
     types <- names(sort(-recommended_additions))
-    list_pkmn <- list()
-    for (i in seq(types)) {
-        temp <- df_pokedex[df_pokedex$type1 == types[i] | (!is.na(df_pokedex$type2) & df_pokedex$type2 == types[i]), ]
-        list_pkmn[[i]] <- temp
+    
+    if (show_allpkmn) {
+        df_pkmn <- df_pokedex
+    } else {
+        list_pkmn <- list()
+        for (i in seq(types)) {
+            temp <- df_pokedex[df_pokedex$type1 == types[i] | (!is.na(df_pokedex$type2) & df_pokedex$type2 == types[i]), ]
+            list_pkmn[[i]] <- temp
+        }
+        df_pkmn <- unique(do.call(rbind, list_pkmn))
     }
-    df_pkmn <- unique(do.call(rbind, list_pkmn))
     
     # prio for pkmn with more than one matching recommended type
     # recommended_additions is a table: higher the value => more resistances
