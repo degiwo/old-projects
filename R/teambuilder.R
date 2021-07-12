@@ -73,9 +73,11 @@ teambuilderServer <- function(id) {
         
         lapply(1:6, function(i) {
             observe({
-                updateSelectizeInput(inputId = paste0("sel_pkmn", i), choices = pokedex()$name, options = list(
-                    onInitialize = I('function() { this.setValue(""); }')
-                ))
+                updateSelectizeInput(inputId = paste0("sel_pkmn", i),
+                                     choices = pokedex()$name,
+                                     server = TRUE, # server side, see Performance note
+                                     options = list(onInitialize = I('function() { this.setValue(""); }'))
+                )
             })
         })
         
@@ -111,9 +113,11 @@ teambuilderServer <- function(id) {
         observeEvent(input$clear_pkmn, {
             lapply(1:6, function(i) {
                 observe({
-                    updateSelectizeInput(inputId = paste0("sel_pkmn", i), choices = pokedex()$name, selected = NULL, options = list(
-                        onInitialize = I('function() { this.setValue(""); }')
-                    ))
+                    updateSelectizeInput(inputId = paste0("sel_pkmn", i),
+                                         choices = pokedex()$name,
+                                         selected = NULL,
+                                         options = list(onInitialize = I('function() { this.setValue(""); }'))
+                    )
                 })
             })
         })
@@ -125,7 +129,9 @@ teambuilderServer <- function(id) {
                 observe({
                     updateSelectizeInput(inputId = paste0("sel_pkmn", i),
                                          choices = filtered_pkmn,
-                                         selected = isolate(pkmn_team[[paste0("pkmn", i)]][["name"]])
+                                         selected = isolate(pkmn_team[[paste0("pkmn", i)]][["name"]]),
+                                         options = list(onInitialize = I('function() { this.setValue(""); }')),
+                                         server = TRUE # server side, see Performance note
                     )
                 })
             })
@@ -194,10 +200,10 @@ teambuilderServer <- function(id) {
             
             # convert type from list to string to be searchable
             fun <- function(x) {
-                if (is.na(x$type2)) {
-                    return(x$type1)
+                if (is.na(x["type2"])) {
+                    return(x["type1"])
                 } else {
-                    return(paste0(c(x$type1, x$type2), collapse = ","))
+                    return(paste0(c(x["type1"], x["type2"]), collapse = ","))
                 }
             }
             df$type <- apply(df, 1, fun)
