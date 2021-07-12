@@ -65,11 +65,11 @@ teambuilderUI <- function(id) {
                 ),
                 column(
                     width = 3,
-                    materialSwitch(ns("show_onlyfullyevolved"), label = "Only fully evolved", value = TRUE, status = "primary")
+                    materialSwitch(ns("show_onlyfullevo"), label = "Only fully evolved", value = TRUE, status = "primary")
                 ),
                 column(
                     width = 3,
-                    materialSwitch(ns("show_allpkmn"), label = "All availables", value = TRUE, status = "primary")
+                    materialSwitch(ns("show_onlyrectypes"), label = "Only recommended types", value = TRUE, status = "primary")
                 )
             ),
             DTOutput(ns("tbl_recommended_pkmn"))
@@ -96,7 +96,7 @@ teambuilderServer <- function(id) {
             input$show_legendaries
             
             req(recommended_additions())
-            df <- get_recommended_pkmn(recommended_additions, input$show_allpkmn)
+            df <- get_recommended_pkmn(recommended_additions, input$show_onlyrectypes)
         })
         
         pkmn_team <- reactiveValues()
@@ -225,7 +225,7 @@ teambuilderServer <- function(id) {
             }
             
             # filter not fully evolved
-            if (!input$show_onlyfullyevolved) {
+            if (input$show_onlyfullevo) {
                 df <- df[is.na(df$evos), ]
             }
             

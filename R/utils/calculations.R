@@ -67,14 +67,14 @@ get_recommended_additions <- function(pkmn_team) {
     return(table(recommended_types))
 }
 
-get_recommended_pkmn <- function(recommended_additions, show_allpkmn) {
+get_recommended_pkmn <- function(recommended_additions, show_onlyrectypes) {
     df_pokedex <- get_pokedex()
     if (is.reactive(recommended_additions)) {
         recommended_additions <- recommended_additions()
     }
     types <- names(sort(-recommended_additions))
     
-    if (show_allpkmn) {
+    if (!show_onlyrectypes) {
         df_pkmn <- df_pokedex
     } else {
         list_pkmn <- list()
