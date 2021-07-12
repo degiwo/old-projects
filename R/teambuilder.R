@@ -54,7 +54,16 @@ teambuilderUI <- function(id) {
             width = 12,
             collapsible = TRUE,
             collapsed = TRUE,
-            materialSwitch(ns("show_legendaries"), label = "Include Legendaries", value = TRUE, status = "primary"),
+            fluidRow(
+                column(
+                    width = 3,
+                    materialSwitch(ns("show_legendaries"), label = "Include Legendaries", value = TRUE, status = "primary")
+                ),
+                column(
+                    width = 3,
+                    materialSwitch(ns("show_megas"), label = "Include Megas", value = TRUE, status = "primary")
+                ),
+            ),
             DTOutput(ns("tbl_recommended_pkmn"))
         )
     )
@@ -198,15 +207,11 @@ teambuilderServer <- function(id) {
                 df <- df[df$legend == 0, ]
             }
             
-            # convert type from list to string to be searchable
-            fun <- function(x) {
-                if (is.na(x["type2"])) {
-                    return(x["type1"])
-                } else {
-                    return(paste0(c(x["type1"], x["type2"]), collapse = ","))
-                }
+            # filter megas
+            if (!input$show_megas) {
+                df <- df[!grepl("-Mega", df$name), ]
             }
-            df$type <- apply(df, 1, fun)
+            
             df <- subset(df, select = c("name", "type", "total",
                                         "base.HP", "base.Attack",
                                         "base.Defense", "base.Sp. Attack",
