@@ -18,7 +18,9 @@ prepare_pokedex <- function() {
             x["types1"]
     })
     pokedex$type2 <- pokedex$types2
-    pokedex$type <- pokedex$types
+    pokedex$type <- apply(pokedex, 1, function(x) {
+        ifelse(!is.na(x["type2"]), paste0(c(x["type1"], x["type2"]), collapse = ','), x["type1"])
+    })
     pokedex$base.HP <- as.integer(pokedex$baseStats.hp)
     pokedex$base.Attack <- as.integer(pokedex$baseStats.atk)
     pokedex$base.Defense <- as.integer(pokedex$baseStats.def)

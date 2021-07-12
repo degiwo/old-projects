@@ -75,7 +75,7 @@ teambuilderServer <- function(id) {
             observe({
                 updateSelectizeInput(inputId = paste0("sel_pkmn", i),
                                      choices = pokedex()$name,
-                                     server = TRUE,
+                                     server = TRUE, # server side, see Performance note
                                      options = list(onInitialize = I('function() { this.setValue(""); }'))
                 )
             })
@@ -131,7 +131,7 @@ teambuilderServer <- function(id) {
                                          choices = filtered_pkmn,
                                          selected = isolate(pkmn_team[[paste0("pkmn", i)]][["name"]]),
                                          options = list(onInitialize = I('function() { this.setValue(""); }')),
-                                         server = TRUE
+                                         server = TRUE # server side, see Performance note
                     )
                 })
             })

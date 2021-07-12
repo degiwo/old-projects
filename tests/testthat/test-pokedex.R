@@ -29,3 +29,7 @@ test_that("stat columns are integer", {
         expect_type(pokedex[[stat_columns[i]]], "integer")
     }
 })
+
+test_that("type column has the correct values", {
+    expect_true(all(c("Grass,Poison", "Water", "Dragon,Flying") %in% pokedex$type))
+})
