@@ -9,7 +9,11 @@ test_that("legendaries has the needed columns", {
 
 test_that("pokedex has all needed columns", {
     pokedex <- get_pokedex()
-    expect_true(all(c("name", "type", "type1", "type2", "base.HP", "base.Attack", "gen", "legend") %in% names(pokedex)))
+    needed_cols <- c(
+        "name", "type", "type1", "type2", "base.HP", "base.Attack",
+        "gen", "legend", "abilities", "abilities.0", "abilities.1", "abilities.H"
+    )
+    expect_true(all(needed_cols %in% names(pokedex)))
 })
 
 test_that("gen is correct", {

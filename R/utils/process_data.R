@@ -30,7 +30,7 @@ get_pokedex <- function() {
                                  base.HP, base.Attack, base.Defense,
                                  `base.Sp. Attack`, `base.Sp. Defense`, base.Speed,
                                  abilities.0, abilities.1, abilities.H, abilities.S,
-                                 evos
+                                 evos, abilities
                                  )
                       )
     

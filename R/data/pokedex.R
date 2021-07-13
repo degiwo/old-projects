@@ -10,7 +10,7 @@ prepare_pokedex <- function() {
     
     pokedex <- pivot_wider(collapsed_df[, c("value", "header", "colname")], names_from = colname, values_from = value)
     
-    # modify columns: type1, type2, total
+    # modify columns: type1, type2
     pokedex$type1 <- apply(pokedex, 1, function(x) {
         if(!is.na(x["types"]))
             x["types"]
@@ -21,6 +21,7 @@ prepare_pokedex <- function() {
     pokedex$type <- apply(pokedex, 1, function(x) {
         ifelse(!is.na(x["type2"]), paste0(c(x["type1"], x["type2"]), collapse = ','), x["type1"])
     })
+    # modify columns: total
     pokedex$base.HP <- as.integer(pokedex$baseStats.hp)
     pokedex$base.Attack <- as.integer(pokedex$baseStats.atk)
     pokedex$base.Defense <- as.integer(pokedex$baseStats.def)
@@ -30,6 +31,12 @@ prepare_pokedex <- function() {
     pokedex$id <- as.integer(pokedex$num)
     pokedex$total <- pokedex$base.HP + pokedex$base.Attack + pokedex$base.Defense +
         pokedex$`base.Sp. Attack` + pokedex$`base.Sp. Defense` + pokedex$base.Speed
+    # modify columns: abilities
+    pokedex$abilities <- apply(pokedex, 1, function(x) {
+        abilities <- unlist(c(x["abilities.0"], x["abilities.1"], x["abilities.H"], x["abilities.S"]))
+        x <- paste0(na.omit(abilities), collapse = ",")
+        return(x)
+    })
     
     return(pokedex)
 }

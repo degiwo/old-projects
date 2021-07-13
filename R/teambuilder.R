@@ -232,7 +232,10 @@ teambuilderServer <- function(id) {
             df <- subset(df, select = c("name", "type", "total",
                                         "base.HP", "base.Attack",
                                         "base.Defense", "base.Sp. Attack",
-                                        "base.Sp. Defense", "base.Speed"))
+                                        "base.Sp. Defense", "base.Speed",
+                                        "abilities"
+                                        )
+                         )
             datatable(df, filter = "top")
         })
     })

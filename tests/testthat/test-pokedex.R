@@ -3,7 +3,12 @@ source("R/data/pokedex.R")
 pokedex <- prepare_pokedex()
 
 test_that("pokedex has the needed columns", {
-    expect_true(all(c("name", "id", "type", "type1", "type2", "base.HP", "base.Attack", "base.Sp. Defense", "total") %in% names(pokedex)))
+    needed_cols <- c(
+        "name", "id", "type", "type1", "type2",
+        "base.HP", "base.Attack", "base.Sp. Defense", "total",
+        "abilities", "abilities.0", "abilities.1", "abilities.H"
+    )
+    expect_true(all(needed_cols %in% names(pokedex)))
 })
 
 test_that("pokedex is a list with columns and rows", {
@@ -32,4 +37,8 @@ test_that("stat columns are integer", {
 
 test_that("type column has the correct values", {
     expect_true(all(c("Grass,Poison", "Water", "Dragon,Flying") %in% pokedex$type))
+})
+
+test_that("abilities has correct values", {
+    expect_true(all(c("Overgrow,Chlorophyll", "Blaze,Solar Power") %in% pokedex$abilities))
 })
