@@ -1,0 +1,9 @@
+[{"ability":"Dry Skin","immunes":["Water"]},
+{"ability":"Flash Fire","immunes":["Fire"]},
+{"ability":"Levitate","immunes":["Ground"]},
+{"ability":"Lightning Rod","immunes":["Electric"]},
+{"ability":"Motor Drive","immunes":["Electric"]},
+{"ability":"Sap Sipper","immunes":["Grass"]},
+{"ability":"Storm Drain","immunes":["Water"]},
+{"ability":"Volt Absorb","immunes":["Electric"]},
+{"ability":"Water Absorb","immunes":["Water"]}]
