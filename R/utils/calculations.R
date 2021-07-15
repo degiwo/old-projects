@@ -47,8 +47,9 @@ get_types_defense_table <- function(pkmn_team) {
 get_recommended_additions <- function(pkmn_team) {
     df_defense <- get_types_defense_table(pkmn_team)
     bad_types <- df_defense$type[df_defense$coverage == "bad"]
-    df_off <- get_offense_type_effects()
     
+    # recommended types -------------------------------------------------------
+    df_off <- get_offense_type_effects()
     recommended_types <- c()
     for (i in seq(bad_types)) {
         resists <- rep(unlist(df_off$resisted_by[df_off$name == bad_types[i]]), 2)
@@ -64,7 +65,17 @@ get_recommended_additions <- function(pkmn_team) {
             recommended_types[recommended_types %in% weaks[j]][1] <- NA
         }
     }
-    return(table(recommended_types))
+    
+
+    # recommended abilities ---------------------------------------------------
+    df_abs <- get_ability_immunities()
+    recommended_abilities <- c()
+    for (i in seq(bad_types)) {
+        immunes <- unlist(df_abs$ability[df_abs$immunes == bad_types[i]])
+        recommended_abilities <- append(recommended_abilities, immunes)
+    }
+
+    return(table(c(recommended_types, recommended_abilities)))
 }
 
 get_recommended_pkmn <- function(recommended_additions, show_onlyrectypes) {
