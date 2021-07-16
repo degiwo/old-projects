@@ -70,4 +70,22 @@ test_that("all pokemon are possible in recommended pokemon", {
     expect_equal(nrow(df_pkmn), nrow(df_pokedex))
 })
 
+test_that("abilities are also recommended", {
+    pkmn_team <- list()
+    pkmn_team[["pkmn1"]][["name"]] <- "Test1"
+    pkmn_team[["pkmn1"]][["type"]] <- list(c("Grass"))
+    pkmn_team[["pkmn1"]][["defense"]] <- data.frame(
+        type = c("Normal", "Fire", "Water", "Grass", "Ground"),
+        multiplicator = c(1.0, 2.0, 0.5, 0.5, 2.0)
+    )
+    pkmn_team[["pkmn2"]][["name"]] <- "Test2"
+    pkmn_team[["pkmn2"]][["type"]] <- list(c("Fire"))
+    pkmn_team[["pkmn2"]][["defense"]] <- data.frame(
+        type = c("Normal", "Fire", "Water", "Grass", "Ground"),
+        multiplicator = c(1.0, 1.0, 2.0, 0.5, 1.0)
+    )
+    recs <- get_recommended_additions(pkmn_team)
+    expect_true(all(c("Flash Fire", "Levitate") %in% names(recs)))
+})
+
 setwd(wd)
