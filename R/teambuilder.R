@@ -22,8 +22,8 @@ teambuilderUI <- function(id) {
                                      )
             ),
             column(
-                width = 3,
-                textOutput(ns("avg_stats"))
+                width = 2,
+                plotOutput(ns("avg_stats"), height = "150px")
             )
         ),
         fluidRow(
@@ -250,9 +250,19 @@ teambuilderServer <- function(id) {
             datatable(df, filter = "top")
         })
         
-        output$avg_stats <- renderText({
-            x <- Reduce(cbind, lapply(reactiveValuesToList(pkmn_team), function(x) {x$stats}))
-            round(rowMeans(x, na.rm = TRUE))
+        output$avg_stats <- renderPlot({
+            x <- reactiveValuesToList(input)
+            req(any(x[grep("sel_pkmn", names(x))] != ""))
+            
+            max_min <- t(data.frame(rep(150, 6), rep(0, 6)))
+            values <- Reduce(rbind, lapply(reactiveValuesToList(pkmn_team), function(x) {x$stats}))
+            avg_values <- colMeans(values, na.rm = TRUE)
+            
+            df <- data.frame(rbind(max_min, avg_values))
+            names(df) <- c("HP", "ATT", "DEF", "SPA", "SPD", "SPE")
+            par(mar = rep(1, 4))
+            radarchart(df, pcol = "#00AFBB", cglcol = "grey",
+                       vlcex = 0.8, caxislabels = c(0, 50, 100, 150))
         })
     })
 }
