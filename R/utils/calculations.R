@@ -71,7 +71,7 @@ get_recommended_additions <- function(pkmn_team) {
     df_abs <- get_ability_immunities()
     recommended_abilities <- c()
     for (i in seq(bad_types)) {
-        immunes <- unlist(df_abs$ability[df_abs$immunes == bad_types[i]])
+        immunes <- rep(unlist(df_abs$ability[df_abs$immunes == bad_types[i]]), 3)
         recommended_abilities <- append(recommended_abilities, immunes)
     }
 
@@ -83,14 +83,19 @@ get_recommended_pkmn <- function(recommended_additions, show_onlyrectypes) {
     if (is.reactive(recommended_additions)) {
         recommended_additions <- recommended_additions()
     }
-    types <- names(sort(-recommended_additions))
+    ty_ab <- names(sort(-recommended_additions)) # types and abilities
     
     if (!show_onlyrectypes) {
         df_pkmn <- df_pokedex
     } else {
         list_pkmn <- list()
-        for (i in seq(types)) {
-            temp <- df_pokedex[df_pokedex$type1 == types[i] | (!is.na(df_pokedex$type2) & df_pokedex$type2 == types[i]), ]
+        for (i in seq(ty_ab)) {
+            bool_type <- (
+                df_pokedex$type1 == ty_ab[i] |
+                    (!is.na(df_pokedex$type2) & df_pokedex$type2 == ty_ab[i])
+            )
+            bool_abilities <- grepl(ty_ab[i], df_pokedex$abilities)
+            temp <- df_pokedex[bool_type | bool_abilities, ]
             list_pkmn[[i]] <- temp
         }
         df_pkmn <- unique(do.call(rbind, list_pkmn))
