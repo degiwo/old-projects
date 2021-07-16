@@ -12,7 +12,7 @@ teambuilderUI <- function(id) {
                 actionButton(ns("clear_pkmn"), label = "Clear all")
             ),
             column(
-                width = 11,
+                width = 8,
                 checkboxGroupButtons(ns("btns_choose_gen"),
                                      choices = get_generations(),
                                      selected = 1:8,
@@ -20,6 +20,10 @@ teambuilderUI <- function(id) {
                                          yes = icon("check-square"),
                                          no = icon("square-o"))
                                      )
+            ),
+            column(
+                width = 3,
+                textOutput(ns("avg_stats"))
             )
         ),
         fluidRow(
@@ -117,11 +121,17 @@ teambuilderServer <- function(id) {
             observeEvent(input[[paste0("sel_pkmn", i)]], {
                 pkmn <- input[[paste0("sel_pkmn", i)]]
                 pokedex <- pokedex()
-                df <- pokedex[pokedex$name == pkmn, c("name", "type", "type1", "type2")]
+                df <- pokedex[pokedex$name == pkmn, c("name", "type", "type1", "type2",
+                                                      "base.HP", "base.Attack", "base.Defense",
+                                                      "base.Sp. Attack", "base.Sp. Defense", "base.Speed")]
                 
                 pkmn_team[[paste0("pkmn", i)]][["name"]] <- pkmn
                 pkmn_team[[paste0("pkmn", i)]][["type"]] <- df$type
                 pkmn_team[[paste0("pkmn", i)]][["defense"]] <- get_defense_multiplicators(df$type1[1], df$type2[1])
+                pkmn_team[[paste0("pkmn", i)]][["stats"]] <- c(
+                    df$base.HP, df$base.Attack, df$base.Defense,
+                    df$`base.Sp. Attack`, df$`base.Sp. Defense`, df$base.Speed
+                )
                 
                 # rename columns to prevent merge warnings
                 df <- pkmn_team[[paste0("pkmn", i)]][["defense"]]
@@ -178,6 +188,7 @@ teambuilderServer <- function(id) {
                 df_def <- pkmn_team[[paste0("pkmn", i)]][["defense"]]
                 df <- data.frame(
                     type = paste(unlist(pkmn_team[[paste0("pkmn", i)]][["type"]]), collapse = ","),
+                    stats = paste(unlist(pkmn_team[[paste0("pkmn", i)]][["stats"]]), collapse = ","),
                     weak = paste(df_def$type[df_def$multiplicator > 1], collapse = ","),
                     resists = paste(df_def$type[df_def$multiplicator < 1 & df_def$multiplicator > 0], collapse = ","),
                     immune = paste(df_def$type[df_def$multiplicator == 0], collapse = ",")
@@ -237,6 +248,11 @@ teambuilderServer <- function(id) {
                                         )
                          )
             datatable(df, filter = "top")
+        })
+        
+        output$avg_stats <- renderText({
+            x <- Reduce(cbind, lapply(reactiveValuesToList(pkmn_team), function(x) {x$stats}))
+            round(rowMeans(x, na.rm = TRUE))
         })
     })
 }
