@@ -134,21 +134,11 @@ teambuilderServer <- function(id) {
                     df$base.HP, df$base.Attack, df$base.Defense,
                     df$`base.Sp. Attack`, df$`base.Sp. Defense`, df$base.Speed
                 )
+                pkmn_team[[paste0("pkmn", i)]][["ability"]] <- ""
                 
                 # rename columns to prevent merge warnings
                 df <- pkmn_team[[paste0("pkmn", i)]][["defense"]]
                 names(pkmn_team[[paste0("pkmn", i)]][["defense"]])[names(df) != "type"] <- paste(names(df)[names(df) != "type"], i)
-            })
-        })
-        
-        # get recommended additions
-        lapply(1:6, function(i) {
-            observeEvent(input[[paste0("sel_pkmn", i)]], {
-                x <- reactiveValuesToList(input)
-                req(any(x[grep("sel_pkmn", names(x))] != ""))
-                
-                # store recommended additions as a table in a reactiveVal
-                recommended_additions(get_recommended_additions(pkmn_team))
             })
         })
         
@@ -162,12 +152,13 @@ teambuilderServer <- function(id) {
                 temp <- unlist(
                     pokedex[pokedex$name == input[[paste0("sel_pkmn", i)]], grepl("abilities.", names(pokedex))]
                 )
-                abilities <- temp[!is.na(temp)]
-                names(abilities) <- abilities
+                abilities <- as.character(temp[!is.na(temp)])
                 updateRadioGroupButtons(session,
-                                           input = paste0("sel_ability", i),
-                                           choices = abilities,
-                                           disabled = FALSE)
+                                        input = paste0("sel_ability", i),
+                                        choices = abilities,
+                                        selected = abilities[1],
+                                        disabled = FALSE)
+                pkmn_team[[paste0("pkmn", i)]][["ability"]] <- abilities[1]
             })
         })
         
@@ -176,7 +167,25 @@ teambuilderServer <- function(id) {
             observeEvent(input[[paste0("sel_ability", i)]], {
                 req(input[[paste0("sel_ability", i)]])
                 pkmn_team[[paste0("pkmn", i)]][["ability"]] <- input[[paste0("sel_ability", i)]]
-                print(pkmn_team[[paste0("pkmn", i)]][["ability"]])
+            })
+        })
+        
+        # get recommended additions
+        lapply(1:6, function(i) {
+            # calculate new if pkmn or ability was changed
+            rec_listener <- reactive({
+                list(
+                    pkmn_team[[paste0("pkmn", i)]][["ability"]],
+                    input[[paste0("sel_pkmn", i)]]
+                )
+            })
+            
+            observeEvent(rec_listener(), {
+                x <- reactiveValuesToList(input)
+                req(any(x[grep("sel_pkmn", names(x))] != ""))
+                
+                # store recommended additions as a table in a reactiveVal
+                recommended_additions(get_recommended_additions(pkmn_team))
             })
         })
         
