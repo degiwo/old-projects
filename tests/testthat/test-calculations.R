@@ -89,4 +89,26 @@ test_that("abilities are also recommended", {
     expect_true(all(c("Flash Fire", "Levitate") %in% names(recs)))
 })
 
+test_that("types_defense_table considers ability immunities", {
+    pkmn_team <- list()
+    pkmn_team[["pkmn1"]][["name"]] <- "Test"
+    pkmn_team[["pkmn1"]][["type"]] <- list(c("Grass"))
+    pkmn_team[["pkmn1"]][["defense"]] <- data.frame(
+        type = c("Normal", "Fire", "Water", "Ground"),
+        multiplicator = c(1.0, 2.0, 0.5, 2.0)
+    )
+    pkmn_team[["pkmn1"]][["ability"]] <- "Levitate"
+    
+    
+    pkmn_team[["pkmn2"]][["name"]] <- "Test2"
+    pkmn_team[["pkmn2"]][["type"]] <- list(c("Fire"))
+    pkmn_team[["pkmn2"]][["defense"]] <- data.frame(
+        type = c("Normal", "Fire", "Water", "Grass", "Ground"),
+        multiplicator = c(1.0, 1.0, 2.0, 0.5, 1.0)
+    )
+    df <- get_types_defense_table(pkmn_team)
+    expect_true(df$coverage[df$type == "Ground"] == "good")
+    
+})
+
 setwd(wd)
