@@ -31,6 +31,7 @@ teambuilderUI <- function(id) {
                 column(
                     width = 4,
                     selectizeInput(ns(paste0("sel_pkmn", i)), "", choices = NULL),
+                    checkboxGroupButtons(ns(paste0("sel_ability", i)), "", choices = "ability", size = "s", disabled = TRUE),
                     tableOutput(ns(paste0("tbl_pkmn", i)))
                 )
             })
@@ -40,6 +41,7 @@ teambuilderUI <- function(id) {
                 column(
                     width = 4,
                     selectizeInput(ns(paste0("sel_pkmn", i)), "", choices = NULL),
+                    checkboxGroupButtons(ns(paste0("sel_ability", i)), "", choices = "ability", size = "s", disabled = TRUE),
                     tableOutput(ns(paste0("tbl_pkmn", i)))
                 )
             })
@@ -147,6 +149,25 @@ teambuilderServer <- function(id) {
                 
                 # store recommended additions as a table in a reactiveVal
                 recommended_additions(get_recommended_additions(pkmn_team))
+            })
+        })
+        
+        # get abilities of selected pkmn
+        lapply(1:6, function(i) {
+            observeEvent(input[[paste0("sel_pkmn", i)]], {
+                x <- reactiveValuesToList(input)
+                req(x[grep(paste0("sel_pkmn", i), names(x))] != "")
+                
+                pokedex <- pokedex()
+                temp <- unlist(
+                    pokedex[pokedex$name == input[[paste0("sel_pkmn", i)]], grepl("abilities.", names(pokedex))]
+                )
+                abilities <- temp[!is.na(temp)]
+                names(abilities) <- abilities
+                updateCheckboxGroupButtons(session,
+                                           input = paste0("sel_ability", i),
+                                           choices = abilities,
+                                           disabled = FALSE)
             })
         })
         
