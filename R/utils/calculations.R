@@ -31,7 +31,17 @@ get_types_defense_table <- function(pkmn_team) {
     if (is.reactivevalues(pkmn_team)) {
         pkmn_team <- reactiveValuesToList(pkmn_team)
     }
-    list_mult <- lapply(pkmn_team, function(x) x[["defense"]])
+    list_mult <- lapply(pkmn_team, function(x) {
+        df_def <- x[["defense"]]
+        
+        # consider ability
+        ability_immunities <- get_ability_immunities()
+        temp <- ability_immunities[ability_immunities$ability == x[["ability"]], ]
+        if (nrow(temp) > 0) {
+            df_def[df_def$type == unlist(temp$immunes), 2] <- 0.00
+        }
+        return(df_def)
+    })
     df <- Reduce(function(x, y) merge(x, y, by = "type"), list_mult)
     df$weak <- apply(df[, grep("multiplicator", names(df))], 1, function(x) sum(x > 1))
     df$resist <- apply(df[, grep("multiplicator", names(df))], 1, function(x) sum(x < 1 & x > 0))
@@ -94,11 +104,17 @@ get_recommended_pkmn <- function(recommended_additions, show_onlyrectypes) {
                 df_pokedex$type1 == ty_ab[i] |
                     (!is.na(df_pokedex$type2) & df_pokedex$type2 == ty_ab[i])
             )
-            bool_abilities <- grepl(ty_ab[i], df_pokedex$abilities)
+            bool_abilities <- (
+                df_pokedex$abilities.0 == ty_ab[i] |
+                    df_pokedex$abilities.1 == ty_ab[i] |
+                    df_pokedex$abilities.S == ty_ab[i] |
+                    df_pokedex$abilities.H == ty_ab[i]
+            )
             temp <- df_pokedex[bool_type | bool_abilities, ]
             list_pkmn[[i]] <- temp
         }
         df_pkmn <- unique(do.call(rbind, list_pkmn))
+        df_pkmn <- df_pkmn[!is.na(df_pkmn$name), ]
     }
     
     # prio for pkmn with more than one matching recommended type

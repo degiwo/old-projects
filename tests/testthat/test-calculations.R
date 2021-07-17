@@ -56,11 +56,12 @@ test_that("recommended types are correct", {
 })
 
 test_that("recommended pokemon are correct", {
-    temp <- c("Steel", "Steel", "Steel", "Electric")
+    temp <- c("Steel", "Steel", "Steel", "Fairy")
     recs <- table(temp)
     df_pkmn <- get_recommended_pkmn(recs, show_onlyrectypes = 1)
     
-    expect_true(all(df_pkmn$type1 %in% c("Steel", "Electric") | df_pkmn$type2 %in% c("Steel", "Electric")))
+    expect_true(all(df_pkmn$type1 %in% c("Steel", "Fairy") |
+                        df_pkmn$type2 %in% c("Steel", "Fairy")))
 })
 
 test_that("all pokemon are possible in recommended pokemon", {
