@@ -31,7 +31,7 @@ teambuilderUI <- function(id) {
                 column(
                     width = 4,
                     selectizeInput(ns(paste0("sel_pkmn", i)), "", choices = NULL),
-                    checkboxGroupButtons(ns(paste0("sel_ability", i)), "", choices = "ability", size = "s", disabled = TRUE),
+                    radioGroupButtons(ns(paste0("sel_ability", i)), "", choices = "", size = "s", disabled = TRUE),
                     tableOutput(ns(paste0("tbl_pkmn", i)))
                 )
             })
@@ -41,7 +41,7 @@ teambuilderUI <- function(id) {
                 column(
                     width = 4,
                     selectizeInput(ns(paste0("sel_pkmn", i)), "", choices = NULL),
-                    checkboxGroupButtons(ns(paste0("sel_ability", i)), "", choices = "ability", size = "s", disabled = TRUE),
+                    radioGroupButtons(ns(paste0("sel_ability", i)), "", choices = "", size = "s", disabled = TRUE),
                     tableOutput(ns(paste0("tbl_pkmn", i)))
                 )
             })
@@ -152,7 +152,7 @@ teambuilderServer <- function(id) {
             })
         })
         
-        # get abilities of selected pkmn
+        # get abilities of selected pkmn and update Checkboxes
         lapply(1:6, function(i) {
             observeEvent(input[[paste0("sel_pkmn", i)]], {
                 x <- reactiveValuesToList(input)
@@ -164,10 +164,19 @@ teambuilderServer <- function(id) {
                 )
                 abilities <- temp[!is.na(temp)]
                 names(abilities) <- abilities
-                updateCheckboxGroupButtons(session,
+                updateRadioGroupButtons(session,
                                            input = paste0("sel_ability", i),
                                            choices = abilities,
                                            disabled = FALSE)
+            })
+        })
+        
+        # add chosen ability to pkmn team
+        lapply(1:6, function(i) {
+            observeEvent(input[[paste0("sel_ability", i)]], {
+                req(input[[paste0("sel_ability", i)]])
+                pkmn_team[[paste0("pkmn", i)]][["ability"]] <- input[[paste0("sel_ability", i)]]
+                print(pkmn_team[[paste0("pkmn", i)]][["ability"]])
             })
         })
         
