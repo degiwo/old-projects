@@ -1,4 +1,4 @@
-get_defense_multiplicators <- function(type1, type2) {
+get_defense_multiplicators <- function(type1, type2, ability) {
     df_def <- get_defense_type_effects()
     df_mult <- data.frame(
         type = unique(df_def$name)
@@ -21,6 +21,14 @@ get_defense_multiplicators <- function(type1, type2) {
             )
         )
     )
+
+    # consider ability
+    ability_immunities <- get_ability_immunities()
+    temp <- na.omit(ability_immunities[ability_immunities$ability == ability, ])
+    if (nrow(temp) > 0) {
+        df_mult$type1[df_mult$type == unlist(temp$immunes)] <- 0.00
+    }
+    
     df_mult$multiplicator <- df_mult$type1 * df_mult$type2
     df_mult <- subset(df_mult, select = -c(type1, type2))
     return(df_mult)
@@ -40,6 +48,7 @@ get_types_defense_table <- function(pkmn_team) {
         if (nrow(temp) > 0) {
             df_def[df_def$type == unlist(temp$immunes), 2] <- 0.00
         }
+        
         return(df_def)
     })
     df <- Reduce(function(x, y) merge(x, y, by = "type"), list_mult)

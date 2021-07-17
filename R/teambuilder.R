@@ -125,16 +125,17 @@ teambuilderServer <- function(id) {
                 pokedex <- pokedex()
                 df <- pokedex[pokedex$name == pkmn, c("name", "type", "type1", "type2",
                                                       "base.HP", "base.Attack", "base.Defense",
-                                                      "base.Sp. Attack", "base.Sp. Defense", "base.Speed")]
+                                                      "base.Sp. Attack", "base.Sp. Defense", "base.Speed",
+                                                      "abilities.0")]
                 
                 pkmn_team[[paste0("pkmn", i)]][["name"]] <- pkmn
                 pkmn_team[[paste0("pkmn", i)]][["type"]] <- df$type
-                pkmn_team[[paste0("pkmn", i)]][["defense"]] <- get_defense_multiplicators(df$type1[1], df$type2[1])
                 pkmn_team[[paste0("pkmn", i)]][["stats"]] <- c(
                     df$base.HP, df$base.Attack, df$base.Defense,
                     df$`base.Sp. Attack`, df$`base.Sp. Defense`, df$base.Speed
                 )
                 pkmn_team[[paste0("pkmn", i)]][["ability"]] <- ""
+                pkmn_team[[paste0("pkmn", i)]][["defense"]] <- get_defense_multiplicators(df$type1[1], df$type2[1], df$abilities.0[1])
                 
                 # rename columns to prevent merge warnings
                 df <- pkmn_team[[paste0("pkmn", i)]][["defense"]]
@@ -245,6 +246,15 @@ teambuilderServer <- function(id) {
         lapply(1:6, function(i) {
             output[[paste0("tbl_pkmn", i)]] <- renderTable({
                 req(input[[paste0("sel_pkmn", i)]])
+                req(input[[paste0("sel_ability", i)]])
+                
+                # # update after ability change
+                ab <- pkmn_team[[paste0("pkmn", i)]][["ability"]]
+                pkmn <- input[[paste0("sel_pkmn", i)]]
+                pokedex <- pokedex()
+                df <- pokedex[pokedex$name == pkmn, ]
+                pkmn_team[[paste0("pkmn", i)]][["defense"]] <- get_defense_multiplicators(df$type1[1], df$type2[1], ab)
+                
                 df_def <- pkmn_team[[paste0("pkmn", i)]][["defense"]]
                 df <- data.frame(
                     type = paste(unlist(pkmn_team[[paste0("pkmn", i)]][["type"]]), collapse = ","),
