@@ -6,4 +6,8 @@
 {"ability":"Sap Sipper","immunes":["Grass"]},
 {"ability":"Storm Drain","immunes":["Water"]},
 {"ability":"Volt Absorb","immunes":["Electric"]},
-{"ability":"Water Absorb","immunes":["Water"]}]
+{"ability":"Water Absorb","immunes":["Water"]},
+{"ability":"Fluffy","weakness":["Fire"]},
+{"ability":"Heatproof","resists":["Fire"]},
+{"ability":"Thick Fat","resists":["Fire","Ice"]},
+{"ability":"Water Bubble","resists":["Fire"]}]
