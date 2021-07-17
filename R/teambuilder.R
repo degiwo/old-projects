@@ -260,9 +260,12 @@ teambuilderServer <- function(id) {
             
             df <- data.frame(rbind(max_min, avg_values))
             names(df) <- c("HP", "ATT", "DEF", "SPA", "SPD", "SPE")
-            par(mar = rep(1, 4))
-            radarchart(df, pcol = "#00AFBB", cglcol = "grey",
-                       vlcex = 0.8, caxislabels = c(0, 50, 100, 150))
+            df <- df[, c("HP", "ATT", "DEF", "SPE", "SPD", "SPA")]
+            
+            par(mar = c(0.2, 0, 1.5, 0)) # c(bottom, left, top, right)
+            fmsb::radarchart(df, pcol = "#00AFBB", pfcol = scales::alpha("#00AFBB", 0.5),
+                       cglcol = "grey", seg = 2,
+                       vlcex = 0.8, title = "Team average base stats")
         })
     })
 }

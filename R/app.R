@@ -4,7 +4,6 @@ library(DT)
 library(shinyWidgets)
 library(jsonlite)
 library(tidyr)
-library(fmsb)
 
 source("utils/process_data.R")
 source("utils/calculations.R")
