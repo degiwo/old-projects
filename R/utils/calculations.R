@@ -87,13 +87,13 @@ get_recommended_additions <- function(pkmn_team) {
         }
     }
     
-
     # recommended abilities ---------------------------------------------------
     df_abs <- get_ability_immunities()
     recommended_abilities <- c()
     for (i in seq(bad_types)) {
         immunes <- rep(unlist(df_abs$ability[df_abs$immunes == bad_types[i]]), 3)
-        recommended_abilities <- append(recommended_abilities, immunes)
+        resists <- rep(unlist(df_abs$ability[grepl(bad_types[i], df_abs$resists)]), 1)
+        recommended_abilities <- append(recommended_abilities, c(immunes, resists))
     }
 
     return(table(c(recommended_types, recommended_abilities)))
