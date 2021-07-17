@@ -162,6 +162,20 @@ teambuilderServer <- function(id) {
             })
         })
         
+        # clear ability checkboxes if pkmn is deselected
+        lapply(1:6, function(i) {
+            observeEvent(input[[paste0("sel_pkmn", i)]], {
+                x <- reactiveValuesToList(input)
+                req(x[grep(paste0("sel_pkmn", i), names(x))] == "")
+                
+                updateRadioGroupButtons(session,
+                                        input = paste0("sel_ability", i),
+                                        choices = "",
+                                        disabled = TRUE)
+                pkmn_team[[paste0("pkmn", i)]][["ability"]] <- ""
+            })
+        })
+        
         # add chosen ability to pkmn team
         lapply(1:6, function(i) {
             observeEvent(input[[paste0("sel_ability", i)]], {
@@ -197,6 +211,13 @@ teambuilderServer <- function(id) {
                                          choices = pokedex()$name,
                                          selected = NULL,
                                          options = list(onInitialize = I('function() { this.setValue(""); }'))
+                    )
+                    updateRadioGroupButtons(
+                        session,
+                        inputId = paste0("sel_ability", i),
+                        choices = "",
+                        selected = "",
+                        disabled = TRUE
                     )
                 })
             })
