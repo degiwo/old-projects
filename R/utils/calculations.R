@@ -26,7 +26,9 @@ get_defense_multiplicators <- function(type1, type2, ability) {
     ability_immunities <- get_ability_immunities()
     temp <- na.omit(ability_immunities[ability_immunities$ability == ability, ])
     if (nrow(temp) > 0) {
-        df_mult$type1[df_mult$type == unlist(temp$immunes)] <- 0.00
+        df_mult$type1[df_mult$type %in% unlist(temp$immunes)] <- 0.0
+        df_mult$type1[df_mult$type %in% unlist(temp$weakness)] <- 2.0 * df_mult$type1[df_mult$type %in% unlist(temp$weakness)]
+        df_mult$type1[df_mult$type %in% unlist(temp$resists)] <- 0.5 * df_mult$type1[df_mult$type %in% unlist(temp$resists)]
     }
     
     df_mult$multiplicator <- df_mult$type1 * df_mult$type2
