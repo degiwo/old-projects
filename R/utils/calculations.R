@@ -101,8 +101,13 @@ get_recommended_additions <- function(pkmn_team) {
 
 get_recommended_pkmn <- function(recommended_additions) {
     df_pokedex <- get_pokedex()
+    
     if (is.reactive(recommended_additions)) {
         recommended_additions <- recommended_additions()
+    }
+    if (length(recommended_additions) == 0) {
+        df_pokedex$prio_type <- NA
+        return(df_pokedex) # exit if nothing is recommended (at start or no weaknesses)
     }
     ty_ab <- names(sort(-recommended_additions)) # types and abilities
     

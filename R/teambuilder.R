@@ -101,7 +101,6 @@ teambuilderServer <- function(id) {
             input$sel_pkmn6
             input$show_legendaries
             
-            req(recommended_additions())
             df <- get_recommended_pkmn(recommended_additions)
         })
         
