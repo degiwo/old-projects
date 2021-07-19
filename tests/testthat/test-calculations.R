@@ -58,7 +58,8 @@ test_that("recommended types are correct", {
 test_that("recommended pokemon are correct", {
     temp <- c("Steel", "Steel", "Steel", "Fairy")
     recs <- table(temp)
-    df_pkmn <- get_recommended_pkmn(recs, show_onlyrectypes = 1)
+    df_pkmn <- get_recommended_pkmn(recs)
+    df_pkmn <- df_pkmn[!is.na(df_pkmn$prio_type), ]
     
     expect_true(all(df_pkmn$type1 %in% c("Steel", "Fairy") |
                         df_pkmn$type2 %in% c("Steel", "Fairy")))
@@ -66,8 +67,8 @@ test_that("recommended pokemon are correct", {
 
 test_that("all pokemon are possible in recommended pokemon", {
     df_pokedex <- get_pokedex()
-    temp <- c("Fire", "Water")
-    df_pkmn <- get_recommended_pkmn(table(temp), show_onlyrectypes = FALSE)
+    temp <- c()
+    df_pkmn <- get_recommended_pkmn(table(temp))
     expect_equal(nrow(df_pkmn), nrow(df_pokedex))
 })
 
