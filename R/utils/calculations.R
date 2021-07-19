@@ -131,7 +131,13 @@ get_recommended_pkmn <- function(recommended_additions, show_onlyrectypes) {
     # prio for pkmn with more than one matching recommended type
     # recommended_additions is a table: higher the value => more resistances
     df_pkmn$prio_type <- apply(df_pkmn, 1, function(x) {
-        sum(c(recommended_additions[x["type1"]], recommended_additions[x["type2"]]), na.rm = TRUE)
+        sum(c(recommended_additions[x["type1"]],
+              recommended_additions[x["type2"]],
+              recommended_additions[x["abilities.0"]],
+              recommended_additions[x["abilities.1"]],
+              recommended_additions[x["abilities.S"]],
+              recommended_additions[x["abilities.H"]]
+              ), na.rm = TRUE)
     })
     df_pkmn <- df_pkmn[order(df_pkmn$prio_type, df_pkmn$total, decreasing = TRUE), ]
     
