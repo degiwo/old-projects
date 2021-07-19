@@ -99,34 +99,30 @@ get_recommended_additions <- function(pkmn_team) {
     return(table(c(recommended_types, recommended_abilities)))
 }
 
-get_recommended_pkmn <- function(recommended_additions, show_onlyrectypes) {
+get_recommended_pkmn <- function(recommended_additions) {
     df_pokedex <- get_pokedex()
     if (is.reactive(recommended_additions)) {
         recommended_additions <- recommended_additions()
     }
     ty_ab <- names(sort(-recommended_additions)) # types and abilities
     
-    if (!show_onlyrectypes) {
-        df_pkmn <- df_pokedex
-    } else {
-        list_pkmn <- list()
-        for (i in seq(ty_ab)) {
-            bool_type <- (
-                df_pokedex$type1 == ty_ab[i] |
-                    (!is.na(df_pokedex$type2) & df_pokedex$type2 == ty_ab[i])
-            )
-            bool_abilities <- (
-                df_pokedex$abilities.0 == ty_ab[i] |
-                    df_pokedex$abilities.1 == ty_ab[i] |
-                    df_pokedex$abilities.S == ty_ab[i] |
-                    df_pokedex$abilities.H == ty_ab[i]
-            )
-            temp <- df_pokedex[bool_type | bool_abilities, ]
-            list_pkmn[[i]] <- temp
-        }
-        df_pkmn <- unique(do.call(rbind, list_pkmn))
-        df_pkmn <- df_pkmn[!is.na(df_pkmn$name), ]
+    list_pkmn <- list()
+    for (i in seq(ty_ab)) {
+        bool_type <- (
+            df_pokedex$type1 == ty_ab[i] |
+                (!is.na(df_pokedex$type2) & df_pokedex$type2 == ty_ab[i])
+        )
+        bool_abilities <- (
+            df_pokedex$abilities.0 == ty_ab[i] |
+                df_pokedex$abilities.1 == ty_ab[i] |
+                df_pokedex$abilities.S == ty_ab[i] |
+                df_pokedex$abilities.H == ty_ab[i]
+        )
+        temp <- df_pokedex[bool_type | bool_abilities, ]
+        list_pkmn[[i]] <- temp
     }
+    df_pkmn <- unique(do.call(rbind, list_pkmn))
+    df_pkmn <- df_pkmn[!is.na(df_pkmn$name), ]
     
     # prio for pkmn with more than one matching recommended type
     # recommended_additions is a table: higher the value => more resistances
@@ -139,6 +135,7 @@ get_recommended_pkmn <- function(recommended_additions, show_onlyrectypes) {
               recommended_additions[x["abilities.H"]]
               ), na.rm = TRUE)
     })
+    df_pkmn <- merge(df_pokedex, df_pkmn[, c("name", "prio_type")], all.x = TRUE)
     df_pkmn <- df_pkmn[order(df_pkmn$prio_type, df_pkmn$total, decreasing = TRUE), ]
     
     return(df_pkmn)

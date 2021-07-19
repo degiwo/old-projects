@@ -102,7 +102,7 @@ teambuilderServer <- function(id) {
             input$show_legendaries
             
             req(recommended_additions())
-            df <- get_recommended_pkmn(recommended_additions, input$show_onlyrectypes)
+            df <- get_recommended_pkmn(recommended_additions)
         })
         
         pkmn_team <- reactiveValues()
@@ -308,6 +308,11 @@ teambuilderServer <- function(id) {
             # filter not fully evolved
             if (input$show_onlyfullevo) {
                 df <- df[is.na(df$evos), ]
+            }
+            
+            # filter only recommended types
+            if (input$show_onlyrectypes) {
+                df <- df[!is.na(df$prio_type), ]
             }
             
             df <- subset(df, select = c("name", "type", "total",
