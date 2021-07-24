@@ -83,7 +83,7 @@ teambuilderUI <- function(id) {
     )
 }
 
-teambuilderServer <- function(id) {
+teambuilderServer <- function(id, pkmn_team) {
     moduleServer(id, function(input, output, session) {
         # Data management ---------------------------------------------------------
 
@@ -104,7 +104,6 @@ teambuilderServer <- function(id) {
             df <- get_recommended_pkmn(recommended_additions)
         })
         
-        pkmn_team <- reactiveValues()
         recommended_additions <- reactiveVal()
         
         lapply(1:6, function(i) {

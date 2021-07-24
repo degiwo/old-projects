@@ -34,7 +34,9 @@ myApp <- function(...) {
         )
     )
     server <- function(input, output, session) {
-        teambuilderServer("tab_teambuilder")
+        pkmn_team <- reactiveValues()
+        
+        teambuilderServer("tab_teambuilder", pkmn_team)
         movesetServer("tab_moveset")
     }
     shinyApp(ui, server, ...)
