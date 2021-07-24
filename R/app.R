@@ -8,6 +8,7 @@ library(tidyr)
 source("utils/process_data.R")
 source("utils/calculations.R")
 source("teambuilder.R")
+source("moveset.R")
 
 myApp <- function(...) {
     ui <- dashboardPage(
@@ -15,6 +16,9 @@ myApp <- function(...) {
         sidebar = dashboardSidebar(
             sidebarMenu(
                 menuItem("Teambuilder", tabName = "tab_teambuilder")
+            ),
+            sidebarMenu(
+                menuItem("Moveset", tabName = "tab_moveset")
             )
         ),
         body = dashboardBody(
@@ -24,12 +28,14 @@ myApp <- function(...) {
             ),
             
             tabItems(
-                tabItem(tabName = "tab_teambuilder", teambuilderUI("tab_teambuilder"))
+                tabItem(tabName = "tab_teambuilder", teambuilderUI("tab_teambuilder")),
+                tabItem(tabName = "tab_moveset", movesetUI("tab_moveset"))
             )
         )
     )
     server <- function(input, output, session) {
         teambuilderServer("tab_teambuilder")
+        movesetServer("tab_moveset")
     }
     shinyApp(ui, server, ...)
 }
