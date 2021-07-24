@@ -43,4 +43,9 @@ test_that("all files have the same type namings", {
     expect_true(all(expected_types %in% all_types))
 })
 
+test_that("ability_immunities has all needed columns", {
+    ability_immunities <- get_ability_immunities()
+    expect_true(all(c("ability", "immunes") %in% names(ability_immunities)))
+})
+
 setwd(wd)

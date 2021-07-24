@@ -54,3 +54,7 @@ get_offense_type_effects <- function() {
     
     return(offense_type_effects)
 }
+
+get_ability_immunities <- function() {
+    ability_immunities <- fromJSON(readLines("../data/raw/ability_immunities.json"), flatten = TRUE)
+}
