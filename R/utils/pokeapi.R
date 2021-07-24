@@ -7,5 +7,5 @@ get_moves_list <- function(pkmn_name) {
         unlist(x)["move.name"]
     })
     
-    return(unlist(moves))
+    return(as.character(unlist(moves)))
 }

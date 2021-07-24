@@ -7,6 +7,7 @@ library(tidyr)
 
 source("utils/process_data.R")
 source("utils/calculations.R")
+source("utils/pokeapi.R")
 source("teambuilder.R")
 source("moveset.R")
 
@@ -37,7 +38,7 @@ myApp <- function(...) {
         pkmn_team <- reactiveValues()
         
         teambuilderServer("tab_teambuilder", pkmn_team)
-        movesetServer("tab_moveset")
+        movesetServer("tab_moveset", pkmn_team)
     }
     shinyApp(ui, server, ...)
 }
