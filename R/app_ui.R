@@ -15,6 +15,7 @@ app_ui <- function(request) {
         sidebarMenu(
           menuItem("Übersicht", tabName = "tab_dashboard", icon = icon("dashboard")),
           menuItem("Projekte", tabName = "tab_projects", icon = icon("chart-bar")),
+          menuItem("Business Analytics", tabName = "tab_business_analytics", icon = icon("database")),
           menuItem("Detailsicht", tabName = "tab_detail", icon = icon("info"))
         )
       ),
@@ -22,6 +23,7 @@ app_ui <- function(request) {
         tabItems(
           tabItem(tabName = "tab_dashboard", mod_dashboard_ui("tab_dashboard")),
           tabItem(tabName = "tab_projects", mod_projects_ui("tab_projects")),
+          tabItem(tabName = "tab_business_analytics", mod_business_analytics_ui("tab_business_analytics")),
           tabItem(tabName = "tab_detail", mod_detail_ui("tab_detail"))
         )
       )
