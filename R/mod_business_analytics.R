@@ -6,7 +6,8 @@
 #'
 #' @noRd 
 #'
-#' @importFrom shiny NS tagList 
+#' @importFrom shiny NS tagList
+#' @import shinyWidgets
 mod_business_analytics_ui <- function(id){
   ns <- NS(id)
   tagList(
@@ -19,6 +20,10 @@ mod_business_analytics_ui <- function(id){
       column(
         3,
         pickerInput_(ns("sel_year"), label = "Jahr", multiple = TRUE)
+      ),
+      column(
+        3,
+        radioGroupButtons(ns("sel_abs_rel"), label = "test", choices = c("PT", "%40h", "%100"), selected = "PT")
       )
     ),
     pivottablerOutput(ns("tbl_pivot"))
@@ -43,15 +48,23 @@ mod_business_analytics_server <- function(input, output, session, df_ba){
     updatePickerInput(session, "sel_year", choices = choices, selected = NULL)
   })
   
+  
   output$tbl_pivot <- renderPivottabler({
     req(input$sel_employee)
     req(input$sel_year)
     year_filter <- paste0(input$sel_year, "-")
     
+    df_targets <- get_target_days()
+    
     withProgress(message = "Calculation pivot table", value = 0, {
       df <- df_ba() %>%
         filter(`kürzel` %in% input$sel_employee) %>%
-        filter(grepl(year_filter, zeitraum))
+        filter(grepl(year_filter, zeitraum)) %>%
+        left_join(df_targets, by = c("zeitraum" = "month")) %>%
+        mutate(rel40 = round(ts_pt_zu_8_std / days * 100, 2)) %>%
+        group_by(`kürzel`, zeitraum) %>%
+        mutate(rel100 = round(ts_pt_zu_8_std / sum(ts_pt_zu_8_std) * 100, 2)) %>%
+        ungroup()
       pt <- PivotTable$new()
       pt$addData(df)
       pt$addColumnDataGroups("zeitraum")
@@ -60,7 +73,13 @@ mod_business_analytics_server <- function(input, output, session, df_ba){
                           outlineTotal = list(groupStyleDeclarations=list(color="blue")))
       pt$addRowDataGroups("project_name", addTotal = FALSE)
       incProgress(1/2)
-      pt$defineCalculation(calculationName = "PT", summariseExpression = "sum(ts_pt_zu_8_std)")
+      if (input$sel_abs_rel == "PT") {
+        pt$defineCalculation(calculationName = "PT", summariseExpression = "sum(ts_pt_zu_8_std)")
+      } else if (input$sel_abs_rel == "%40h") {
+        pt$defineCalculation(calculationName = "PT", summariseExpression = "sum(rel40)")
+      } else {
+        pt$defineCalculation(calculationName = "PT", summariseExpression = "sum(rel100)")
+      }
       pt$evaluatePivot()
       incProgress(1/2)
     })
