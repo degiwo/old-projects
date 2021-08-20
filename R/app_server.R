@@ -14,6 +14,8 @@ app_server <- function( input, output, session ) {
   df_ba <- "/Users/dwon/Desktop/Timesheet/Projektzuordnungen_IST.txt" %>%
     read.delim(sep = ";") %>%
     filter(kostenstelle != "DATUM DER") %>%
+    mutate(cost_center = kostenstelle) %>%
+    join_project_names() %>%
     reactiveVal()
   # List the first level callModules here
   callModule(mod_dashboard_server, "tab_dashboard", df_timesheet = df_timesheet)
