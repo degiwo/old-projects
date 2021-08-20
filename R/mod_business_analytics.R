@@ -58,10 +58,15 @@ mod_business_analytics_server <- function(input, output, session, df_ba){
     
     withProgress(message = "Calculation pivot table", value = 0, {
       df <- df_ba() %>%
+        # vacation days
+        bind_rows(get_vacation_days()) %>%
+        # filter by selections
         filter(`kürzel` %in% input$sel_employee) %>%
         filter(grepl(year_filter, zeitraum)) %>%
+        # relative zu full time equivalent
         left_join(df_targets, by = c("zeitraum" = "month")) %>%
         mutate(rel40 = round(ts_pt_zu_8_std / days * 100, 2)) %>%
+        # relative to 100%
         group_by(`kürzel`, zeitraum) %>%
         mutate(rel100 = round(ts_pt_zu_8_std / sum(ts_pt_zu_8_std) * 100, 2)) %>%
         ungroup()

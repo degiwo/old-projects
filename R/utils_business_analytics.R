@@ -4,5 +4,17 @@
 #' @import dplyr
 get_target_days <- function() {
   filepath <- "data/targets.csv"
-  return(read.csv2(filepath))
+  df <- read.csv2(filepath)
+  return(df)
+}
+
+#' get vacation days for each employee
+#'
+#' @noRd
+#' @import dplyr
+get_vacation_days <- function() {
+  filepath <- "data/vacation.csv"
+  df <- read.csv2(filepath) %>%
+    mutate(project_name = "Urlaub")
+  return(df)
 }
