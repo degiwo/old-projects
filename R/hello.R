@@ -8,6 +8,6 @@
 #'
 #' @examples
 #' hello() # [1] "Hello World!"
-hello <- function() {
+hello <-  function() {
     print("Hello World!")
 }
