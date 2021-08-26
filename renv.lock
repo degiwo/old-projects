@@ -452,10 +452,10 @@
     },
     "stringi": {
       "Package": "stringi",
-      "Version": "1.7.3",
+      "Version": "1.7.4",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "7943cfae120c77a255025e5f63856532"
+      "Hash": "ebaccb577da50829a3bb1b8296f318a5"
     },
     "stringr": {
       "Package": "stringr",

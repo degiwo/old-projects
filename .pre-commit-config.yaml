@@ -19,6 +19,7 @@ repos:
           (.*/|)appveyor.yml|
           (.*/|)\.Rbuildignore|
           (.*/|)\.pre-commit-.*|
+          (.*/|)\renv.lock|
           .*\.[rR]|
           .*\.Rproj|
           .*\.py|
