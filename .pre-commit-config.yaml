@@ -20,6 +20,7 @@ repos:
           (.*/|)\.Rbuildignore|
           (.*/|)\.pre-commit-.*|
           renv.lock|
+          .*\.yaml|
           .*\.[rR]|
           .*\.Rproj|
           .*\.py|
