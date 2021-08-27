@@ -52,7 +52,7 @@ repos:
         language: fail
         files: '\.Rhistory|\.RData|\.Rds|\.rds$'
         # `exclude: <regex>` to allow committing specific files.
-    -   id: renv-snapshot
-        name: Update renv.lock
+    -   id: renv-status
+        name: Check renv status
         language: r
-        entry: Rscript -e {renv::snapshot()}
+        entry: Rscript -e {renv::status()}

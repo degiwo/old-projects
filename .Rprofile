@@ -1,3 +1,3 @@
 source("renv/activate.R")
-renv::restore()
+renv::status()
 library(devtools)
