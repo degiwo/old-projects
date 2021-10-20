@@ -1,8 +1,14 @@
+"""
+This file stores all functions for the house price model.
+"""
+
+## Import packages
 import pandas as pd
 from sklearn.model_selection import train_test_split
 
 from house_config import DATA_PATH, ORIGINAL_DATA_FILE, TARGET_VARIABLE, NUMERIC_VARIABLES
 
+## Data reading
 def read_original_data() -> pd.DataFrame:
     try:
         data = pd.read_csv(f"../../{DATA_PATH}{ORIGINAL_DATA_FILE}")
@@ -11,6 +17,8 @@ def read_original_data() -> pd.DataFrame:
     except Exception as e:
         print(e)
 
+
+## Feature selection
 def select_numeric_features(input: pd.DataFrame) -> pd.DataFrame:
     assert all(var in input.columns for var in NUMERIC_VARIABLES), "Not all NUMERIC_VARIABLES present."
 
@@ -18,6 +26,25 @@ def select_numeric_features(input: pd.DataFrame) -> pd.DataFrame:
     print(f"Rows: {output.shape[0]}, Columns: {output.shape[1]}")
     return output
 
+
+## Modeling process
+def get_target_data(input: pd.DataFrame):
+    assert TARGET_VARIABLE in input.columns, f"{TARGET_VARIABLE} not in DataFrame present."
+
+    target_data = input[TARGET_VARIABLE]
+    return target_data
+
+def get_train_test_data(features: pd.DataFrame, target: pd.Series):
+    X_train, X_test, y_train, y_test = train_test_split(
+        features,
+        target,
+        test_size=0.2,
+        random_state=42
+    )
+    return X_train, X_test, y_train, y_test
+
+
+## Tests
 def check_missing_values(input: pd.DataFrame):
     assert all(input.isnull().sum()==0), "There are missing values."
     print("No Missing values.")
