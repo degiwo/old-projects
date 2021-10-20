@@ -5,6 +5,7 @@ This file stores all functions for the house price model.
 ## Import packages
 import pandas as pd
 from sklearn.model_selection import train_test_split
+from sklearn.base import TransformerMixin, BaseEstimator
 
 from house_config import DATA_PATH, ORIGINAL_DATA_FILE, TARGET_VARIABLE, NUMERIC_VARIABLES
 
@@ -19,12 +20,17 @@ def read_original_data() -> pd.DataFrame:
 
 
 ## Feature selection
-def select_numeric_features(input: pd.DataFrame) -> pd.DataFrame:
-    assert all(var in input.columns for var in NUMERIC_VARIABLES), "Not all NUMERIC_VARIABLES present."
-
-    output = input[NUMERIC_VARIABLES]
-    print(f"Rows: {output.shape[0]}, Columns: {output.shape[1]}")
-    return output
+class FeatureSelector(BaseEstimator, TransformerMixin):
+    def __init__(self) -> None:
+        super().__init__()
+    
+    def fit(self, X, y):
+        return self
+    
+    def transform(self, X) -> pd.DataFrame:
+        X = X.copy()
+        X = X[NUMERIC_VARIABLES]
+        return X
 
 
 ## Modeling process
