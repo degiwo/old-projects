@@ -28,6 +28,8 @@ class FeatureSelector(BaseEstimator, TransformerMixin):
         return self
     
     def transform(self, X) -> pd.DataFrame:
+        assert isinstance(NUMERIC_VARIABLES, list), "NUMERIC_VARIABLES is not a list"
+
         X = X.copy()
         X = X[NUMERIC_VARIABLES]
         return X
@@ -55,9 +57,20 @@ def check_missing_values(input: pd.DataFrame):
     assert all(input.isnull().sum()==0), "There are missing values."
     print("No Missing values.")
 
-def check_train_test_data(X_train: pd.DataFrame, X_test: pd.DataFrame):
-    assert X_train.shape[0] > 0, "X_train has no rows."
-    assert X_train.shape[1] > 0, "X_train has no columns."
-    assert X_test.shape[0] > 0, "X_test has no rows."
-    assert X_test.shape[1] > 0, "X_test has no columns."
-    print("X_train and X_test are ready for modeling.")
+def check_shape(X: pd.DataFrame):
+    assert X.shape[0] > 0, "X has no rows."
+    assert X.shape[1] > 0, "X has no columns."
+    print("X is ready for modeling.")
+
+class Tester(BaseEstimator, TransformerMixin):
+    def __init__(self) -> None:
+        super().__init__()
+    
+    def fit(self, X, y):
+        return self
+    
+    def transform(self, X):
+        check_missing_values(X)
+        check_shape(X)
+
+        return X
