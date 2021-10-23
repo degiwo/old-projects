@@ -2,11 +2,11 @@
 This file stores configuration information like global variables.
 """
 
-## path and filename
+# path and filename
 DATA_PATH = "data/house_price/"
 ORIGINAL_DATA_FILE = "original_data.csv"
 
-## variables
+# variables
 TARGET_VARIABLE = "SalePrice"
 NUMERIC_VARIABLES = [
     # 'Id',
