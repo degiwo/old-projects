@@ -7,14 +7,25 @@ deployml
 |   README.md
 |
 └───packages
-|   |   requirements.txt
-|   |   tox.ini
 |   |
 |   └───regression_model
-|   |   |   __init__.py
-|   |   |   pipeline.py
-|   |   |   train_pipeline.py
+|   |   |   requirements.txt
+|   |   |   tox.ini
 |   |   |
-|   |   └───datasets
+|   |   └───src
 |   |   |   |   __init__.py
+|   |   |   |   pipeline.py
+|   |   |   |   train_pipeline.py
+|   |   |   |
+|   |   |   └───datasets
+|   |   |   |   |   __init__.py
+|   |   |   |   |   original_data.csv
+|   |   |   |
+|   |   |   └───processing
+|   |   |   |   |   __init__.py
+|   |   |   |   |   preprocessors.py
+|   |   |   |
+|   |   |   └───processing
+|   |   |   |   |   __init__.py
+|   |   |   |   |   regression_model.pkl
 ```
