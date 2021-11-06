@@ -10,11 +10,20 @@ import joblib
 app = Flask(__name__)
 model = joblib.load("models/linear_model.pkl")
 
+# Get version from VERSION file
+with open("VERSION", 'r') as version_file:
+    __version = version_file.read().strip()
+
 
 # Routes of app
 @app.route("/")
 def index():
     return render_template("index.html")
+
+
+@app.route("/version")
+def version():
+    return f"Version: v{__version}"
 
 
 @app.route("/predict", methods=["POST"])
