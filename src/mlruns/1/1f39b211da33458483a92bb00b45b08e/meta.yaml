@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/Detlef/Desktop/Coding/Python/ml-stonks/src/mlruns/1/1f39b211da33458483a92bb00b45b08e/artifacts
+end_time: 1636820433292
+entry_point_name: ''
+experiment_id: '1'
+lifecycle_stage: active
+name: ''
+run_id: 1f39b211da33458483a92bb00b45b08e
+run_uuid: 1f39b211da33458483a92bb00b45b08e
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1636820433228
+status: 4
+tags: []
+user_id: Detlef
