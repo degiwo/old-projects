@@ -3,6 +3,7 @@
 #' @param id 
 #'
 #' @importFrom shiny NS
+#' @importFrom shinyWidgets checkboxGroupButtons
 #' @noRd
 pokedexUI <- function(id) {
   ns <- NS(id)
@@ -38,6 +39,34 @@ pokedexUI <- function(id) {
             plotOutput(ns("plt_stats"))
           )
         )
+      ),
+      
+      
+      box(
+        status = "primary",
+        
+        column(
+          width = 12,
+          
+          # Move pool ----
+          selectizeInput(
+            ns("btn_gen"),
+            label = "Generation",
+            choices = unique(movepool$version_group),
+            selected = "red-blue"
+          ),
+          checkboxGroupButtons(
+            ns("btn_method"),
+            label = "Method",
+            choices = unique(movepool$method),
+            selected = "level-up",
+            checkIcon = list(yes = icon("ok", lib = "glyphicon")),
+            justified = TRUE
+          ),
+          fluidRow(
+            tableOutput(ns("tbl_movepool"))
+          )
+        )
       )
     )
   )
@@ -51,6 +80,7 @@ pokedexUI <- function(id) {
 #' @import ggplot2
 #' @importFrom magrittr %>%
 #' @importFrom tidyr pivot_longer
+#' @importFrom dplyr left_join
 #' @importFrom stats na.omit
 #' @importFrom httr GET content
 #' @noRd
@@ -111,6 +141,20 @@ pokedexServer <- function(id) {
           abilities$short_desc[abilities$name == df$ability[i]][1]
         )
       })
+    })
+    
+    # Move pool ----
+    output$tbl_movepool <- renderTable({
+      req(input$sel_pkmn)
+      req(input$btn_method)
+      req(input$btn_gen)
+      df <- movepool %>%
+        .[.$name == input$sel_pkmn, ] %>%
+        .[.$method %in% input$btn_method, ] %>%
+        .[.$version_group %in% input$btn_gen, ] %>%
+        left_join(moves, by = c("move" = "name")) %>%
+        .[order(.$level),  c("level", "move", "type", "dmg_class",
+                             "power", "accuracy", "method")]
     })
     
   })
