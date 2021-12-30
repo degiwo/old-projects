@@ -1,0 +1,17 @@
+Package: pktool
+Title: Pokémon analysis tool
+Version: 0.0.0.9000
+Authors@R: 
+    person("Detlef", "Wong", , "d.wong93@hotmail.de", role = c("aut", "cre"))
+Description: A R Shiny Application with integrated Pokédex, possibilities to
+    compare Pokémon, analyze viability and many other options.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.2
+Imports: 
+    shiny,
+    shinydashboard
+Depends: 
+    R (>= 2.10)
