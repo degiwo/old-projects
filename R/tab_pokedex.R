@@ -17,14 +17,27 @@ pokedexUI <- function(id) {
     fluidRow(
       box(
         status = "primary",
-        # Pokemon sprite ----
-        htmlOutput(ns("link_sprite")),
-        # Types ----
-        textOutput(ns("txt_types")),
-        # Abilities ----
-        uiOutput(ns("box_abilities")),
-        # Bar chart for stats ----
-        plotOutput(ns("plt_stats"))
+        
+        column(
+          width = 12,
+          
+          # Pokemon sprite ----
+          fluidRow(
+            htmlOutput(ns("link_sprite"))
+          ),
+          # Types ----
+          fluidRow(
+            textOutput(ns("txt_types"))
+          ),
+          # Abilities ----
+          fluidRow(
+            uiOutput(ns("box_abilities"))
+          ),
+          # Bar chart for stats ----
+          fluidRow(
+            plotOutput(ns("plt_stats"))
+          )
+        )
       )
     )
   )
@@ -49,6 +62,7 @@ pokedexServer <- function(id) {
     
     # Types ----
     output$txt_types <- renderText({
+      req(input$sel_pkmn)
       paste(na.omit(c(
         pokemon$type1[pokemon$name == input$sel_pkmn],
         pokemon$type2[pokemon$name == input$sel_pkmn]
@@ -57,6 +71,7 @@ pokedexServer <- function(id) {
     
     # Pokemon sprite ----
     output$link_sprite <- renderText({
+      req(input$sel_pkmn)
       link <- paste0("https://pokeapi.co/api/v2/pokemon/", input$sel_pkmn)
       json_content <- content(GET(link))
       c('<img src="',
@@ -66,6 +81,7 @@ pokedexServer <- function(id) {
     
     # Bar chart for stats ----
     output$plt_stats <- renderPlot({
+      req(input$sel_pkmn)
       df <- pokemon %>%
         .[.$name == input$sel_pkmn, stat_cols] %>%
         pivot_longer(stat_cols, names_to = "stat", values_to = "value")
@@ -76,20 +92,23 @@ pokedexServer <- function(id) {
         geom_text(aes(label = value, color = stat), hjust = -0.3, size = 5) +
         coord_flip() +
         theme(axis.text = element_text(size = 12), legend.position = "none") +
+        # ylim(0, 255) +
+        scale_y_continuous(n.breaks = 6, limits = c(0, 255)) +
         labs(x = "", y = "", fill = "")
     })
     
     # Abilities ----
     output$box_abilities <- renderUI({
+      req(input$sel_pkmn)
       df <- pokemon %>%
         .[.$name == input$sel_pkmn, ability_cols] %>%
         pivot_longer(ability_cols, names_to = "slot", values_to = "ability") %>%
         na.omit()
       lapply(seq(df$slot), function(i) {
         box(
-          width = 12 / length(df$slot),
+          width = floor(12 / length(df$slot)),
           title = paste(df$ability[i], ifelse(df$slot[i] == "ability-hidden", "(HA)", "")),
-          "Description"
+          abilities$short_desc[abilities$name == df$ability[i]][1]
         )
       })
     })

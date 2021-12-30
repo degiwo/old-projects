@@ -4,7 +4,7 @@ library(jsonlite)
 library(httr)
 
 # Initialize empty data.frame
-n_pkmn <- 50
+n_pkmn <- 300
 columns <- c(
   "id", "name", "type1", "type2",
   "hp", "attack", "defense",
@@ -57,4 +57,4 @@ close(progressbar)
 
 # Store data
 pokemon <- df_pkmn
-use_data(pokemon, internal = TRUE)
+use_data(pokemon, overwrite = TRUE)
