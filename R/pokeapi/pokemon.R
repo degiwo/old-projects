@@ -4,12 +4,12 @@ library(jsonlite)
 library(httr)
 
 # Initialize empty data.frame
-n_pkmn <- 300
+n_pkmn <- 800
 columns <- c(
   "id", "name", "type1", "type2",
   "hp", "attack", "defense",
-  "special-attack", "special-defense", "speed",
-  "ability1", "ability2", "ability-hidden"
+  "special_attack", "special_defense", "speed",
+  "ability1", "ability2", "ability_hidden"
 )
 df_pkmn <- data.frame(matrix(nrow = n_pkmn, ncol = length(columns)))
 names(df_pkmn) <- columns
@@ -36,7 +36,8 @@ for (i in seq(n_pkmn)) {
   # Stats
   for (j in seq(json_content[["stats"]])) {
     stat_name <- json_content[["stats"]][[j]][["stat"]][["name"]]
-    df_pkmn[i, stat_name] <- json_content[["stats"]][[j]][["base_stat"]]
+    stat_name_underscore <- gsub("-", "_", stat_name)
+    df_pkmn[i, stat_name_underscore] <- json_content[["stats"]][[j]][["base_stat"]]
   }
   
   # Abilities
@@ -45,7 +46,7 @@ for (i in seq(n_pkmn)) {
   }
   for (j in seq(json_content[["abilities"]])) {
     ability_slot <- ifelse(
-      json_content[["abilities"]][[j]][["is_hidden"]], "ability-hidden", 
+      json_content[["abilities"]][[j]][["is_hidden"]], "ability_hidden", 
       paste0("ability", json_content[["abilities"]][[j]][["slot"]])
     )
     df_pkmn[i, ability_slot] <- json_content[["abilities"]][[j]][["ability"]][["name"]]

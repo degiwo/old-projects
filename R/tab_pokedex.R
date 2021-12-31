@@ -100,8 +100,8 @@ pokedexUI <- function(id) {
 pokedexServer <- function(id) {
   moduleServer(id, function(input, output, session) {
     # global module settings ----
-    stat_cols <- c("hp", "attack", "defense", "special-attack", "special-defense", "speed")
-    ability_cols <- c("ability1", "ability2", "ability-hidden")
+    stat_cols <- c("hp", "attack", "defense", "special_attack", "special_defense", "speed")
+    ability_cols <- c("ability1", "ability2", "ability_hidden")
     
     # Types ----
     output$txt_types <- renderText({
@@ -150,7 +150,7 @@ pokedexServer <- function(id) {
       lapply(seq(df$slot), function(i) {
         box(
           width = floor(12 / length(df$slot)),
-          title = paste(df$ability[i], ifelse(df$slot[i] == "ability-hidden", "(HA)", "")),
+          title = paste(df$ability[i], ifelse(df$slot[i] == "ability_hidden", "(HA)", "")),
           abilities$short_desc[abilities$name == df$ability[i]][1]
         )
       })
