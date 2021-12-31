@@ -22,9 +22,22 @@ pokedexUI <- function(id) {
         column(
           width = 12,
           
-          # Pokemon sprite ----
           fluidRow(
-            htmlOutput(ns("link_sprite"))
+            # Pre evolution ----
+            column(
+              width = 4,
+              tableOutput(ns("txt_pre_evolution"))
+            ),
+            # Pokemon sprite ----
+            column(
+              width = 4,
+              htmlOutput(ns("link_sprite"))
+            ),
+            # Post evolution ----
+            column(
+              width = 4,
+              tableOutput(ns("txt_post_evolution"))
+            )
           ),
           # Types ----
           fluidRow(
@@ -155,6 +168,70 @@ pokedexServer <- function(id) {
         left_join(moves, by = c("move" = "name")) %>%
         .[order(.$level),  c("level", "move", "type", "dmg_class",
                              "power", "accuracy", "method")]
+    })
+    
+    # Pre evolution ----
+    output$txt_pre_evolution <- renderTable({
+      req(input$sel_pkmn)
+      if (sum(evolution$evolves_to == input$sel_pkmn) > 0) {
+        df <- evolution %>%
+          .[.$evolves_to == input$sel_pkmn, ]
+        # TODO: Refactor in a function
+        df$condition <- ifelse(
+          # Friendship
+          !is.na(df$friendship), "Friendship",
+          ifelse(
+            # Use item
+            df$trigger == "use-item", paste0("Use ", df$item),
+            ifelse(
+              # Trade
+              df$trigger == "trade", paste0(
+                df$trigger, ifelse(!is.na(df$held_item), paste0(": ", df$held_item), "")
+              ),
+              # Level up
+              paste0(df$trigger, ifelse(
+                !is.na(df$held_item), paste0(": ", df$held_item), ifelse(
+                  !is.na(df$min_level), paste0(": ", df$min_level), ""
+                )
+              ))
+            )
+          )
+        )
+        df$evolves_from <- df$name
+        df <- df[, c("evolves_from", "condition")]
+      }
+    })
+    
+    # Post evolution ----
+    output$txt_post_evolution <- renderTable({
+      req(input$sel_pkmn)
+      
+      if (sum(evolution$name == input$sel_pkmn) > 0) {
+        df <- evolution %>%
+          .[.$name == input$sel_pkmn, ]
+        # TODO: Refactor in a function
+        df$condition <- ifelse(
+          # Friendship
+          !is.na(df$friendship), "Friendship",
+          ifelse(
+            # Use item
+            df$trigger == "use-item", paste0("Use ", df$item),
+            ifelse(
+              # Trade
+              df$trigger == "trade", paste0(
+                df$trigger, ifelse(!is.na(df$held_item), paste0(": ", df$held_item), "")
+              ),
+              # Level up
+              paste0(df$trigger, ifelse(
+                !is.na(df$held_item), paste0(": ", df$held_item), ifelse(
+                  !is.na(df$min_level), paste0(": ", df$min_level), ""
+                )
+              ))
+            )
+          )
+        )
+        df <- df[, c("evolves_to", "condition")]
+      }
     })
     
   })
