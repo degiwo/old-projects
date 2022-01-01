@@ -57,11 +57,14 @@ for (i in seq(n_evo)) {
   if (length(json_content) == 1) next # "Not Found" as response
   json_chain <- json_content[["chain"]]
   
+  # Set base form as id
+  base_form <- json_chain[["species"]][["name"]]
+  
   # Unchain evolves_to
   # TODO: chain complete?
-  list_df <- append(list_df, list(unchain_evolves_to(json_chain, i)))
+  list_df <- append(list_df, list(unchain_evolves_to(json_chain, base_form)))
   for (j in seq(json_chain[["evolves_to"]])) {
-    list_df <- append(list_df, list(unchain_evolves_to(json_chain[["evolves_to"]][[j]], i)))
+    list_df <- append(list_df, list(unchain_evolves_to(json_chain[["evolves_to"]][[j]], base_form)))
   }
   
   setTxtProgressBar(progressbar, i)
