@@ -1,0 +1,13 @@
+Package: edar
+Title: Explorative Data Analysis with R
+Version: 0.0.0.9000
+Authors@R: 
+    person("Detlef", "Wong", , "d.wong93@hotmail.de", role = c("aut", "cre"))
+Description: Easy convenience functions for explorative data analysis with R.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.2
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
