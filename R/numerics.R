@@ -1,3 +1,5 @@
+# functions to analyze numeric features
+
 #' Plot histogram
 #'
 #' @param data data.frame
@@ -15,10 +17,10 @@ plot_histogram <- function(data, column) {
   )
 
   ggplot(data, aes_string(x = column)) +
-    geom_histogram(aes(y = ..density..), breaks = breaks) +
+    geom_histogram(aes_string(y = "..density.."), breaks = breaks) +
     geom_density() +
     labs(title = paste0(
       "Histogram of ", column,
-      " (n: ", sum(!is.na(data[column])), ")"
+      " (n = ", sum(!is.na(data[column])), ")"
     ))
 }

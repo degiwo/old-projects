@@ -14,5 +14,5 @@ edar_report <- function(data) {
     print(plot_histogram(data, col))
   }
 
-  summary(data)
+  skim_data(data)
 }
