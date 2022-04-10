@@ -1,3 +1,3 @@
 test_that("edar_report() works", {
-  expect_type(edar_report(mtcars), "character")
+  expect_null(edar_report(mtcars))
 })

@@ -10,9 +10,9 @@
 #' data(mtcars)
 #' edar_report(mtcars)
 edar_report <- function(data) {
+  skim_data(data)
+
   for (col in names(data)) {
     print(plot_histogram(data, col))
   }
-
-  skim_data(data)
 }
