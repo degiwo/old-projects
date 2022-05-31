@@ -1,6 +1,7 @@
 """Test Typer application"""
-from todoapp import __appname__, __version__, cli
 from typer.testing import CliRunner
+
+from todoapp import __appname__, __version__, cli
 
 runner = CliRunner()
 
