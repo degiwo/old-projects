@@ -1,10 +1,12 @@
 """Module to provide the CLI functionality"""
 
+from pathlib import Path
 from typing import Optional
 
 import typer
 
 from todoapp import __appname__, __version__
+from todoapp.database import DEFAULT_DB_FILE, init_database
 
 app = typer.Typer()
 
@@ -28,3 +30,17 @@ def main(
     )
 ) -> None:
     return
+
+
+@app.command()
+def init(
+    db_path: str = typer.Option(
+        str(DEFAULT_DB_FILE),
+        "-db",
+        "--db-path",
+        prompt="to-do database location?",  # prompt appears
+    )
+) -> None:
+    """Initialize the to-do database and echo the path"""
+    init_database(Path(db_path))
+    typer.secho(f"The to-do database is {db_path}", fg=typer.colors.GREEN)
