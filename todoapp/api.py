@@ -1,7 +1,7 @@
 """Module to connect the CLI with the database"""
 
 from pathlib import Path
-from typing import Any, Dict, NamedTuple
+from typing import Any, Dict, List, NamedTuple
 
 from todoapp.database import DatabaseHandler
 
@@ -18,3 +18,15 @@ class TodoAPI:
 
     def __init__(self, db_path: Path) -> None:
         self._db_handler = DatabaseHandler(db_path)
+
+    def add(self, description: List[str]):
+        """Add a new to-do entry to the database"""
+        description_text = " ".join(description)
+        todo = {
+            "Description": description_text,
+            "Done": False,
+        }
+        read = self._db_handler.read_todos()
+        read.todo_list.append(todo)
+        write = self._db_handler.write_todos(read.todo_list)
+        return CurrentToDo(todo, write.error)

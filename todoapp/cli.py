@@ -1,11 +1,12 @@
 """Module to provide the CLI functionality"""
 
 from pathlib import Path
-from typing import Optional
+from typing import List, Optional
 
 import typer
 
 from todoapp import __appname__, __version__
+from todoapp.api import TodoAPI
 from todoapp.database import DEFAULT_DB_FILE, init_database
 
 app = typer.Typer()
@@ -44,3 +45,11 @@ def init(
     """Initialize the to-do database and echo the path"""
     init_database(Path(db_path))
     typer.secho(f"The to-do database is {db_path}", fg=typer.colors.GREEN)
+
+
+@app.command()
+def add(description: List[str] = typer.Argument(...)) -> None:
+    """Add a new to-do with a DESCRIPTION"""
+    todoapi = TodoAPI(DEFAULT_DB_FILE)
+    todo, error = todoapi.add(description)
+    typer.secho(f"""to-do: "{todo["Description"]}" was added """)
