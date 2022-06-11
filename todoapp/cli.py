@@ -53,3 +53,13 @@ def add(description: List[str] = typer.Argument(...)) -> None:
     todoapi = TodoAPI(DEFAULT_DB_FILE)
     todo, error = todoapi.add(description)
     typer.secho(f"""to-do: "{todo["Description"]}" was added """)
+
+
+@app.command(name="list")
+def list_all() -> None:
+    """List all todos"""
+    todoapi = TodoAPI(DEFAULT_DB_FILE)
+    todo_list = todoapi.get_todo_list()
+    for id, todo in enumerate(todo_list, 1):
+        desc, done = todo.values()
+        typer.secho(f"{desc}, status: {done}")
