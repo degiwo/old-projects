@@ -46,3 +46,13 @@ class TodoAPI:
         todo["Done"] = True
         write = self._db_handler.write_todos(read.todo_list)
         return CurrentToDo(todo, write.error)
+
+    def remove(self, todo_id: int) -> CurrentToDo:
+        """Remove a todo from the database using its id or index"""
+        read = self._db_handler.read_todos()
+        try:
+            todo = read.todo_list.pop(todo_id - 1)
+        except IndexError:
+            return CurrentToDo({}, "ID not found")
+        write = self._db_handler.write_todos(read.todo_list)
+        return CurrentToDo(todo, write.error)

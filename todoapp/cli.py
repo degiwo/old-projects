@@ -94,3 +94,24 @@ def set_done(todo_id: int = typer.Argument(...)) -> None:
         f"""to-do #{todo_id} "{todo["Description"]}" completed""",
         fg=typer.colors.GREEN,
     )
+
+
+@app.command()
+def remove(todo_id: int = typer.Argument(...)) -> None:
+    """Remove a todo using its TODO_ID"""
+    todoapi = TodoAPI(DEFAULT_DB_FILE)
+    todo_list = todoapi.get_todo_list()
+    try:
+        todo = todo_list[todo_id - 1]
+    except IndexError:
+        typer.secho(f"""todo #{todo_id} not found""", fg=typer.colors.RED)
+        raise typer.Exit()
+    delete = typer.confirm(
+        f"""Delete todo #{todo_id}: {todo["Description"]}?""",
+    )
+    if delete:
+        todo, error = todoapi.remove(todo_id)
+        typer.secho(
+            f"""todo #{todo_id}: {todo["Description"]} was removed""",
+            fg=typer.colors.GREEN,
+        )
