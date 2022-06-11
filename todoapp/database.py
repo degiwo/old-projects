@@ -25,8 +25,11 @@ class DatabaseHandler:
         self.db_path = db_path
 
     def read_todos(self) -> DBResponse:
-        with self.db_path.open("r") as db:
-            return DBResponse(json.load(db), "SUCCESS")
+        try:
+            with self.db_path.open("r") as db:
+                return DBResponse(json.load(db), "SUCCESS")
+        except json.JSONDecodeError:
+            return DBResponse([], "ERROR")
 
     def write_todos(self, todo_list: List[Dict[str, Any]]) -> DBResponse:
         with self.db_path.open("w") as db:

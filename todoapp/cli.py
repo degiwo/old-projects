@@ -52,7 +52,10 @@ def add(description: List[str] = typer.Argument(...)) -> None:
     """Add a new to-do with a DESCRIPTION"""
     todoapi = TodoAPI(DEFAULT_DB_FILE)
     todo, error = todoapi.add(description)
-    typer.secho(f"""to-do: "{todo["Description"]}" was added """)
+    typer.secho(
+        f"""to-do: "{todo["Description"]}" was added """,
+        fg=typer.colors.GREEN,
+    )
 
 
 @app.command(name="list")
@@ -60,6 +63,23 @@ def list_all() -> None:
     """List all todos"""
     todoapi = TodoAPI(DEFAULT_DB_FILE)
     todo_list = todoapi.get_todo_list()
+    if len(todo_list) == 0:
+        typer.secho(
+            "There are no tasks in the to-do list yet",
+            fg=typer.colors.RED,
+        )
+        raise typer.Exit()
+    typer.secho("\nto-do list:\n", fg=typer.colors.BLUE)
+    columns = ("ID ", " | Done ", " | Description")
+    headers = "".join(columns)
+    typer.secho(headers, fg=typer.colors.BLUE, bold=True)
+    typer.secho("-" * len(headers), fg=typer.colors.BLUE)
     for id, todo in enumerate(todo_list, 1):
         desc, done = todo.values()
-        typer.secho(f"{desc}, status: {done}")
+        typer.secho(
+            f"{id} {' '  * (len(columns[0]) - len(str(id)))}"
+            f"| {done} {' ' * (len(columns[1]) - len(str(done)) - 3)}"
+            f"| {desc}",
+            fg=typer.colors.BLUE,
+        )
+    typer.secho("-" * len(headers), fg=typer.colors.BLUE)
