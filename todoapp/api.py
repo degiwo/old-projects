@@ -35,3 +35,14 @@ class TodoAPI:
         """Return the current todo list"""
         read = self._db_handler.read_todos()
         return read.todo_list
+
+    def set_done(self, todo_id: int) -> CurrentToDo:
+        """Set a todo as done"""
+        read = self._db_handler.read_todos()
+        try:
+            todo = read.todo_list[todo_id - 1]
+        except IndexError:
+            return CurrentToDo({}, "ID not found")
+        todo["Done"] = True
+        write = self._db_handler.write_todos(read.todo_list)
+        return CurrentToDo(todo, write.error)

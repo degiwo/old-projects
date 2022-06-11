@@ -83,3 +83,14 @@ def list_all() -> None:
             fg=typer.colors.BLUE,
         )
     typer.secho("-" * len(headers), fg=typer.colors.BLUE)
+
+
+@app.command(name="complete")
+def set_done(todo_id: int = typer.Argument(...)) -> None:
+    """Complete a todo by setting it as done using its TODO_ID"""
+    todoapi = TodoAPI(DEFAULT_DB_FILE)
+    todo, error = todoapi.set_done(todo_id)
+    typer.secho(
+        f"""to-do #{todo_id} "{todo["Description"]}" completed""",
+        fg=typer.colors.GREEN,
+    )
