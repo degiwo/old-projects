@@ -7,6 +7,7 @@ A Todo-App via Command Line Interface (CLI).
 This project is set up with [Visual Studio Code](https://code.visualstudio.com/) and [poetry](https://python-poetry.org/). To start developing in the intended environment, run
 
     cd path/to/project
+    poetry install
     poetry shell
     code .
 
