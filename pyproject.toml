@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "todoapp"
-version = "0.1.0"
+version = "0.1.1"
 description = "A Todo-App via Command Line Interface (CLI)"
 authors = ["degiwo <d.wong93@hotmail.de>"]
 
