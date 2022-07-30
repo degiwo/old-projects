@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "teambuilder"
+version = "0.0.1"
+description = "A Python Dash application to build a Pokémon team"
+authors = ["degiwo <d.wong93@hotmail.de>"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+dash = "^2.6.0"
+
+[tool.poetry.dev-dependencies]
+flake8 = "^4.0.1"
+black = "^22.6.0"
+commitizen = "^2.29.2"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
