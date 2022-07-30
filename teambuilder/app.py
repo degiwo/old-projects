@@ -1,7 +1,7 @@
 """First level layout of application"""
 
 import requests
-from dash import Dash, dcc, html
+from dash import Dash, Input, Output, dcc, html
 
 
 def get_version_groups():
@@ -32,5 +32,27 @@ app.layout = html.Div(
         dcc.RadioItems(get_version_groups(), id="home-in-version-group"),
         html.Br(),
         dcc.Dropdown(get_all_pokemon(), id="home-in-pokemon"),
+        html.Br(),
+        html.Img(id="home-out-pokemon-sprite"),
     ]
 )
+
+
+@app.callback(
+    Output(component_id="home-out-pokemon-sprite", component_property="src"),
+    Input(component_id="home-in-pokemon", component_property="value"),
+)
+def update_pokemon_sprite(input_name):
+    try:
+        output = (
+            requests.get(f"https://pokeapi.co/api/v2/pokemon/{input_name}")
+            .json()
+            .get("sprites")
+            .get("front_default")
+        )
+    except requests.JSONDecodeError:
+        output = (
+            "https://upload.wikimedia.org/wikipedia/commons"
+            "/thumb/5/55/Question_Mark.svg/288px-Question_Mark.svg.png"
+        )
+    return output
