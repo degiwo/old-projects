@@ -87,7 +87,7 @@ def store_pokemon_team(input_pokemon, current_pokemon_team):
         component_property="value",
     ),
 )
-def update_pokemon_sprite_new(input_name):
+def update_pokemon_sprite(input_name):
     try:
         output = (
             requests.get(f"https://pokeapi.co/api/v2/pokemon/{input_name}")
