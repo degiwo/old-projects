@@ -1,5 +1,5 @@
 import requests
-from teambuilder.app import store_pokemon_team, update_pokemon_sprite
+from teambuilder.home.home_view import store_pokemon_team, update_pokemon_sprite
 
 
 def test_store_pokemon_team():
