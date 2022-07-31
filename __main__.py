@@ -1,7 +1,6 @@
-from dash import Dash, html
+"""Main entrypoint of application"""
 
-app = Dash(__name__)
-app.layout = html.Div([html.H1("Teambuilder")])
+from teambuilder.app import app
 
 if __name__ == "__main__":
     app.run_server(debug=True)
