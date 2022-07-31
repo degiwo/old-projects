@@ -1,7 +1,7 @@
 """First level layout of application"""
 
 import requests
-from dash import Dash, Input, Output, dcc, html
+from dash import ALL, MATCH, Dash, Input, Output, State, dcc, html
 
 
 def get_version_groups():
@@ -30,30 +30,64 @@ app.layout = html.Div(
         html.H1("Teambuilder"),
         html.Label("Choose your version group:"),
         dcc.RadioItems(get_version_groups(), id="home-in-version-group"),
-        html.Br(),
-        dcc.Dropdown(get_all_pokemon(), id="home-in-pokemon"),
-        html.Br(),
-        html.Img(id="home-out-pokemon-sprite"),
+        html.Div(
+            [
+                html.Div(
+                    [
+                        html.Img(
+                            id={
+                                "type": "home-out-pokemon-sprite",
+                                "index": i,
+                            }
+                        ),
+                        html.Br(),
+                        dcc.Dropdown(
+                            get_all_pokemon(),
+                            id={
+                                "type": "home-in-pokemon",
+                                "index": i,
+                            },
+                        ),
+                    ]
+                )
+                for i in range(6)
+            ]
+        ),
         dcc.Store(id="home-store-pokemon-team"),
     ]
 )
 
 
 @app.callback(
-    Output(component_id="home-store-pokemon-team", component_property="data"),
-    Input(component_id="home-in-pokemon", component_property="value"),
+    Output(
+        component_id="home-store-pokemon-team",
+        component_property="data",
+    ),
+    Input(
+        component_id={"type": "home-in-pokemon", "index": ALL},
+        component_property="value",
+    ),
+    State(
+        component_id="home-store-pokemon-team",
+        component_property="data",
+    ),
 )
-def store_pokemon_team(input_name):
-    pokemon_team = {"1": input_name}
-    return pokemon_team
+def store_pokemon_team(input_pokemon, current_pokemon_team):
+    current_pokemon_team = {i: name for (i, name) in enumerate(input_pokemon)}
+    return current_pokemon_team
 
 
 @app.callback(
-    Output(component_id="home-out-pokemon-sprite", component_property="src"),
-    Input(component_id="home-store-pokemon-team", component_property="data"),
+    Output(
+        component_id={"type": "home-out-pokemon-sprite", "index": MATCH},
+        component_property="src",
+    ),
+    Input(
+        component_id={"type": "home-in-pokemon", "index": MATCH},
+        component_property="value",
+    ),
 )
-def update_pokemon_sprite(pokemon_team):
-    input_name = pokemon_team.get("1")
+def update_pokemon_sprite_new(input_name):
     try:
         output = (
             requests.get(f"https://pokeapi.co/api/v2/pokemon/{input_name}")
