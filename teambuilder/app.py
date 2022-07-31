@@ -34,15 +34,26 @@ app.layout = html.Div(
         dcc.Dropdown(get_all_pokemon(), id="home-in-pokemon"),
         html.Br(),
         html.Img(id="home-out-pokemon-sprite"),
+        dcc.Store(id="home-store-pokemon-team"),
     ]
 )
 
 
 @app.callback(
-    Output(component_id="home-out-pokemon-sprite", component_property="src"),
+    Output(component_id="home-store-pokemon-team", component_property="data"),
     Input(component_id="home-in-pokemon", component_property="value"),
 )
-def update_pokemon_sprite(input_name):
+def store_pokemon_team(input_name):
+    pokemon_team = {"1": input_name}
+    return pokemon_team
+
+
+@app.callback(
+    Output(component_id="home-out-pokemon-sprite", component_property="src"),
+    Input(component_id="home-store-pokemon-team", component_property="data"),
+)
+def update_pokemon_sprite(pokemon_team):
+    input_name = pokemon_team.get("1")
     try:
         output = (
             requests.get(f"https://pokeapi.co/api/v2/pokemon/{input_name}")
@@ -50,6 +61,7 @@ def update_pokemon_sprite(input_name):
             .get("sprites")
             .get("front_default")
         )
+
     except requests.JSONDecodeError:
         output = (
             "https://upload.wikimedia.org/wikipedia/commons"
