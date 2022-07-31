@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "teambuilder"
-version = "0.0.1"
+version = "0.0.2"
 description = "A Python Dash application to build a Pokémon team"
 authors = ["degiwo <d.wong93@hotmail.de>"]
 
