@@ -38,7 +38,8 @@ app.layout = html.Div(
                             id={
                                 "type": "home-out-pokemon-sprite",
                                 "index": i,
-                            }
+                            },
+                            style={"height": "96px", "width": "96px"},
                         ),
                         html.Br(),
                         dcc.Dropdown(
