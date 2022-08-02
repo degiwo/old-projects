@@ -34,7 +34,6 @@ def create_home_layout():
                             },
                         ),
                         html.P(
-                            "test",
                             id={
                                 "type": "home-out-pokemon-types",
                                 "index": i,
