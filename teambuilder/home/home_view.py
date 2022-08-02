@@ -54,10 +54,34 @@ def update_pokemon_sprite(pokemon_name: str) -> str:
             .get("sprites")
             .get("front_default")
         )
-
     except requests.JSONDecodeError:
         output = (
             "https://upload.wikimedia.org/wikipedia/commons"
             "/thumb/5/55/Question_Mark.svg/288px-Question_Mark.svg.png"
         )
     return output
+
+
+@dash.callback(
+    Output(
+        component_id={"type": "home-out-pokemon-types", "index": MATCH},
+        component_property="children",
+    ),
+    Input(
+        component_id={"type": "home-in-pokemon", "index": MATCH},
+        component_property="value",
+    ),
+)
+def get_pokemon_types(pokemon_name: str) -> str:
+    """Get the types of the chosen Pokémon as a string.
+    Dual-types will return something like 'normal flying'"""
+    try:
+        types_list = (
+            requests.get(f"https://pokeapi.co/api/v2/pokemon/{pokemon_name}")
+            .json()
+            .get("types")
+        )
+    except requests.JSONDecodeError:
+        types_list = []
+    types = " ".join([x.get("type").get("name") for x in types_list])
+    return types

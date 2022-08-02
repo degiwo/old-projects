@@ -13,7 +13,7 @@ def create_home_layout():
         html.Label("Choose your version group:"),
         dcc.RadioItems(get_version_groups(), id="home-in-version-group"),
         # === 6 Divs where you can choose a Pokémon ===
-        # and the corresponding sprite gets displayed
+        # and the corresponding sprite and types gets displayed
         html.Div(
             [
                 html.Div(
@@ -30,6 +30,13 @@ def create_home_layout():
                             get_all_pokemon(),
                             id={
                                 "type": "home-in-pokemon",
+                                "index": i,
+                            },
+                        ),
+                        html.P(
+                            "test",
+                            id={
+                                "type": "home-out-pokemon-types",
                                 "index": i,
                             },
                         ),
