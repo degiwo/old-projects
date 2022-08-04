@@ -1,5 +1,6 @@
 """Layout of the home module"""
 
+import dash
 from dash import dcc, html
 from teambuilder.utils import get_all_pokemon, get_version_groups
 
@@ -39,6 +40,7 @@ def create_home_layout():
                                 "index": i,
                             },
                         ),
+                        html.Img(src=dash.get_asset_url("normal.png")),
                     ]
                 )
                 for i in range(6)
