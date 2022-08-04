@@ -1,4 +1,4 @@
-from teambuilder.app import get_version_groups
+from teambuilder.utils import get_version_groups
 
 
 def test_get_version_groups():

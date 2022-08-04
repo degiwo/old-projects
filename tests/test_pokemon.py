@@ -1,4 +1,4 @@
-from teambuilder.app import get_all_pokemon
+from teambuilder.utils import get_all_pokemon
 
 
 def test_get_all_pokemon():
