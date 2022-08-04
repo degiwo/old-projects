@@ -69,15 +69,15 @@ def update_pokemon_sprite(pokemon_name: str) -> str:
 
 @dash.callback(
     Output(
-        component_id={"type": "home-out-pokemon-types-icon-1", "index": MATCH},
-        component_property="src",
+        component_id={"type": "home-out-pokemon-types-icons", "index": MATCH},
+        component_property="children",
     ),
     Input(
         component_id={"type": "home-in-pokemon", "index": MATCH},
         component_property="value",
     ),
 )
-def update_pokemon_types_icon_1(pokemon_name):
+def update_pokemon_types_icons(pokemon_name: str) -> list[html.Img]:
     try:
         types_dict: dict = (
             requests.get(f"https://pokeapi.co/api/v2/pokemon/{pokemon_name}")
@@ -85,29 +85,6 @@ def update_pokemon_types_icon_1(pokemon_name):
             .get("types")
         )
     except requests.JSONDecodeError:
-        return None
+        return [html.Img(None)]
     types_list = [x.get("type").get("name") for x in types_dict]
-    return dash.get_asset_url(f"{types_list[0]}.png")
-
-
-@dash.callback(
-    Output(
-        component_id={"type": "home-out-pokemon-types-icon-2", "index": MATCH},
-        component_property="src",
-    ),
-    Input(
-        component_id={"type": "home-in-pokemon", "index": MATCH},
-        component_property="value",
-    ),
-)
-def update_pokemon_types_icon_2(pokemon_name):
-    try:
-        types_dict: dict = (
-            requests.get(f"https://pokeapi.co/api/v2/pokemon/{pokemon_name}")
-            .json()
-            .get("types")
-        )
-    except requests.JSONDecodeError:
-        return None
-    types_list = [x.get("type").get("name") for x in types_dict]
-    return dash.get_asset_url(f"{types_list[1]}.png")
+    return [html.Img(src=dash.get_asset_url(f"{x}.png")) for x in types_list]

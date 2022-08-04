@@ -33,15 +33,9 @@ def create_home_layout():
                                 "index": i,
                             },
                         ),
-                        html.Img(
+                        html.Div(
                             id={
-                                "type": "home-out-pokemon-types-icon-1",
-                                "index": i,
-                            },
-                        ),
-                        html.Img(
-                            id={
-                                "type": "home-out-pokemon-types-icon-2",
+                                "type": "home-out-pokemon-types-icons",
                                 "index": i,
                             },
                         ),
