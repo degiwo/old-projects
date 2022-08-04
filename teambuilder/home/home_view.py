@@ -33,7 +33,8 @@ def store_pokemon_team(
     input_pokemon: list[str], current_pokemon_team: dict[int, str]
 ) -> dict[int, str]:
     """Get all chosen Pokémon and store them in a dictionary
-    Example: {1: "bulbasaur", 2: "mew", 3: None, 4: None, 5: None, 6: None}
+    Example: {"1": "bulbasaur", "2": "mew", "3": None, "4": None, "5": None,
+    "6": None}
     """
     # TODO: State is currently useless
     current_pokemon_team = {i: name for (i, name) in enumerate(input_pokemon)}
@@ -46,12 +47,19 @@ def store_pokemon_team(
         component_property="src",
     ),
     Input(
+        component_id="home-store-pokemon-team",
+        component_property="data",
+    ),
+    State(
         component_id={"type": "home-in-pokemon", "index": MATCH},
-        component_property="value",
+        component_property="id",
     ),
 )
-def update_pokemon_sprite(pokemon_name: str) -> str:
-    """Get the URL to the sprite of the Pokémon"""
+def update_pokemon_sprite(pokemon_team: dict, state: dict) -> str:
+    """Get the URL to the sprite of the Pokémon.
+    Update when home-store-pokemon-team get changed,
+    lookup of index from home-in-pokemon."""
+    pokemon_name = pokemon_team.get(str(state.get("index")))
     try:
         output = (
             requests.get(f"https://pokeapi.co/api/v2/pokemon/{pokemon_name}")

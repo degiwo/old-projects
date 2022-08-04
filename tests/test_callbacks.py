@@ -15,7 +15,8 @@ def test_store_pokemon_team():
 
 
 def test_update_pokemon_sprite():
-    sprite = update_pokemon_sprite("bulbasaur")
+    pokemon_team = {"1": "bulbasaur", "2": "mew", "3": None}
+    sprite = update_pokemon_sprite(pokemon_team, {"index": 1})
     assert isinstance(sprite, str)
     assert sprite[-4:] == ".png"
     assert requests.get(sprite).ok
