@@ -64,7 +64,8 @@ def store_pokemon_team(input: list[str]) -> dict[str, dict[str, Union[str, list[
     ),
 )
 def update_pokemon_sprite(
-    pokemon_team: dict[str, str], state: dict[str, Union[str, int]]
+    pokemon_team: dict[str, dict[str, Union[str, list[str]]]],
+    state: dict[str, Union[str, int]],
 ) -> str:
     """Get the URL to the sprite of the Pokémon.
     Update when home-store-pokemon-team get changed,
@@ -83,6 +84,7 @@ def update_pokemon_sprite(
             "https://upload.wikimedia.org/wikipedia/commons"
             "/thumb/5/55/Question_Mark.svg/288px-Question_Mark.svg.png"
         )
+    print(output)
     return output
 
 
