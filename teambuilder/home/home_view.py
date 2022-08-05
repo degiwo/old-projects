@@ -27,12 +27,25 @@ def home_view() -> html.Div:
         component_property="value",
     ),
 )
-def store_pokemon_team(input: list[str]) -> dict[str, str]:
+def store_pokemon_team(input: list[str]) -> dict[str, dict[str, Union[str, list[str]]]]:
     """Get all chosen Pokémon and store them in a dictionary
-    Example: {'1': 'bulbasaur', '2': 'mew', '3': None,
-    '4': None, '5': None, '6': None}
+    Example: {'1': {'name': 'bulbasaur', 'types': ['grass', 'poison']},
+    '2': {'name': 'mew', 'types': ['psychic']},
+    '3': {'name': None, 'types': []}, ...}
     """
-    current_pokemon_team = {str(i): name for (i, name) in enumerate(input)}
+    current_pokemon_team = {}
+    for (i, name) in enumerate(input):
+        try:
+            types_dict: dict = (
+                requests.get(f"https://pokeapi.co/api/v2/pokemon/{name}")
+                .json()
+                .get("types")
+            )
+        except requests.JSONDecodeError:
+            types_dict = {}
+        types_list = [x.get("type").get("name") for x in types_dict]
+        member = {"name": name, "types": types_list}
+        current_pokemon_team.update({str(i): member})
     return current_pokemon_team
 
 
@@ -79,18 +92,17 @@ def update_pokemon_sprite(
         component_property="children",
     ),
     Input(
+        component_id="home-store-pokemon-team",
+        component_property="data",
+    ),
+    State(
         component_id={"type": "home-in-pokemon", "index": MATCH},
-        component_property="value",
+        component_property="id",
     ),
 )
-def update_pokemon_types_icons(pokemon_name: str) -> list[html.Img]:
-    try:
-        types_dict: dict = (
-            requests.get(f"https://pokeapi.co/api/v2/pokemon/{pokemon_name}")
-            .json()
-            .get("types")
-        )
-    except requests.JSONDecodeError:
-        return [html.Img(None)]
-    types_list = [x.get("type").get("name") for x in types_dict]
+def update_pokemon_types_icons(
+    pokemon_dict: dict[str, dict[str, Union[str, list[str]]]],
+    state: dict[str, Union[str, int]],
+) -> list[html.Img]:
+    types_list = pokemon_dict.get(str(state.get("index"))).get("types")
     return [html.Img(src=dash.get_asset_url(f"{x}.png")) for x in types_list]
