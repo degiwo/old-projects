@@ -8,10 +8,10 @@ from teambuilder.home.home_view import (
 
 
 def test_store_pokemon_team():
-    team = store_pokemon_team(["bulbasaur", "mew"], {})
+    team = store_pokemon_team(["bulbasaur", "mew"])
     assert isinstance(team, dict)
     assert len(team) > 0
-    assert team.get(0) == "bulbasaur"
+    assert team.get("0") == "bulbasaur"
 
 
 def test_update_pokemon_sprite():
