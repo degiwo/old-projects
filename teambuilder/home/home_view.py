@@ -70,7 +70,7 @@ def update_pokemon_sprite(
     Update when home-store-pokemon-team get changed,
     lookup of index from home-in-pokemon."""
     # state is of form: {'type': 'home-in-pokemon', 'index': 0}
-    pokemon_name = pokemon_team.get(str(state.get("index")))
+    pokemon_name = pokemon_team.get(str(state.get("index"))).get("name")
     try:
         output = (
             requests.get(f"https://pokeapi.co/api/v2/pokemon/{pokemon_name}")
