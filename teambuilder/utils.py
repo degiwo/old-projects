@@ -19,3 +19,11 @@ def get_all_pokemon():
         .get("results")
     ]
     return all_pokemon
+
+
+def get_all_types():
+    all_types = [
+        x.get("name")
+        for x in requests.get("https://pokeapi.co/api/v2/type").json().get("results")
+    ]
+    return all_types

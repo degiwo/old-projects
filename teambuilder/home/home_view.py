@@ -84,7 +84,6 @@ def update_pokemon_sprite(
             "https://upload.wikimedia.org/wikipedia/commons"
             "/thumb/5/55/Question_Mark.svg/288px-Question_Mark.svg.png"
         )
-    print(output)
     return output
 
 

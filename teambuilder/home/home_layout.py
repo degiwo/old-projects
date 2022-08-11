@@ -1,7 +1,9 @@
 """Layout of the home module"""
 
+import dash
+import requests
 from dash import dcc, html
-from teambuilder.utils import get_all_pokemon, get_version_groups
+from teambuilder.utils import get_all_pokemon, get_all_types, get_version_groups
 
 
 def create_home_layout():
@@ -43,6 +45,10 @@ def create_home_layout():
                 )
                 for i in range(6)
             ]
+        ),
+        # === Show type weaknesses of the team ===
+        html.Div(
+            [html.Img(src=dash.get_asset_url(f"{x}.png")) for x in get_all_types()]
         ),
         # === Store the chosen Pokémon here to share between callbacks ===
         dcc.Store(id="home-store-pokemon-team"),
