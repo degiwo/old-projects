@@ -1,0 +1,6 @@
+git init
+pyenv local 3.10.5
+poetry init
+poetry add dash
+poetry add -D flake8 black commitizen
+poetry shell
