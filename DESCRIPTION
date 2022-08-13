@@ -10,11 +10,18 @@ Description: A Shiny web application for Controlling.
 License: MIT + file LICENSE
 URL: https://github.com/degiwo/owcontrolling.git
 BugReports: https://github.com/degiwo/owcontrolling.git/issues
+Depends: 
+    R (>= 2.10)
 Imports: 
+    DT,
     config,
+    dplyr,
+    ggplot2,
     golem,
     processx,
-    shiny
+    shiny,
+    shinyWidgets,
+    shinydashboard
 Suggests: 
     covr,
     testthat
