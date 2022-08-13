@@ -5,4 +5,5 @@ from dash import Dash
 from teambuilder.home.home_view import home_view
 
 app = Dash(__name__, assets_folder="../assets")
+app_server = app.server
 app.layout = home_view()
