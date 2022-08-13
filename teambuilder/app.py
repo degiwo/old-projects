@@ -1,8 +1,16 @@
 """First level layout of application"""
 
-from dash import Dash
+import dash
+from dash import Dash, html
 
-from teambuilder.home.home_view import home_view
-
-app = Dash(__name__, assets_folder="../assets")
-app.layout = home_view()
+app = Dash(
+    __name__,
+    assets_folder="../assets",
+    use_pages=True,
+    # pages_folder="./pages",
+)
+app.layout = html.Div(
+    [
+        dash.page_container,
+    ]
+)
