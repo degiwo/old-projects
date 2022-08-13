@@ -8,4 +8,7 @@
         "editor.formatOnSave": true,
         "editor.codeActionsOnSave": {"source.organizeImports": true}
     },
+    "python.analysis.diagnosticSeverityOverrides": {
+        "reportGeneralTypeIssues": "none"
+    },
 }
