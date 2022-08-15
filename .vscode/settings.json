@@ -11,4 +11,6 @@
     "python.analysis.diagnosticSeverityOverrides": {
         "reportGeneralTypeIssues": "none"
     },
+    "python.terminal.activateEnvironment": true,
+    "python.terminal.activateEnvInCurrentTerminal": true,
 }
