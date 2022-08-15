@@ -3,11 +3,13 @@
 import dash
 import requests
 from dash import ALL, MATCH, Input, Output, State, html
-from teambuilder.home.home_layout import create_home_layout
+from teambuilder.pages.home.home_layout import create_home_layout
+
+dash.register_page(__name__, path="/")
 
 
 # === Layout definition ===
-def home_view() -> html.Div:
+def layout() -> html.Div:
     """Function to call in the application layout script.
     One reason why it get passed as a function (instead of an object) is that
     the asset folder works with dash.get_asset_url()."""
