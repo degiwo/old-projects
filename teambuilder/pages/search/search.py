@@ -1,6 +1,7 @@
 import dash
 import dash_bootstrap_components as dbc
-from dash import Input, Output, State, html
+from dash import Input, Output, State, dcc, html
+from teambuilder.utils import get_all_types
 
 dash.register_page(
     __name__,
@@ -30,7 +31,17 @@ def layout():
                 ]
             ),
             dbc.Offcanvas(
-                html.P("TEST"),
+                [
+                    "Type",
+                    dcc.Dropdown(
+                        get_all_types(),
+                        multi=True,
+                        style={
+                            "color": "black"
+                        },  # otherwise it is displayed white in dark mode
+                        id="search-dropdown-chosen-types",
+                    ),
+                ],
                 id="search-offcanvas-filters",
                 title="Choose filters",
                 is_open=False,
