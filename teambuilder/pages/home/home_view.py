@@ -1,5 +1,7 @@
 """Main script for the home module. Callbacks are defined here"""
 
+from typing import Union
+
 import dash
 import requests
 from dash import ALL, MATCH, Input, Output, State, html
@@ -26,19 +28,26 @@ def layout() -> html.Div:
         component_id={"type": "home-in-pokemon", "index": ALL},
         component_property="value",
     ),
-    State(
-        component_id="home-store-pokemon-team",
-        component_property="data",
-    ),
 )
-def store_pokemon_team(
-    input_pokemon: list[str], current_pokemon_team: dict[int, str]
-) -> dict[int, str]:
+def store_pokemon_team(input: list[str]) -> dict[str, dict[str, Union[str, list[str]]]]:
     """Get all chosen Pokémon and store them in a dictionary
-    Example: {1: "bulbasaur", 2: "mew", 3: None, 4: None, 5: None, 6: None}
+    Example: {'1': {'name': 'bulbasaur', 'types': ['grass', 'poison']},
+    '2': {'name': 'mew', 'types': ['psychic']},
+    '3': {'name': None, 'types': []}, ...}
     """
-    # TODO: State is currently useless
-    current_pokemon_team = {i: name for (i, name) in enumerate(input_pokemon)}
+    current_pokemon_team = {}
+    for (i, name) in enumerate(input):
+        try:
+            types_dict: dict = (
+                requests.get(f"https://pokeapi.co/api/v2/pokemon/{name}")
+                .json()
+                .get("types")
+            )
+        except requests.JSONDecodeError:
+            types_dict = {}
+        types_list = [x.get("type").get("name") for x in types_dict]
+        member = {"name": name, "types": types_list}
+        current_pokemon_team.update({str(i): member})
     return current_pokemon_team
 
 
@@ -48,12 +57,23 @@ def store_pokemon_team(
         component_property="src",
     ),
     Input(
+        component_id="home-store-pokemon-team",
+        component_property="data",
+    ),
+    State(
         component_id={"type": "home-in-pokemon", "index": MATCH},
-        component_property="value",
+        component_property="id",
     ),
 )
-def update_pokemon_sprite(pokemon_name: str) -> str:
-    """Get the URL to the sprite of the Pokémon"""
+def update_pokemon_sprite(
+    pokemon_team: dict[str, dict[str, Union[str, list[str]]]],
+    state: dict[str, Union[str, int]],
+) -> str:
+    """Get the URL to the sprite of the Pokémon.
+    Update when home-store-pokemon-team get changed,
+    lookup of index from home-in-pokemon."""
+    # state is of form: {'type': 'home-in-pokemon', 'index': 0}
+    pokemon_name = pokemon_team.get(str(state.get("index"))).get("name")
     try:
         output = (
             requests.get(f"https://pokeapi.co/api/v2/pokemon/{pokemon_name}")
@@ -75,18 +95,17 @@ def update_pokemon_sprite(pokemon_name: str) -> str:
         component_property="children",
     ),
     Input(
+        component_id="home-store-pokemon-team",
+        component_property="data",
+    ),
+    State(
         component_id={"type": "home-in-pokemon", "index": MATCH},
-        component_property="value",
+        component_property="id",
     ),
 )
-def update_pokemon_types_icons(pokemon_name: str) -> list[html.Img]:
-    try:
-        types_dict: dict = (
-            requests.get(f"https://pokeapi.co/api/v2/pokemon/{pokemon_name}")
-            .json()
-            .get("types")
-        )
-    except requests.JSONDecodeError:
-        return [html.Img(None)]
-    types_list = [x.get("type").get("name") for x in types_dict]
+def update_pokemon_types_icons(
+    pokemon_dict: dict[str, dict[str, Union[str, list[str]]]],
+    state: dict[str, Union[str, int]],
+) -> list[html.Img]:
+    types_list = pokemon_dict.get(str(state.get("index"))).get("types")
     return [html.Img(src=dash.get_asset_url(f"{x}.png")) for x in types_list]
