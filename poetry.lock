@@ -100,6 +100,20 @@ ci = ["xlrd (>=2.0.1)", "pandas (>=1.4.0)", "openpyxl", "pyarrow", "orjson (==3.
 celery = ["celery[redis] (>=5.1.2)", "redis (>=3.5.3)"]
 
 [[package]]
+name = "dash-bootstrap-components"
+version = "1.2.1"
+description = "Bootstrap themed components for use in Plotly Dash"
+category = "main"
+optional = false
+python-versions = ">=3.6, <4"
+
+[package.dependencies]
+dash = ">=2.0.0"
+
+[package.extras]
+pandas = ["pandas", "numpy"]
+
+[[package]]
 name = "dash-core-components"
 version = "2.0.0"
 description = "Core component suite for Dash"
@@ -454,7 +468,7 @@ watchdog = ["watchdog"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "a965f19dd940a8cd1d1920ebca09e7c292baa0b174a92b34c500ad944ebe12e3"
+content-hash = "a7214103ad2bbdcc0705f78dfd6b14620ad41f77ce5454dca5e9b1bca6546a16"
 
 [metadata.files]
 atomicwrites = []
@@ -474,6 +488,7 @@ colorama = [
     {file = "colorama-0.4.5.tar.gz", hash = "sha256:e6c6b4334fc50988a639d9b98aa429a0b57da6e17b9a44f0451f930b6967b7a4"},
 ]
 dash = []
+dash-bootstrap-components = []
 dash-core-components = []
 dash-html-components = []
 dash-table = []
