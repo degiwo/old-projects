@@ -20,22 +20,34 @@ def get_all_pokemon_names_of_type(chosen_type: str) -> list[str]:
     return [x.get("pokemon").get("name") for x in pokemon]
 
 
+async def get_infos_of_pokemon(
+    session: aiohttp.ClientSession, chosen_pokemon: str
+) -> dict[str, str]:
+    """Function to asynchronously get additional information of Pokémon"""
+    url = f"{URL_POKEAPI}/pokemon/{chosen_pokemon}"
+    async with session.get(url) as response:
+        pkmn = await response.json()
+        stats_dict = {
+            stat.get("stat").get("name"): stat.get("base_stat")
+            for stat in pkmn.get("stats")
+        }
+        return {"name": chosen_pokemon} | stats_dict  # merge two dictionaries
+
+
 def get_all_pokemon_data_of_type(chosen_type: str) -> list[dict[str, str]]:
-    """Returns the appropriate data for the table"""
+    """Returns the appropriate data for the table.
+    This is done via asynchronous tasks which are gathered at the end."""
     list_of_pokemon = get_all_pokemon_names_of_type(chosen_type)
 
-    async def main():
-        all_infos = []
+    async def main() -> list[dict[str, str]]:
+        list_of_all_pokemon_data = []
         async with aiohttp.ClientSession() as session:
-            for pokemon in list_of_pokemon:
-                url = f"{URL_POKEAPI}/pokemon/{pokemon}"
-                async with session.get(url) as response:
-                    pkmn = await response.json()
-                    stats_dict = {
-                        x.get("stat").get("name"): x.get("base_stat")
-                        for x in pkmn.get("stats")
-                    }
-                    all_infos.append({"name": pokemon} | stats_dict)
-        return all_infos
+            async_tasks = []
+            for pkmn in list_of_pokemon:
+                async_tasks.append(
+                    asyncio.ensure_future(get_infos_of_pokemon(session, pkmn))
+                )
+            list_of_all_pokemon_data = await asyncio.gather(*async_tasks)
+        return list_of_all_pokemon_data
 
     return asyncio.run(main())
