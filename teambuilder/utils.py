@@ -13,16 +13,16 @@ def get_all_types() -> list[str]:
     return [x for x in types if x not in ("unknown", "shadow")]
 
 
-def get_all_pokemon_of_type(chosen_type: str) -> list[str]:
+def get_all_pokemon_names_of_type(chosen_type: str) -> list[str]:
     """Returns a list of all Pokémon names with the chosen type"""
     url = f"{URL_POKEAPI}/type/{chosen_type}"
     pokemon = requests.get(url).json().get("pokemon")
     return [x.get("pokemon").get("name") for x in pokemon]
 
 
-def get_all_data_of_type(chosen_type: str) -> list[dict[str, str]]:
+def get_all_pokemon_data_of_type(chosen_type: str) -> list[dict[str, str]]:
     """Returns the appropriate data for the table"""
-    list_of_pokemon = get_all_pokemon_of_type(chosen_type)
+    list_of_pokemon = get_all_pokemon_names_of_type(chosen_type)
 
     async def main():
         all_infos = []

@@ -1,7 +1,7 @@
 import dash
 import dash_bootstrap_components as dbc
 from dash import Input, Output, State, dash_table, dcc, html
-from teambuilder.utils import get_all_data_of_type, get_all_types
+from teambuilder.utils import get_all_pokemon_data_of_type, get_all_types
 
 dash.register_page(
     __name__,
@@ -32,7 +32,7 @@ def layout():
             ),
             dbc.Row(
                 dash_table.DataTable(
-                    get_all_data_of_type("normal"),
+                    get_all_pokemon_data_of_type("normal"),
                     style_table={
                         "color": "black"
                     },  # otherwise it is displayed white in dark mode
