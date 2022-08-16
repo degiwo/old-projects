@@ -32,10 +32,10 @@ def layout():
             ),
             dbc.Row(
                 dash_table.DataTable(
-                    get_all_pokemon_data_of_type("normal"),
                     style_table={
                         "color": "black"
                     },  # otherwise it is displayed white in dark mode
+                    id="search-datatable-filtered-pokemon",
                 ),
             ),
             dbc.Offcanvas(
@@ -43,7 +43,7 @@ def layout():
                     "Type",
                     dcc.Dropdown(
                         get_all_types(),
-                        multi=True,
+                        # multi=True,
                         style={
                             "color": "black"
                         },  # otherwise it is displayed white in dark mode
@@ -76,3 +76,19 @@ def toggle_offcanvas_filters(click_on_button: int, canvas_state: bool) -> bool:
     if click_on_button:
         return not canvas_state
     return canvas_state
+
+
+@dash.callback(
+    Output(
+        component_id="search-datatable-filtered-pokemon",
+        component_property="data",
+    ),
+    Input(
+        component_id="search-dropdown-chosen-types",
+        component_property="value",
+    ),
+)
+def update_datatable_filtered_pokemon(input_type: str) -> list[dict[str, str]]:
+    if input_type:
+        return get_all_pokemon_data_of_type(input_type)
+    return []
