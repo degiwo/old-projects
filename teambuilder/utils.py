@@ -13,11 +13,17 @@ def get_all_types() -> list[str]:
     return [x for x in types if x not in ("unknown", "shadow")]
 
 
-def get_all_pokemon_names_of_type(chosen_type: str) -> list[str]:
-    """Returns a list of all Pokémon names with the chosen type"""
-    url = f"{URL_POKEAPI}/type/{chosen_type}"
-    pokemon = requests.get(url).json().get("pokemon")
-    return [x.get("pokemon").get("name") for x in pokemon]
+def get_all_pokemon_names_of_types(chosen_types: list[str]) -> list[str]:
+    """Returns a list of all Pokémon names with the chosen types"""
+    if chosen_types:
+        pokemon_of_types = []  # list of list of pokemon names for each type
+        for type in chosen_types:
+            resp = requests.get(f"{URL_POKEAPI}/type/{type}").json()
+            pkmn = [x.get("pokemon").get("name") for x in resp.get("pokemon")]
+            pokemon_of_types.append(pkmn)
+
+        return set.intersection(*map(set, pokemon_of_types))
+    return []
 
 
 async def get_infos_of_pokemon(
@@ -34,10 +40,9 @@ async def get_infos_of_pokemon(
         return {"name": chosen_pokemon} | stats_dict  # merge two dictionaries
 
 
-def get_all_pokemon_data_of_type(chosen_type: str) -> list[dict[str, str]]:
+def get_data_of_pokemon(list_of_pokemon: list[str]) -> list[dict[str, str]]:
     """Returns the appropriate data for the table.
     This is done via asynchronous tasks which are gathered at the end."""
-    list_of_pokemon = get_all_pokemon_names_of_type(chosen_type)
 
     async def main() -> list[dict[str, str]]:
         list_of_all_pokemon_data = []

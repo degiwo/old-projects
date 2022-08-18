@@ -1,7 +1,11 @@
 import dash
 import dash_bootstrap_components as dbc
 from dash import Input, Output, State, dash_table, dcc, html
-from teambuilder.utils import get_all_pokemon_data_of_type, get_all_types
+from teambuilder.utils import (
+    get_all_pokemon_names_of_types,
+    get_all_types,
+    get_data_of_pokemon,
+)
 
 dash.register_page(
     __name__,
@@ -43,7 +47,7 @@ def layout():
                     "Type",
                     dcc.Dropdown(
                         get_all_types(),
-                        # multi=True,
+                        multi=True,
                         style={
                             "color": "black"
                         },  # otherwise it is displayed white in dark mode
@@ -88,7 +92,8 @@ def toggle_offcanvas_filters(click_on_button: int, canvas_state: bool) -> bool:
         component_property="value",
     ),
 )
-def update_datatable_filtered_pokemon(input_type: str) -> list[dict[str, str]]:
-    if input_type:
-        return get_all_pokemon_data_of_type(input_type)
+def update_table_filtered_pokemon(types: list[str]) -> list[dict[str, str]]:
+    pokemon_of_chosen_types = get_all_pokemon_names_of_types(types)
+    if pokemon_of_chosen_types:
+        return get_data_of_pokemon(pokemon_of_chosen_types)
     return []
