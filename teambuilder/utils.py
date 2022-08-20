@@ -26,18 +26,24 @@ def get_all_pokemon_names_of_types(chosen_types: list[str]) -> list[str]:
     return []
 
 
-async def get_infos_of_pokemon(
+async def get_data_from_pokeapi(
     session: aiohttp.ClientSession, chosen_pokemon: str
 ) -> dict[str, str]:
-    """Function to asynchronously get additional information of Pokémon"""
+    """Function to asynchronously get additional information of Pokémon.
+    This should be the only place where you execute a GET to the pokemon route.
+    """
     url = f"{URL_POKEAPI}/pokemon/{chosen_pokemon}"
     async with session.get(url) as response:
         pkmn = await response.json()
+
+        sprite_dict = {"sprite": pkmn.get("sprites").get("front_default")}
         stats_dict = {
             stat.get("stat").get("name"): stat.get("base_stat")
             for stat in pkmn.get("stats")
         }
-        return {"name": chosen_pokemon} | stats_dict  # merge two dictionaries
+
+        # return merged dictionaries
+        return {"name": chosen_pokemon} | sprite_dict | stats_dict
 
 
 def get_data_of_pokemon(list_of_pokemon: list[str]) -> list[dict[str, str]]:
@@ -50,7 +56,7 @@ def get_data_of_pokemon(list_of_pokemon: list[str]) -> list[dict[str, str]]:
             async_tasks = []
             for pkmn in list_of_pokemon:
                 async_tasks.append(
-                    asyncio.ensure_future(get_infos_of_pokemon(session, pkmn))
+                    asyncio.ensure_future(get_data_from_pokeapi(session, pkmn))
                 )
             list_of_all_pokemon_data = await asyncio.gather(*async_tasks)
         return list_of_all_pokemon_data

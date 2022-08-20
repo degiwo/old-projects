@@ -36,10 +36,27 @@ def layout():
             ),
             dbc.Row(
                 dash_table.DataTable(
-                    style_table={
-                        "color": "black"
-                    },  # otherwise it is displayed white in dark mode
                     id="search-datatable-filtered-pokemon",
+                    hidden_columns=["sprite"],
+                    sort_action="native",
+                    style_cell={
+                        "background": "#505050",
+                        "textAlign": "left",
+                    },
+                    style_header={
+                        "background": "#282828",
+                    },
+                    css=[
+                        {
+                            "selector": ".dash-table-tooltip",
+                            "rule": "background-color: grey",
+                        },
+                        {
+                            "selector": ".show-hide",
+                            "rule": "display: none",
+                        },  # otherwise a useless toggle button is shown
+                        # because of hidden_columns
+                    ],
                 ),
             ),
             dbc.Offcanvas(
@@ -87,13 +104,29 @@ def toggle_offcanvas_filters(click_on_button: int, canvas_state: bool) -> bool:
         component_id="search-datatable-filtered-pokemon",
         component_property="data",
     ),
+    Output(
+        component_id="search-datatable-filtered-pokemon",
+        component_property="tooltip_data",
+    ),
     Input(
         component_id="search-dropdown-chosen-types",
         component_property="value",
     ),
 )
-def update_table_filtered_pokemon(types: list[str]) -> list[dict[str, str]]:
-    pokemon_of_chosen_types = get_all_pokemon_names_of_types(types)
-    if pokemon_of_chosen_types:
-        return get_data_of_pokemon(pokemon_of_chosen_types)
-    return []
+def update_datatable_filtered_pokemon(
+    chosen_types: list[str],
+) -> tuple[list[dict[str, str]], list[dict[str, dict[str, str]]]]:
+    pkmn_names_of_chosen_types = get_all_pokemon_names_of_types(chosen_types)
+    data_of_pokemon = get_data_of_pokemon(pkmn_names_of_chosen_types)
+    tooltips = [
+        {
+            "name": {
+                "value": f"![]({pkmn.get('sprite')})",
+                "type": "markdown",
+            }
+        }
+        for pkmn in data_of_pokemon
+    ]
+    if pkmn_names_of_chosen_types:
+        return data_of_pokemon, tooltips
+    return [], []
