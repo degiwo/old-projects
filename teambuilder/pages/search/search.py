@@ -116,6 +116,7 @@ def toggle_offcanvas_filters(click_on_button: int, canvas_state: bool) -> bool:
 def update_datatable_filtered_pokemon(
     chosen_types: list[str],
 ) -> tuple[list[dict[str, str]], list[dict[str, dict[str, str]]]]:
+    # TODO: tooltips after sorting table not correct
     pkmn_names_of_chosen_types = get_all_pokemon_names_of_types(chosen_types)
     data_of_pokemon = get_data_of_pokemon(pkmn_names_of_chosen_types)
     tooltips = [
