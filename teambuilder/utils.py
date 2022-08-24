@@ -13,6 +13,12 @@ def get_all_types() -> list[str]:
     return [x for x in types if x not in ("unknown", "shadow")]
 
 
+def get_all_abilities() -> list[str]:
+    """Returns a list of all Pokémon abilities ['stench', 'drizzle', ...]"""
+    url = URL_POKEAPI + "ability?limit=1000"  # NOTE: parameter limit
+    return [x.get("name") for x in requests.get(url).json().get("results")]
+
+
 def get_all_pokemon_names_of_types(chosen_types: list[str]) -> list[str]:
     """Returns a list of all Pokémon names with the chosen types"""
     if chosen_types:
@@ -23,6 +29,15 @@ def get_all_pokemon_names_of_types(chosen_types: list[str]) -> list[str]:
             pokemon_of_types.append(pkmn)
 
         return set.intersection(*map(set, pokemon_of_types))
+    return []
+
+
+def get_all_pokemon_names_of_ability(chosen_ability: str) -> list[str]:
+    """Return a list of all Pokémon names with the chosen ability"""
+    if chosen_ability:
+        resp = requests.get(f"{URL_POKEAPI}/ability/{chosen_ability}").json()
+        pkmn = [x.get("pokemon").get("name") for x in resp.get("pokemon")]
+        return pkmn
     return []
 
 

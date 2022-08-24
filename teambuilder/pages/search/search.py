@@ -2,6 +2,8 @@ import dash
 import dash_bootstrap_components as dbc
 from dash import Input, Output, State, dash_table, dcc, html
 from teambuilder.utils import (
+    get_all_abilities,
+    get_all_pokemon_names_of_ability,
     get_all_pokemon_names_of_types,
     get_all_types,
     get_data_of_pokemon,
@@ -70,6 +72,15 @@ def layout():
                         },  # otherwise it is displayed white in dark mode
                         id="search-dropdown-chosen-types",
                     ),
+                    html.Br(),
+                    "Ability",
+                    dcc.Dropdown(
+                        get_all_abilities(),
+                        style={
+                            "color": "black"
+                        },  # otherwise it is displayed white in dark mode
+                        id="search-dropdown-chosen-ability",
+                    ),
                 ],
                 id="search-offcanvas-filters",
                 title="Choose filters",
@@ -112,13 +123,27 @@ def toggle_offcanvas_filters(click_on_button: int, canvas_state: bool) -> bool:
         component_id="search-dropdown-chosen-types",
         component_property="value",
     ),
+    Input(
+        component_id="search-dropdown-chosen-ability",
+        component_property="value",
+    ),
 )
 def update_datatable_filtered_pokemon(
-    chosen_types: list[str],
+    chosen_types: list[str], chosen_ability: str
 ) -> tuple[list[dict[str, str]], list[dict[str, dict[str, str]]]]:
     # TODO: tooltips after sorting table not correct
+    relevant_pokemon = []
     pkmn_names_of_chosen_types = get_all_pokemon_names_of_types(chosen_types)
-    data_of_pokemon = get_data_of_pokemon(pkmn_names_of_chosen_types)
+    pkmn_names_of_chosen_ability = get_all_pokemon_names_of_ability(chosen_ability)
+    if chosen_ability and chosen_types:
+        relevant_pokemon = set.intersection(
+            *map(set, [pkmn_names_of_chosen_types, pkmn_names_of_chosen_ability])
+        )
+    elif chosen_ability:
+        relevant_pokemon = pkmn_names_of_chosen_ability
+    elif chosen_types:
+        relevant_pokemon = pkmn_names_of_chosen_types
+    data_of_pokemon = get_data_of_pokemon(relevant_pokemon)
     tooltips = [
         {
             "name": {
@@ -128,6 +153,6 @@ def update_datatable_filtered_pokemon(
         }
         for pkmn in data_of_pokemon
     ]
-    if pkmn_names_of_chosen_types:
+    if relevant_pokemon:
         return data_of_pokemon, tooltips
     return [], []
