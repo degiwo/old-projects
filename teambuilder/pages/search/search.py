@@ -86,6 +86,7 @@ def layout():
                 title="Choose filters",
                 is_open=False,
             ),
+            dcc.Store(id="search-store-filtered-pokemon"),
         ]
     )
 
@@ -112,12 +113,8 @@ def toggle_offcanvas_filters(click_on_button: int, canvas_state: bool) -> bool:
 
 @dash.callback(
     Output(
-        component_id="search-datatable-filtered-pokemon",
+        component_id="search-store-filtered-pokemon",
         component_property="data",
-    ),
-    Output(
-        component_id="search-datatable-filtered-pokemon",
-        component_property="tooltip_data",
     ),
     Input(
         component_id="search-dropdown-chosen-types",
@@ -128,22 +125,44 @@ def toggle_offcanvas_filters(click_on_button: int, canvas_state: bool) -> bool:
         component_property="value",
     ),
 )
-def update_datatable_filtered_pokemon(
+def update_store_filtered_pokemon(
     chosen_types: list[str], chosen_ability: str
-) -> tuple[list[dict[str, str]], list[dict[str, dict[str, str]]]]:
-    # TODO: tooltips after sorting table not correct
-    relevant_pokemon = []
-    pkmn_names_of_chosen_types = get_all_pokemon_names_of_types(chosen_types)
-    pkmn_names_of_chosen_ability = get_all_pokemon_names_of_ability(chosen_ability)
+) -> dict[str, list[str]]:
+    filtered_pokemon = []
+    pkmn_of_chosen_types = get_all_pokemon_names_of_types(chosen_types)
+    pkmn_of_chosen_ability = get_all_pokemon_names_of_ability(chosen_ability)
+    # TODO: there must be a better solution...
     if chosen_ability and chosen_types:
-        relevant_pokemon = set.intersection(
-            *map(set, [pkmn_names_of_chosen_types, pkmn_names_of_chosen_ability])
+        filtered_pokemon = set.intersection(
+            *map(set, [pkmn_of_chosen_types, pkmn_of_chosen_ability])
         )
     elif chosen_ability:
-        relevant_pokemon = pkmn_names_of_chosen_ability
+        filtered_pokemon = pkmn_of_chosen_ability
     elif chosen_types:
-        relevant_pokemon = pkmn_names_of_chosen_types
-    data_of_pokemon = get_data_of_pokemon(relevant_pokemon)
+        filtered_pokemon = pkmn_of_chosen_types
+    return {"list_of_filtered_pokemon": list(filtered_pokemon)}
+
+
+@dash.callback(
+    Output(
+        component_id="search-datatable-filtered-pokemon",
+        component_property="data",
+    ),
+    Output(
+        component_id="search-datatable-filtered-pokemon",
+        component_property="tooltip_data",
+    ),
+    Input(
+        component_id="search-store-filtered-pokemon",
+        component_property="data",
+    ),
+)
+def update_datatable_filtered_pokemon(
+    store_dict: dict[str, list[str]],
+) -> tuple[list[dict[str, str]], list[dict[str, dict[str, str]]]]:
+    # TODO: tooltips after sorting table not correct
+    filtered_pokemon = store_dict.get("list_of_filtered_pokemon")
+    data_of_pokemon = get_data_of_pokemon(filtered_pokemon)
     tooltips = [
         {
             "name": {
@@ -153,6 +172,6 @@ def update_datatable_filtered_pokemon(
         }
         for pkmn in data_of_pokemon
     ]
-    if relevant_pokemon:
+    if filtered_pokemon:
         return data_of_pokemon, tooltips
     return [], []
