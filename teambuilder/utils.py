@@ -19,6 +19,12 @@ def get_all_abilities() -> list[str]:
     return [x.get("name") for x in requests.get(url).json().get("results")]
 
 
+def get_all_moves() -> list[str]:
+    """Returns a list of all Pokémon moves ['pound', 'karate-chop', ...]"""
+    url = URL_POKEAPI + "move?limit=10000"  # NOTE: parameter limit
+    return [x.get("name") for x in requests.get(url).json().get("results")]
+
+
 def get_all_pokemon_names_of_types(chosen_types: list[str]) -> list[str]:
     """Returns a list of all Pokémon names with the chosen types"""
     if chosen_types:
@@ -38,6 +44,19 @@ def get_all_pokemon_names_of_ability(chosen_ability: str) -> list[str]:
         resp = requests.get(f"{URL_POKEAPI}/ability/{chosen_ability}").json()
         pkmn = [x.get("pokemon").get("name") for x in resp.get("pokemon")]
         return pkmn
+    return []
+
+
+def get_all_pokemon_names_of_moves(chosen_moves: list[str]) -> list[str]:
+    """Returns a list of all Pokémon names with the chosen moves"""
+    if chosen_moves:
+        pokemon_of_moves = []  # list of list of pokemon names for each move
+        for move in chosen_moves:
+            resp = requests.get(f"{URL_POKEAPI}/move/{move}").json()
+            pkmn = [x.get("name") for x in resp.get("learned_by_pokemon")]
+            pokemon_of_moves.append(pkmn)
+
+        return set.intersection(*map(set, pokemon_of_moves))
     return []
 
 

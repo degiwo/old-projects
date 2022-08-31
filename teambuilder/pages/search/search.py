@@ -3,7 +3,9 @@ import dash_bootstrap_components as dbc
 from dash import Input, Output, State, dash_table, dcc, html
 from teambuilder.utils import (
     get_all_abilities,
+    get_all_moves,
     get_all_pokemon_names_of_ability,
+    get_all_pokemon_names_of_moves,
     get_all_pokemon_names_of_types,
     get_all_types,
     get_data_of_pokemon,
@@ -81,6 +83,16 @@ def layout():
                         },  # otherwise it is displayed white in dark mode
                         id="search-dropdown-chosen-ability",
                     ),
+                    html.Br(),
+                    "Moves",
+                    dcc.Dropdown(
+                        get_all_moves(),
+                        multi=True,
+                        style={
+                            "color": "black"
+                        },  # otherwise it is displayed white in dark mode
+                        id="search-dropdown-chosen-moves",
+                    ),
                 ],
                 id="search-offcanvas-filters",
                 title="Choose filters",
@@ -124,22 +136,57 @@ def toggle_offcanvas_filters(click_on_button: int, canvas_state: bool) -> bool:
         component_id="search-dropdown-chosen-ability",
         component_property="value",
     ),
+    Input(
+        component_id="search-dropdown-chosen-moves",
+        component_property="value",
+    ),
 )
 def update_store_filtered_pokemon(
-    chosen_types: list[str], chosen_ability: str
+    chosen_types: list[str], chosen_ability: str, chosen_moves: list[str]
 ) -> dict[str, list[str]]:
     filtered_pokemon = []
     pkmn_of_chosen_types = get_all_pokemon_names_of_types(chosen_types)
     pkmn_of_chosen_ability = get_all_pokemon_names_of_ability(chosen_ability)
+    pkmn_of_chosen_moves = get_all_pokemon_names_of_moves(chosen_moves)
     # TODO: there must be a better solution...
-    if chosen_ability and chosen_types:
+    if chosen_ability and chosen_types and pkmn_of_chosen_moves:
         filtered_pokemon = set.intersection(
-            *map(set, [pkmn_of_chosen_types, pkmn_of_chosen_ability])
+            *map(
+                set,
+                [
+                    pkmn_of_chosen_types,
+                    pkmn_of_chosen_ability,
+                    pkmn_of_chosen_moves,
+                ],
+            )
+        )
+    elif chosen_ability and chosen_types:
+        filtered_pokemon = set.intersection(
+            *map(
+                set,
+                [pkmn_of_chosen_types, pkmn_of_chosen_ability],
+            )
+        )
+    elif chosen_ability and pkmn_of_chosen_moves:
+        filtered_pokemon = set.intersection(
+            *map(
+                set,
+                [pkmn_of_chosen_ability, pkmn_of_chosen_moves],
+            )
+        )
+    elif chosen_types and pkmn_of_chosen_moves:
+        filtered_pokemon = set.intersection(
+            *map(
+                set,
+                [pkmn_of_chosen_types, pkmn_of_chosen_moves],
+            )
         )
     elif chosen_ability:
         filtered_pokemon = pkmn_of_chosen_ability
     elif chosen_types:
         filtered_pokemon = pkmn_of_chosen_types
+    elif pkmn_of_chosen_moves:
+        filtered_pokemon = pkmn_of_chosen_moves
     return {"list_of_filtered_pokemon": list(filtered_pokemon)}
 
 
