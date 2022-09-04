@@ -48,6 +48,9 @@ def layout():
                             "name",
                             "type1",
                             "type2",  # TODO: better solution to force column?
+                            "ability1",
+                            "ability2",
+                            "ability3",  # TODO: same as type2
                             "hp",
                             "attack",
                             "defense",
