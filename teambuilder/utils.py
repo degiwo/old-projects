@@ -75,9 +75,13 @@ async def get_data_from_pokeapi(
             stat.get("stat").get("name"): stat.get("base_stat")
             for stat in pkmn.get("stats")
         }
+        types_dict = {
+            f"type{pkmn_type.get('slot')}": pkmn_type.get("type").get("name")
+            for pkmn_type in pkmn.get("types")
+        }
 
         # return merged dictionaries
-        return {"name": chosen_pokemon} | sprite_dict | stats_dict
+        return {"name": chosen_pokemon} | sprite_dict | types_dict | stats_dict
 
 
 def get_data_of_pokemon(list_of_pokemon: list[str]) -> list[dict[str, str]]:

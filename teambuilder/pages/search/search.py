@@ -38,10 +38,24 @@ def layout():
                     ),
                 ]
             ),
+            html.Br(),
             dbc.Row(
                 dash_table.DataTable(
                     id="search-datatable-filtered-pokemon",
-                    hidden_columns=["sprite"],
+                    columns=[
+                        {"name": x, "id": x}
+                        for x in [
+                            "name",
+                            "type1",
+                            "type2",  # TODO: better solution to force column?
+                            "hp",
+                            "attack",
+                            "defense",
+                            "special-attack",
+                            "special-defense",
+                            "speed",
+                        ]
+                    ],
                     sort_action="native",
                     style_cell={
                         "background": "#505050",
