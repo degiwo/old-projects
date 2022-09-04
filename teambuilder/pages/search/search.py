@@ -9,6 +9,7 @@ from teambuilder.utils import (
     get_all_pokemon_names_of_types,
     get_all_types,
     get_data_of_pokemon,
+    get_text_of_ability,
 )
 
 dash.register_page(
@@ -232,7 +233,19 @@ def update_datatable_filtered_pokemon(
             "name": {
                 "value": f"![]({pkmn.get('sprite')})",
                 "type": "markdown",
-            }
+            },
+            "ability1": {
+                "value": get_text_of_ability(pkmn.get("ability1")),
+                "type": "markdown",
+            },
+            "ability2": {
+                "value": get_text_of_ability(pkmn.get("ability2")),
+                "type": "markdown",
+            },
+            "ability3": {
+                "value": get_text_of_ability(pkmn.get("ability3")),
+                "type": "markdown",
+            },
         }
         for pkmn in data_of_pokemon
     ]

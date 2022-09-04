@@ -110,3 +110,19 @@ def get_data_of_pokemon(list_of_pokemon: list[str]) -> list[dict[str, str]]:
         return list_of_all_pokemon_data
 
     return asyncio.run(main())
+
+
+def get_text_of_ability(ability: str) -> str:
+    """Return the short description text of a ability."""
+    # TODO: use async to make faster
+    if ability:
+        url = f"{URL_POKEAPI}/ability/{ability}"
+        resp = requests.get(url).json().get("effect_entries")
+        return " ".join(
+            [
+                entry.get("short_effect")
+                for entry in resp
+                if entry.get("language").get("name") == "en"
+            ]
+        )
+    return ""
