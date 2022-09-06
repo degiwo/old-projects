@@ -16,6 +16,7 @@ knitr::opts_chunk$set(
 # edar
 
 <!-- badges: start -->
+[![R-CMD-check](https://github.com/degiwo/edar/workflows/R-CMD-check/badge.svg)](https://github.com/degiwo/edar/actions)
 <!-- badges: end -->
 
 The goal of edar is to provide easy to use functions for explorative data analysis with R.
