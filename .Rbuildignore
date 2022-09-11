@@ -1,0 +1,9 @@
+^renv$
+^renv\.lock$
+^shinypokedex\.Rproj$
+^\.Rproj\.user$
+^LICENSE\.md$
+^README\.Rmd$
+^\.github$
+^codecov\.yml$
+^\.pre-commit-config\.yaml$
