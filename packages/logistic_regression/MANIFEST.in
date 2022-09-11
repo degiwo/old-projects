@@ -1,0 +1,16 @@
+include *.txt
+include *.md
+include *.cfg
+include *.pkl
+recursive-include ./logistic_regression/*
+
+include logistic_regression/datasets/titanic.csv
+include logistic_regression/datasets/test.csv
+include logistic_regression/trained_models/*.pkl
+include logistic_regression/VERSION
+
+include ./requirements.txt
+exclude *.log
+
+recursive-exclude * __pycache__
+recursive-exclude * *.py[co]
