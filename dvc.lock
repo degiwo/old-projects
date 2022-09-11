@@ -1,7 +1,0 @@
-get_data:
-  cmd: dvc pull data.csv
-train_model:
-  cmd: echo "Training..."
-  deps:
-  - path: data.csv
-    md5: 62989cb335dabaa183875bd200b0e7f3
