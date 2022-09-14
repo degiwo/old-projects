@@ -9,6 +9,6 @@ def home_page():
     return render_template("home.html")
 
 
-@app.route("/about/<username>")
-def about_page(username):
-    return f"<h1>About {username}<h1>"
+@app.route("/about")
+def about_page():
+    return render_template("about.html", username="me")
