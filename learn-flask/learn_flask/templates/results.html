@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Results</h1>
+
+<table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Player</th>
+        <th scope="col">Frame</th>
+        <th scope="col">Opponent</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for result in results %}
+      <tr>
+        <th scope="row">{{ result.id }}</th>
+        <td>{{ result.player }}</td>
+        <td>{{ result.frame }}</td>
+        <td>{{ result.opponent }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+<form method="post">
+    <div class="input-group mb-3">
+        <select class="form-select" id="player1" name="player1" aria-label="Default select example">
+            <option selected disabled>Choose Player 1</option>
+            <option value="1">One</option>
+            <option value="2">Two</option>
+            <option value="3">Three</option>
+        </select>
+        <input type="number" class="form-control" id="frame1" name="frame1" placeholder="Frame 1" aria-label="Frame 1"
+            aria-describedby="frame1">
+        <p class="mx-3">-</p>
+        <input type="number" class="form-control" id="frame2" name="frame2" placeholder="Frame 2" aria-label="Frame 2"
+            aria-describedby="frame2">
+        <select class="form-select" id="player2" name="player2" aria-label="Default select example">
+            <option selected disabled>Choose Player 2</option>
+            <option value="1">One</option>
+            <option value="2">Two</option>
+            <option value="3">Three</option>
+        </select>
+    </div>
+
+    <div align="center">
+        <button type="submit" class="btn btn-primary">Add Result</button>
+    </div>
+</form>
+{% endblock %}

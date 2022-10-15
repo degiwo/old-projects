@@ -1,0 +1,13 @@
+{
+    "python.formatting.provider": "autopep8",
+    "python.linting.enabled": true,
+    "python.linting.flake8Enabled": true,
+    "python.linting.lintOnSave": true,
+    "python.analysis.typeCheckingMode": "basic",
+    "[python]": {
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {"source.organizeImports": true}
+    },
+    "python.terminal.activateEnvironment": true,
+    "python.terminal.activateEnvInCurrentTerminal": true,
+}

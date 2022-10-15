@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ super() }}
+- Sign Up
+{% endblock%}
+
+{% block content %}
+<h3>Sign up here</h3>
+<form method="post">
+  <div class="form-floating mb-3">
+    <input type="email" class="form-control" id="inputEmail" name="inputEmail" placeholder="name@example.com" />
+    <label for="inputEmail">Email address</label>
+  </div>
+  <div class="form-floating mb-3">
+    <input type="password" class="form-control" id="inputPassword1" name="inputPassword1" placeholder="Password" />
+    <label for="inputPassword">Password</label>
+  </div>
+  <div class="form-floating mb-3">
+    <input type="password" class="form-control" id="inputPassword2" name="inputPassword2" placeholder="Password" />
+    <label for="inputPassword">Confirm Password</label>
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+{% endblock %}

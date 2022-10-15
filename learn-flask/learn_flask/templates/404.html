@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+<!-- Amend error to title of base template -->
+{% block title %}
+{{ super() }}
+- Page Not Found
+{% endblock %}
+
+<!-- Content -->
+{% block content %}
+    <h1>Page Not Found</h1>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ super() }}
+- Log In
+{% endblock%}
+
+{% block content %}
+<h3>Log in here</h3>
+<form method="post">
+    <div class="form-floating mb-3">
+        <input type="email" class="form-control" id="inputEmail" name="inputEmail" placeholder="name@example.com" />
+        <label for="inputEmail">Email address</label>
+    </div>
+    <div class="form-floating mb-3">
+        <input type="password" class="form-control" id="inputPassword" name="inputPassword" placeholder="Password" />
+        <label for="inputPassword">Password</label>
+    </div>
+    <button type="submit" class="btn btn-primary">Login</button>
+</form>
+{% endblock %}
