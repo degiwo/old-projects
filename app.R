@@ -46,14 +46,20 @@ ENCOUNTERS_NAMES <- c(
 
 read_stats <- function() {
   stats <- read.csv("data/stats.csv", sep = ";", encoding = "UTF-8")
-  stats[1] <- apply(stats[1], 1, function(x) unlist(strsplit(x, "#(.[^A-Z]*) "))[2])
   names(stats) <- STATS_NAMES
+  
+  stats[1] <- apply(stats[1], 1, function(x) unlist(strsplit(x, "#(.[^A-Z]*) "))[2])
   return(stats)
 }
 
 read_encounters <- function() {
   encounters <- read.csv("data/encounters.csv", sep = ";", encoding = "UTF-8")
   names(encounters) <- ENCOUNTERS_NAMES
+  
+  encounters["Min_Level"] <- as.integer(ifelse(grepl("Lv.", encounters$Method), substr(encounters$Method, 5, 6), 0))
+  encounters <- encounters %>%
+    mutate(Location = as.factor(Location)) %>%
+    mutate(Milestone = as.factor(Milestone))
   return(encounters)
 }
 
@@ -91,7 +97,10 @@ server <- function(input, output) {
         "Ability2",
         "Milestone",
         "Method",
-      ) 
+        "Min_Level"
+      ) %>%
+      filter(Milestone != "Legendary") %>%
+      datatable(filter = 'top')
   })
 }
 

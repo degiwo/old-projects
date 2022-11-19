@@ -7,8 +7,8 @@ Pre Gym 1;Route 201;Starly;WE 30%;;
 Pre Gym 1;Route 202;Bidoof;WE 30%;;
 Pre Gym 1;Route 203;Pidgey;WE 20%;DAY (10% morning, 0% night);
 Pre Gym 1;Route 204;Kricketot;WE 10%;MORNING/NIGHT ONLY;
-Pre Gym 1;Route 205;Nidoran ♂;WE 10%;;
-Pre Gym 1;Route 206;Nidoran ♀;WE 10%;;
+Pre Gym 1;Route 205;Nidoran ♀;WE 10%;;
+Pre Gym 1;Route 206;Nidoran ♂;WE 10%;;
 Pre Gym 1;Route 207;Doduo;PR 22%;;
 Pre Gym 1;Lake Verity;Surskit;WE 20%;;
 Pre Gym 1;Lake Verity;Azurill;WE 10%;;
@@ -84,6 +84,12 @@ Pre Gym 1;Gym 1;Infernape;Lv. 36;Evolve Monferno;
 Pre Gym 1;Gym 1;Prinplup;Lv. 16;Evolve Piplup;
 Pre Gym 1;Gym 1;Empoleon;Lv. 36;Evolve Prinplup;
 Pre Gym 1;Gym 1;Vaporeon;Water Stone;Evolve Eevee;
+Pre Gym 1;Gym 1;Flareon;Fire Stone;Evolve Eevee;
+Pre Gym 1;Gym 1;Jolteon;Thunder Stone;Evolve Eevee;
+Pre Gym 1;Gym 1;Espeon;Sun Stone;Evolve Eevee;
+Pre Gym 1;Gym 1;Umbreon;Moon Stone;Evolve Eevee;
+Pre Gym 1;Gym 1;Glaceon;Ice Stone;Evolve Eevee;
+Pre Gym 1;Gym 1;Leafeon;Leaf Stone;Evolve Eevee;
 Pre Gym 1;Gym 1;Staravia;Lv. 14;Evolve Starly;
 Pre Gym 1;Gym 1;Staraptor;Lv. 34;Evolve Staravia;
 Pre Gym 1;Gym 1;Bibarel;Lv. 15;Evolve Bidoof;
@@ -101,7 +107,7 @@ Pre Gym 1;Gym 1;Wobbuffet;Lv. 15;Evolve Wynaut;
 Pre Gym 1;Gym 1;Luxio;Lv. 15;Evolve Shinx;
 Pre Gym 1;Gym 1;Luxray;Lv. 30;Evolve Luxio;
 Pre Gym 1;Gym 1;Linoone;Lv. 20;Evolve Zigzagoon;If you caught one without Pickup, use that.
-Pre Gym 1;Gym 1;Furrett;Lv. 15;Evolve Sentret;
+Pre Gym 1;Gym 1;Furret;Lv. 15;Evolve Sentret;
 Pre Gym 1;Gym 1;Noctowl;Lv. 20;Evolve Hoothoot;
 Pre Gym 1;Gym 1;Raticate;Lv. 20;Evolve Rattata;
 Pre Gym 1;Gym 1;Mightyena;Lv. 18;Evolve Poochyena;
@@ -118,14 +124,14 @@ Pre Gym 1;Gym 1;Gyarados;Lv. 20;Evolve Magikarp;
 Pre Gym 1;Gym 1;Lumineon;Lv. 31;Evolve Finneon;
 Pre Gym 1;Gym 1;Kingler;Lv. 28;Evolve Krabby;
 Pre Gym 1;Gym 1;Seadra;Lv. 32;Evolve Horsea;
-Pre Gym 1;Gym 1;Kingdra;Dragon Scale;Evolve Seadra;
+Pre Gym 1;Gym 1;Kingdra;Lv. 33 Dragon Scale;Evolve Seadra;
 Pre Gym 1;Gym 1;Poliwhirl;Lv. 25;Evolve Poliwag;
-Pre Gym 1;Gym 1;Politoed;King's Rock;Evolve Poliwhirl;Found with Pickup (Lv. 11-30)
+Pre Gym 1;Gym 1;Politoed;Lv. 25 King's Rock;Evolve Poliwhirl;Found with Pickup (Lv. 11-30)
 Pre Gym 1;Gym 1;Roserade;Shiny Stone;Evolve Roselia;Found with Pickup (Lv. 41+)
 Pre Gym 1;Gym 1;Weepinbell;Lv. 21;Evolve Bellsprout;
 Pre Gym 1;Gym 1;Kirlia;Lv. 20;Evolve Ralts;MUST evolve both
 Pre Gym 1;Gym 1;Gardevoir;Lv. 30;Evolve Kirlia;
-Pre Gym 1;Gym 1;Gallade;Dawn Stone;Evolve Male Kirlia;Found with Pickup (Lv. 51+)
+Pre Gym 1;Gym 1;Gallade;Lv. 20 Dawn Stone;Evolve Male Kirlia;Found with Pickup (Lv. 51+)
 Pre Gym 1;Gym 1;Metapod;Lv. 7;Evolve Caterpie;
 Pre Gym 1;Gym 1;Butterfree;Lv. 10;Evolve Metapod;
 Pre Gym 1;Gym 1;Kakuna;Lv. 7;Evolve Weedle;
@@ -146,13 +152,13 @@ Pre Gym 1;Gym 1;Hariyama;Lv. 24;Evolve Makuhita;
 Pre Gym 1;Gym 1;Whiscash;Lv. 30;Evolve Barboach;
 Pre Gym 1;Gym 1;Fearow;Lv. 20;Evolve Spearow;
 Pre Gym 1;Gym 1;Nuzleaf;Lv. 14;Evolve Seedot;
-Pre Gym 1;Gym 1;Lombra;Lv. 14;Evolve Lotad;
+Pre Gym 1;Gym 1;Lombre;Lv. 14;Evolve Lotad;
 Pre Gym 1;Gym 1;Marowak;Lv. 28;Evolve Cubone;
 Pre Gym 1;Gym 1;Kadabra;Lv. 16;Evolve Abra;
 Pre Gym 1;Gym 1;Alakazam;Lv. 36;Evolve Kadabra;
 Pre Gym 1;Gym 1;Forretress;Lv. 31;Evolve Pineco;
 Pre Gym 1;Gym 1;Golbat;Lv. 22;Evolve Zubat;Give Soothe Bell when you start grinding.
-Pre Gym 1;Gym 1;Crobat;Happiness Evo;Evolve Golbat;
+Pre Gym 1;Gym 1;Crobat;Lv. 23 Happiness Evo;Evolve Golbat;
 Pre Gym 1;Gym 1;Graveler;Lv. 25;Evolve Geodude;
 Pre Gym 1;Gym 1;Golem;Lv. 36;Evolve Graveler;
 Pre Gym 1;Gym 1;Dugtrio;Lv. 26;Evolve Diglett;
@@ -217,7 +223,6 @@ Pre Gym 2;Eterna Forest;Taillow;WE 10%;;
 Pre Gym 2;Old Chateau;Gastly;WE 40%;;Get Old Gateau in room left of entrance and back rightmost room. Make sure to keep hold of at least one for later.
 Pre Gym 2;Old Chateau;Duskull;WE 10%;;
 Pre Gym 2;Old Chateau;Shuppet;WE 10%;;
-Pre Gym 2;Old Chateau;Haunter;WE 5%;As this is a low encounter rate, only try to catch it if you find it while looking for your other encounters. Gastly is found at Level 15-18 so it will most likely be quicker to evolve that.;
 Pre Gym 2;Old Chateau;Gengar;SE 100%;In the room at the back with the glowing eyes. Interact with the painting and try to leave the room to encounter. SAVE BEFORE leaving the room as you can only do this once!!!;
 Pre Gym 2;Old Chateau;Rotom;SE 100%;Interact with TV in back room to encounter.;
 Pre Gym 2;Route 205 - North;Slowpoke;WE 20%;Catch 2;Get Water Stone south of lake.
@@ -257,19 +262,19 @@ Pre Gym 2;Route 216;Sneasel;WE 10%;;
 Pre Gym 2;Route 216;Delibird;PR 22%;;
 Pre Gym 2;Eterna City;Dratini;OR 10%;;
 Pre Gym 2;Eterna City;Chatot;Trade;Trade one of the Snorunt from Route 216, make sure to keep at least 1 Female.;
-Pre Gym 2;Gym 2;Nidoking;Moon Stone;Evolve Nidorino;"Now that you have completed all captures, you'll need to go underground with the Explorer Kit to get Evolution Stones. These are the items you'll need to get from the underground; 2 Moon Stones, 3 Water Stones, 3 Leaf Stones and 1 Sun Stone. In addition you'll also need 2 Dusk Stones, you'll likely have gotten these from your Pickup Zigzagoon as it's obtained from Level 31. If you don't have them then you'll have to find them. I recommend using Route 205/211 or Mt. Coronet for grinding, whilst there are areas with higher level encounters or a higher Exp yield, this is the nearest within a reasonable distance of a Poke Centre."
-Pre Gym 2;Gym 2;Nidoqueen;Moon Stone;Evolve Nidorina;
+Pre Gym 2;Gym 2;Nidoking;Lv. 16 Moon Stone;Evolve Nidorino;"Now that you have completed all captures, you'll need to go underground with the Explorer Kit to get Evolution Stones. These are the items you'll need to get from the underground; 2 Moon Stones, 3 Water Stones, 3 Leaf Stones and 1 Sun Stone. In addition you'll also need 2 Dusk Stones, you'll likely have gotten these from your Pickup Zigzagoon as it's obtained from Level 31. If you don't have them then you'll have to find them. I recommend using Route 205/211 or Mt. Coronet for grinding, whilst there are areas with higher level encounters or a higher Exp yield, this is the nearest within a reasonable distance of a Poke Centre."
+Pre Gym 2;Gym 2;Nidoqueen;Lv. 16 Moon Stone;Evolve Nidorina;
 Pre Gym 2;Gym 2;Arcanine;Fire Stone;Evolve Growlithe;
 Pre Gym 2;Gym 2;Starmie;Water Stone;Evolve Staryu;
 Pre Gym 2;Gym 2;Huntail;Deep Sea Tooth;Evolve Clamperl;
 Pre Gym 2;Gym 2;Gorebyss;Deep Sea Scale;Evolve Clamperl;
-Pre Gym 2;Gym 2;Poliwrath;Water Stone;Evolve Poliwhirl;If you didn't evolve the second Poliwag earlier, you'll need to do so now.
-Pre Gym 2;Gym 2;Victreebell;Leaf Stone;Evolve Weepinbell;
-Pre Gym 2;Gym 2;Vileplume;Leaf Stone;Evolve Gloom;If you didn't evolve the second Oddish earlier, you'll need to do so now.
-Pre Gym 2;Gym 2;Bellossom;Sun Stone;Evolve Gloom;
+Pre Gym 2;Gym 2;Poliwrath;Lv. 25 Water Stone;Evolve Poliwhirl;If you didn't evolve the second Poliwag earlier, you'll need to do so now.
+Pre Gym 2;Gym 2;Victreebel;Lv. 21 Leaf Stone;Evolve Weepinbell;
+Pre Gym 2;Gym 2;Vileplume;Lv. 21 Leaf Stone;Evolve Gloom;If you didn't evolve the second Oddish earlier, you'll need to do so now.
+Pre Gym 2;Gym 2;Bellossom;Lv. 21 Sun Stone;Evolve Gloom;
 Pre Gym 2;Gym 2;Sunflora;Sun Stone;Evolve Sunkern;
-Pre Gym 2;Gym 2;Shiftry;Leaf Stone;Evolve Nuzleaf;
-Pre Gym 2;Gym 2;Ludicolo;Water Stone;Evolve Lombre;
+Pre Gym 2;Gym 2;Shiftry;Lv. 14 Leaf Stone;Evolve Nuzleaf;
+Pre Gym 2;Gym 2;Ludicolo;Lv. 14 Water Stone;Evolve Lombre;
 Pre Gym 2;Gym 2;Steelix;Metal Coat;Evolve Onix;
 Pre Gym 2;Gym 2;Bayleef;Lv. 16;Evolve Chikorita;
 Pre Gym 2;Gym 2;Meganium;Lv. 32;Evolve Bayleef;
@@ -280,15 +285,15 @@ Pre Gym 2;Gym 2;Feraligatr;Lv. 30;Evolve Croconaw;
 Pre Gym 2;Gym 2;Cherrim;Lv. 25;Evolve Cherubi;
 Pre Gym 2;Gym 2;Breloom;Lv. 23;Evolve Shroomish;
 Pre Gym 2;Gym 2;Exeggutor;Leaf Stone;Evolve Exeggcute;
-Pre Gym 2;Gym 2;Tangrowth;Level up with Ancient Power;Evolve Tangela;Tangela learns Ancient Power at Lv. 34, it MUST learn it or it won't evolve.
+Pre Gym 2;Gym 2;Tangrowth;Lv. 34 Level up with Ancient Power;Evolve Tangela;Tangela learns Ancient Power at Lv. 34, it MUST learn it or it won't evolve.
 Pre Gym 2;Gym 2;Drapion;Lv. 30;Evolve Skorupi;
 Pre Gym 2;Gym 2;Magneton;Lv. 30;Evolve Magnemite;
-Pre Gym 2;Gym 2;Magnezone;Level up in Mt. Coronet;Evolve Magneton;
+Pre Gym 2;Gym 2;Magnezone;Lv. 31 Level up in Mt. Coronet;Evolve Magneton;
 Pre Gym 2;Gym 2;Electabuzz;Lv. 30;Evolve Elekid;
 Pre Gym 2;Gym 2;Manectric;Lv. 26;Evolve Electrike;
 Pre Gym 2;Gym 2;Electrode;Lv. 30;Evolve Voltorb;
 Pre Gym 2;Gym 2;Drifblim;Lv. 28;Evolve Drifloon;
-Pre Gym 2;Gym 2;Ambipom;Level up with Double Hit;Evolve Aipom;Aipom learns Double Hit at Lv. 32, it MUST learn it or it won't evolve.
+Pre Gym 2;Gym 2;Ambipom;Lv. 32 Level up with Double Hit;Evolve Aipom;Aipom learns Double Hit at Lv. 32, it MUST learn it or it won't evolve.
 Pre Gym 2;Gym 2;Vigoroth;Lv. 18;Evolve Slakoth;
 Pre Gym 2;Gym 2;Slaking;Lv. 36;Evolve Vigoroth;
 Pre Gym 2;Gym 2;Snorlax;Happiness Evo;Evolve Munchlax;
@@ -315,7 +320,7 @@ Pre Gym 2;Gym 2;Banette;Lv. 32;Evolve Shuppet;
 Pre Gym 2;Gym 2;Slowbro;Lv. 33;Evolve Slowpoke;
 Pre Gym 2;Gym 2;Slowking;King's Rock;Evolve Slowpoke;
 Pre Gym 2;Gym 2;Toxicroak;Lv. 33;Evolve Croagunk;
-Pre Gym 2;Gym 2;Yanmega;Level up with Ancient Power;Evolve Yanma;Yanma learns Ancient Power at Lv. 33, it MUST learn it or it won't evolve.
+Pre Gym 2;Gym 2;Yanmega;Lv. 33 Level up with Ancient Power;Evolve Yanma;Yanma learns Ancient Power at Lv. 33, it MUST learn it or it won't evolve.
 Pre Gym 2;Gym 2;Omastar;Lv. 30;Evolve Omanyte;
 Pre Gym 2;Gym 2;Kabutops;Lv. 30;Evolve Kabuto;
 Pre Gym 2;Gym 2;Cradily;Lv. 30;Evolve Lileep;
@@ -380,7 +385,7 @@ Pre Gym 3;Gym 3;Garchomp;Lv. 48;Evolve Gabite;
 Pre Gym 3;Gym 3;Delcatty;Moon Stone;Evolve Skitty;
 Pre Gym 3;Gym 3;Wigglytuff;Moon Stone;Evolve Jigglypuff;
 Pre Gym 3;Gym 3;Octillery;Lv. 25;Evolve Remoraid;
-Pre Gym 4;Route 212 - North;Manaphy;Gift Egg;Gift after finishing the story events in the Pokemon Mansion.;Get Lucky Egg from happiny in Pokemon Mansion.
+Legendary;Legendary;Manaphy;Gift Egg;Gift after finishing the story events in the Pokemon Mansion.;Get Lucky Egg from happiny in Pokemon Mansion.
 Pre Gym 4;Trophy Garden;Pichu;WE 20%;;
 Pre Gym 4;Trophy Garden;Pikachu;WE 10%;;
 Pre Gym 4;Trophy Garden;Igglybuff;WE 10%;;
@@ -403,32 +408,25 @@ Pre Gym 4;Route 210 - South;Pinsir;WE 10%;;
 Pre Gym 4;Route 210 - South;Miltank;WE 10%;;
 Pre Gym 4;Route 210 - South;Tauros;WE 10%;;
 Pre Gym 4;Route 215;Drowzee;WE 20%;;Get Razor Fang.
-Pre Gym 4;Route 215;Lickitung;WE 15%;;
-Pre Gym 4;Route 215;Hypno;WE 5%;Don't hunt it out. If you find one while looking for encounters then catch it but otherwise you're better off evolving Drowzee.;Get Razor Claw.
+Pre Gym 4;Route 215;Lickitung;WE 15%;;Get Razor Claw.
 Pre Gym 4;Route 215;Absol;PR 22%;;
 Pre Gym 4;Veilstone City;;;;No encounters here but you'll need to get the Dubious Disc from the man in the house behind the Poke Centre
 Pre Gym 4;Maniac Tunnel;Hippopotas;WE 15%;;
 Pre Gym 4;Maniac Tunnel;Ditto;WE 10%;;
 Pre Gym 4;Route 214;Cacnea;WE 10%;;Get a Sitrus Berry. If you get more, make sure to keep hold of one for later.
 Pre Gym 4;Route 214;Spinda;PR 22%;;
-Pre Gym 4;Gym 4;Flareon;Fire Stone;Evolve Eevee;
-Pre Gym 4;Gym 4;Jolteon;Thunder Stone;Evolve Eevee;
-Pre Gym 4;Gym 4;Espeon;Sun Stone;Evolve Eevee;
-Pre Gym 4;Gym 4;Umbreon;Moon Stone;Evolve Eevee;
-Pre Gym 4;Gym 4;Glaceon;Ice Stone;Evolve Eevee;
-Pre Gym 4;Gym 4;Leafeon;Leaf Stone;Evolve Eevee;
 Pre Gym 4;Gym 4;Porygon-Z;Dubious Disc;Evolve Porygon2;
-Pre Gym 4;Gym 4;Dusknoir;Reaper Cloth;Evolve Dusclops;
+Pre Gym 4;Gym 4;Dusknoir;Lv. 32 Reaper Cloth;Evolve Dusclops;
 Pre Gym 4;Gym 4;Weavile;Level up holding Razor Claw;Evolve Sneasel;MUST be done at night.
 Pre Gym 4;Gym 4;Gliscor;Level up holding Razor Fang;Evolve Gligar;MUST be done at night.
 Pre Gym 4;Gym 4;Raichu;Thunder Stone;Evolve Pikachu;
 Pre Gym 4;Gym 4;Ninetales;Fire Stone;Evolve Vulpix;
-Pre Gym 4;Gym 4;Sudowoodo;Level up with Mimic;Evolve Bonsly;Bonsly will already know Mimic when you catch it so just get it up by 1 level.
-Pre Gym 4;Gym 4;Mr. Mime;Level up with Mimic;Evolve Mime Jr.;Mime Jr. will already know Mimic when you catch it so just get it up by 1 level.
+Pre Gym 4;Gym 4;Sudowoodo;Lv. 18 Level up with Mimic;Evolve Bonsly;Bonsly will already know Mimic when you catch it so just get it up by 1 level.
+Pre Gym 4;Gym 4;Mr. Mime;Lv. 18 Level up with Mimic;Evolve Mime Jr.;Mime Jr. will already know Mimic when you catch it so just get it up by 1 level.
 Pre Gym 4;Gym 4;Granbull;Lv. 23;Evolve Snubbull;Obtained at Lv. 24+ so only needs 1 level.
 Pre Gym 4;Gym 4;Persian;Lv. 28;Evolve Meowth;
 Pre Gym 4;Gym 4;Blissey;Happiness Evo;Evolve Chansey;
-Pre Gym 4;Gym 4;Lickilicky;level up with Rollout;Evolve Lickitung;Lickitung learns Rollout at Lv. 33, it MUST learn it or it won't evolve.
+Pre Gym 4;Gym 4;Lickilicky;Lv. 33 level up with Rollout;Evolve Lickitung;Lickitung learns Rollout at Lv. 33, it MUST learn it or it won't evolve.
 Pre Gym 4;Gym 4;Scizor;Metal Coat;Evolve Scyther;
 Pre Gym 4;Gym 4;Hypno;Lv. 26;Evolve Drowzee;Only needed if you didn't catch one earlier.
 Pre Gym 4;Gym 4;Hippowdon;Lv. 34;Evolve Hippopotas;
@@ -447,12 +445,9 @@ Pre Gym 5;Great Marsh;Swalot;WE 10%;Area 5/6;
 Pre Gym 5;Route 212 - South;Grimer;WE 20%;;
 Pre Gym 5;Route 212 - South;Koffing;WE 15%;;
 Pre Gym 5;Route 212 - South;Ekans;WE 15%;;
-Pre Gym 5;Route 212 - South;Arbok;WE 5%;Don't hunt it out. If you find one while looking for encounters then catch it but otherwise you're better off evolving Ekans.;
-Pre Gym 5;Route 212 - South;Muk;PR 11%;These aren't required as you can evolve Grimer and Koffing, use your personal preference.;
-Pre Gym 5;Route 212 - South;Weezing;PR 11%;;
-Pre Gym 5;Gym 5;Electivire;Electirizer;Evolve Electabuzz;
-Pre Gym 5;Gym 5;Magmortar;Magmarizer;Evolve Magmar;
-Pre Gym 5;Gym 5;Mamoswine;Level up with Ancient Power;Evolve Piloswine;
+Pre Gym 5;Gym 5;Electivire;Lv. 30 Electirizer;Evolve Electabuzz;
+Pre Gym 5;Gym 5;Magmortar;Lv. 30 Magmarizer;Evolve Magmar;
+Pre Gym 5;Gym 5;Mamoswine;Lv. 33 Level up with Ancient Power;Evolve Piloswine;
 Pre Gym 5;Gym 5;Wailord;Lv. 36;Evolve Wailmer;
 Pre Gym 5;Gym 5;Sharpedo;Lv. 30;Evolve Carvanha;
 Pre Gym 5;Gym 5;Muk;Lv. 35;Evolve Grimer;Only needed if you didn't catch one earlier.
@@ -462,10 +457,48 @@ Pre Gym 6;Route 210 - North;Skarmory;WE 10%;;
 Pre Gym 6;Celestic Town;Relicanth;GR 10%;;Get HM03 Surf from Cynthia's Grandmother in the Ruins.
 Pre Gym 6;Mt. Coronet - Basement Lake;Seel;Su 30%;;
 Pre Gym 6;Route 219;Tentacool;Su 30%;;
-Pre Gym 6;Route 219;Tentacruel;Su 5%;Don't hunt it out as it's easier to evolve Tentacool later. Only catch it if you find it normally.;
 Pre Gym 6;Route 220;Luvdisc;GR 60%;;
 Pre Gym 6;Route 220;Corsola;GR 10%;;
 Pre Gym 6;Iron Island;Qwilfish;GR 10%;;Get Protector in first room on left on Entrance.
-Pre Gym 6;Gym 6;Rhyperior;Protector;Evolve Rhydon;
+Pre Gym 6;Gym 6;Rhyperior;Lv. 36 Protector;Evolve Rhydon;
 Pre Gym 6;Gym 6;Dewgong;Lv. 34;Evolve Seel;
 Pre Gym 6;Gym 6;Tentacruel;Lv. 30;Evolve Tentacool;Only needed if you didn't catch one earlier.
+Legendary;Legendary;Arceus;;;
+Legendary;Legendary;Shaymin;;;
+Legendary;Legendary;Shaymin (S);;;
+Legendary;Legendary;Darkrai;;;
+Legendary;Legendary;Phione;;;
+Legendary;Legendary;Cresselia;;;
+Legendary;Legendary;Giratina;;;
+Legendary;Legendary;Giratina (O);;;
+Legendary;Legendary;Regigigas;;;
+Legendary;Legendary;Heatran;;;
+Legendary;Legendary;Palkia;;;
+Legendary;Legendary;Dialga;;;
+Legendary;Legendary;Azelf;;;
+Legendary;Legendary;Mesprit;;;
+Legendary;Legendary;Uxie;;;
+Legendary;Legendary;Deoxys (N);;;
+Legendary;Legendary;Deoxys (A);;;
+Legendary;Legendary;Deoxys (D);;;
+Legendary;Legendary;Deoxys (S);;;
+Legendary;Legendary;Jirachi;;;
+Legendary;Legendary;Rayquaza;;;
+Legendary;Legendary;Groudon;;;
+Legendary;Legendary;Kyogre;;;
+Legendary;Legendary;Latios;;;
+Legendary;Legendary;Latias;;;
+Legendary;Legendary;Registeel;;;
+Legendary;Legendary;Regice;;;
+Legendary;Legendary;Regirock;;;
+Legendary;Legendary;Celebi;;;
+Legendary;Legendary;Ho-oh;;;
+Legendary;Legendary;Lugia;;;
+Legendary;Legendary;Suicune;;;
+Legendary;Legendary;Entei;;;
+Legendary;Legendary;Raikou;;;
+Legendary;Legendary;Mew;;;
+Legendary;Legendary;Mewtwo;;;
+Legendary;Legendary;Moltres;;;
+Legendary;Legendary;Zapdos;;;
+Legendary;Legendary;Articuno;;;
