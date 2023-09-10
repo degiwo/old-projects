@@ -11,6 +11,7 @@ class Team:
     Represents a football team.
     """
     name: str
+    strength: float
 
 @dataclass
 class TeamMatchStats:
@@ -34,10 +35,13 @@ class Game:
 
     def simulate_match(self) -> None:
         """
-        Simulate a football match between the two teams and update their scores.
+        Simulate a football match between the two teams and update their scores based on their strengths.
         """
-        team1_goals = random.randint(0, 5)
-        team2_goals = random.randint(0, 5)
+        team1_strength = self.team1_stats.team.strength
+        team2_strength = self.team2_stats.team.strength
+
+        team1_goals = max(0, round(random.gauss(2 + team1_strength, 1)))
+        team2_goals = max(0, round(random.gauss(2 + team2_strength, 1)))
 
         self.team1_stats.score += team1_goals
         self.team2_stats.score += team2_goals
@@ -52,10 +56,6 @@ class Game:
         team1_info = self.team1_stats
         team2_info = self.team2_stats
 
-        winner = (team1_info.team.name if team1_info.score > team2_info.score else
-                team2_info.team.name if team2_info.score > team1_info.score else
-                "No team")
-
         result = f"{team1_info.team.name} {team1_info.score} - {team2_info.score} {team2_info.team.name}"
         
         # Log the match result
@@ -63,8 +63,8 @@ class Game:
         return result
 
 if __name__ == "__main__":
-    team1 = Team("Team A")
-    team2 = Team("Team B")
+    team1 = Team("Team A", strength=0.8)
+    team2 = Team("Team B", strength=0.7)
     game = Game(team1, team2)
 
     game.simulate_match()
