@@ -1,6 +1,37 @@
+from dataclasses import dataclass, field
+from enum import Enum
 import logging
 import random
+
 from team import TeamMasterData, TeamMatchInfo
+
+class Outcome(Enum):
+    """
+    Enum to represent match outcomes (Win, Loss, Draw).
+    """
+    WIN = "Win"
+    LOSS = "Loss"
+    DRAW = "Draw"
+
+
+@dataclass
+class MatchResult:
+    """
+    A blueprint to represent all relevant information of a finished match.
+    """
+    team: TeamMasterData
+    goals: int
+    outcome: Outcome = field(init=False)  # Will be automatically calculated based on goals and goals_conceded
+    goals_conceded: int
+    opponent: TeamMasterData
+
+    def __post_init__(self):
+        if self.goals > self.goals_conceded:
+            self.outcome = Outcome.WIN
+        elif self.goals < self.goals_conceded:
+            self.outcome = Outcome.LOSS
+        else:
+            self.outcome = Outcome.DRAW
 
 
 class Match:
@@ -25,27 +56,29 @@ class Match:
         team1_strength = self.team1_match_info.team.strength
         team2_strength = self.team2_match_info.team.strength
 
-        team1_score = max(0, round(random.gauss(0.5 + team1_strength + (team1_strength - team2_strength), 1.5)))
-        team2_score = max(0, round(random.gauss(0.5 + team2_strength + (team2_strength - team1_strength), 1.5)))
+        team1_goals = max(0, round(random.gauss(0.5 + team1_strength + (team1_strength - team2_strength), 1.5)))
+        team2_goals = max(0, round(random.gauss(0.5 + team2_strength + (team2_strength - team1_strength), 1.5)))
 
-        self.team1_match_info.score += team1_score
-        self.team2_match_info.score += team2_score
+        self.team1_match_info.goals += team1_goals
+        self.team2_match_info.goals += team2_goals
         self._is_finished = True
 
-    def get_match_result(self) -> dict:
+    def get_match_result(self) -> MatchResult:
         """
         Get the result of the match log it.
 
         Returns:
-            dict: A dictionary describing the match result with all relevant team information.
+            MatchResult: A object describing the match result with all relevant team information.
         """
         if not self._is_finished:
             raise RuntimeError("Tried to get match result without simulation first. Please call simulate_match() first.")
         
-        result = {
-            "team": self.team1_match_info,
-            "opponent": self.team2_match_info
-        }
+        result = MatchResult(
+            team=self.team1_match_info.team,
+            goals=self.team1_match_info.goals,
+            goals_conceded=self.team2_match_info.goals,
+            opponent=self.team2_match_info.team
+        )
 
         logging.info(result)
         return result

@@ -13,7 +13,5 @@ if __name__ == "__main__":
     team2 = TeamMasterData("Team B", strength=random.random())
     team3 = TeamMasterData("Team C", strength=random.random())
     league = League([team1, team2, team3])
-    try:
-        league.simulate_season()
-    except RuntimeError as e:
-        logging.error(str(e))
+    league.simulate_season()
+    print(league.get_league_table())

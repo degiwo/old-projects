@@ -12,7 +12,7 @@ class TeamMasterData:
 @dataclass
 class TeamMatchInfo:
     """
-    Represents information of a football team in a match and starts naturally with 0 for every attribute.
+    A blueprint to represent information of a football team during a match and starts naturally with 0 for every attribute.
     """
     team: TeamMasterData
-    score: int = 0
+    goals: int = 0
