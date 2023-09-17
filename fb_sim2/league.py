@@ -15,6 +15,7 @@ class League:
         """
         self.teams = list(teams)
         self.match_results: list[MatchResult] = []
+        self.league_table = {}
 
     def simulate_season(self) -> None:
         """
@@ -28,43 +29,72 @@ class League:
             result = game.get_match_result()
             self.match_results.append(result)
 
+    def __add_match_result_to_league_table(self, match_result: MatchResult) -> None:
+        """
+        Helper function because we need to add the result for the home AND the away team.
+        """
+        team = match_result.team.name
+        opponent = match_result.opponent.name
+        goals = match_result.goals
+        goals_conceded = match_result.goals_conceded
+        outcome = match_result.outcome
+
+        if team not in self.league_table:
+            self.league_table[team] = {
+                "goals": 0,
+                "goals_conceded": 0,
+                "goals_difference": 0,
+                "wins": 0,
+                "draws": 0,
+                "losses": 0,
+                "points": 0
+            }
+        
+        if opponent not in self.league_table:
+            self.league_table[opponent] = {
+                "goals": 0,
+                "goals_conceded": 0,
+                "goals_difference": 0,
+                "wins": 0,
+                "draws": 0,
+                "losses": 0,
+                "points": 0
+            }
+
+        self.league_table[team]["goals"] += goals
+        self.league_table[opponent]["goals"] += goals_conceded
+
+        self.league_table[team]["goals_conceded"] += goals_conceded
+        self.league_table[opponent]["goals_conceded"] += goals
+
+        self.league_table[team]["goals_difference"] += (goals - goals_conceded)
+        self.league_table[opponent]["goals_difference"] += (goals_conceded - goals)
+
+        if outcome == Outcome.WIN:
+            self.league_table[team]["wins"] += 1
+            self.league_table[team]["points"] += 3
+            self.league_table[opponent]["losses"] += 1
+        elif outcome == Outcome.DRAW:
+            self.league_table[team]["draws"] += 1
+            self.league_table[team]["points"] += 1
+            self.league_table[opponent]["draws"] += 1
+            self.league_table[opponent]["points"] += 1
+        else:
+            self.league_table[team]["losses"] += 1
+            self.league_table[opponent]["wins"] += 1
+            self.league_table[opponent]["points"] += 3
+        
+        return self.league_table
+
     def get_league_table(self):
         """
-        Get the current league table.
+        Get the current league table by evaluating the match results.
         """
-        league_table = {}
-
         for result in self.match_results:
-            team = result.team.name
-            goals = result.goals
-            goals_conceded = result.goals_conceded
-            outcome = result.outcome
-
-            if team not in league_table:
-                league_table[team] = {
-                    "goals": 0,
-                    "goals_conceded": 0,
-                    "goals_difference": 0,
-                    "wins": 0,
-                    "draws": 0,
-                    "losses": 0,
-                    "points": 0
-                }
-            
-            league_table[team]["goals"] += goals
-            league_table[team]["goals_conceded"] += goals_conceded
-            league_table[team]["goals_difference"] += (goals - goals_conceded)
-            if outcome == Outcome.WIN:
-                league_table[team]["wins"] += 1
-                league_table[team]["points"] += 3
-            elif outcome == Outcome.DRAW:
-                league_table[team]["draws"] += 1
-                league_table[team]["points"] += 1
-            else:
-                league_table[team]["losses"] += 1
+            self.__add_match_result_to_league_table(result)
         
         sorted_league_table = sorted(
-            league_table.items(),
+            self.league_table.items(),
             key=lambda x: (x[1]["points"], x[1]["goals_difference"], x[1]["goals"]),
             reverse=True
         )
