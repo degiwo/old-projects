@@ -21,13 +21,16 @@ class League:
         """
         Simulate a season in the league.
         """
-        for _ in range(20):
-            team1, team2 = random.sample(self.teams, 2)
-            game = Match(team1, team2)
+        for i, team1 in enumerate(self.teams):
+            for j, team2 in enumerate(self.teams):
+                if i != j and j > i:  # Ensure teams are different and avoid duplicates
+                    home_match = Match(team1, team2)
+                    home_match.simulate_match()
+                    self.match_results.append(home_match.get_match_result())
 
-            game.simulate_match()
-            result = game.get_match_result()
-            self.match_results.append(result)
+                    away_match = Match(team2, team1)
+                    away_match.simulate_match()
+                    self.match_results.append(away_match.get_match_result())
 
     def __add_match_result_to_league_table(self, match_result: MatchResult) -> None:
         """
