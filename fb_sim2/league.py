@@ -1,4 +1,3 @@
-import random
 from typing import Iterable
 
 from match import Match, MatchResult, Outcome
@@ -93,6 +92,7 @@ class League:
         """
         Get the current league table by evaluating the match results.
         """
+        self.league_table = {}  # reset league table to avoid adding the same result multiple times
         for result in self.match_results:
             self.__add_match_result_to_league_table(result)
         
