@@ -19,6 +19,12 @@ def get_all_abilities() -> list[str]:
     return [x.get("name") for x in requests.get(url).json().get("results")]
 
 
+def get_all_moves() -> list[str]:
+    """Returns a list of all Pokémon moves ['pound', 'karate-chop', ...]"""
+    url = URL_POKEAPI + "move?limit=10000"  # NOTE: parameter limit
+    return [x.get("name") for x in requests.get(url).json().get("results")]
+
+
 def get_all_pokemon_names_of_types(chosen_types: list[str]) -> list[str]:
     """Returns a list of all Pokémon names with the chosen types"""
     if chosen_types:
@@ -41,6 +47,19 @@ def get_all_pokemon_names_of_ability(chosen_ability: str) -> list[str]:
     return []
 
 
+def get_all_pokemon_names_of_moves(chosen_moves: list[str]) -> list[str]:
+    """Returns a list of all Pokémon names with the chosen moves"""
+    if chosen_moves:
+        pokemon_of_moves = []  # list of list of pokemon names for each move
+        for move in chosen_moves:
+            resp = requests.get(f"{URL_POKEAPI}/move/{move}").json()
+            pkmn = [x.get("name") for x in resp.get("learned_by_pokemon")]
+            pokemon_of_moves.append(pkmn)
+
+        return set.intersection(*map(set, pokemon_of_moves))
+    return []
+
+
 async def get_data_from_pokeapi(
     session: aiohttp.ClientSession, chosen_pokemon: str
 ) -> dict[str, str]:
@@ -56,9 +75,23 @@ async def get_data_from_pokeapi(
             stat.get("stat").get("name"): stat.get("base_stat")
             for stat in pkmn.get("stats")
         }
+        types_dict = {
+            f"type{pkmn_type.get('slot')}": pkmn_type.get("type").get("name")
+            for pkmn_type in pkmn.get("types")
+        }
+        abilities_dict = {
+            f"ability{ability.get('slot')}": ability.get("ability").get("name")
+            for ability in pkmn.get("abilities")
+        }
 
         # return merged dictionaries
-        return {"name": chosen_pokemon} | sprite_dict | stats_dict
+        return (
+            {"name": chosen_pokemon}
+            | sprite_dict
+            | types_dict
+            | abilities_dict
+            | stats_dict
+        )
 
 
 def get_data_of_pokemon(list_of_pokemon: list[str]) -> list[dict[str, str]]:
@@ -77,3 +110,19 @@ def get_data_of_pokemon(list_of_pokemon: list[str]) -> list[dict[str, str]]:
         return list_of_all_pokemon_data
 
     return asyncio.run(main())
+
+
+def get_text_of_ability(ability: str) -> str:
+    """Return the short description text of a ability."""
+    # TODO: use async to make faster
+    if ability:
+        url = f"{URL_POKEAPI}/ability/{ability}"
+        resp = requests.get(url).json().get("effect_entries")
+        return " ".join(
+            [
+                entry.get("short_effect")
+                for entry in resp
+                if entry.get("language").get("name") == "en"
+            ]
+        )
+    return ""

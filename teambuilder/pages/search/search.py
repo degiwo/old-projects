@@ -21,10 +21,13 @@ import dash_bootstrap_components as dbc
 from dash import Input, Output, State, dash_table, dcc, html
 from teambuilder.utils import (
     get_all_abilities,
+    get_all_moves,
     get_all_pokemon_names_of_ability,
+    get_all_pokemon_names_of_moves,
     get_all_pokemon_names_of_types,
     get_all_types,
     get_data_of_pokemon,
+    get_text_of_ability,
 )
 
 dash.register_page(
@@ -62,10 +65,27 @@ def layout():
                     ),
                 ]
             ),
+            html.Br(),
             dbc.Row(
                 dash_table.DataTable(
                     id="search-datatable-filtered-pokemon",
-                    hidden_columns=["sprite"],
+                    columns=[
+                        {"name": x, "id": x}
+                        for x in [
+                            "name",
+                            "type1",
+                            "type2",  # TODO: better solution to force column?
+                            "ability1",
+                            "ability2",
+                            "ability3",  # TODO: same as type2
+                            "hp",
+                            "attack",
+                            "defense",
+                            "special-attack",
+                            "special-defense",
+                            "speed",
+                        ]
+                    ],
                     sort_action="native",
                     style_cell={
                         "background": "#505050",
@@ -106,6 +126,16 @@ def layout():
                             "color": "black"
                         },  # otherwise it is displayed white in dark mode
                         id="search-dropdown-chosen-ability",
+                    ),
+                    html.Br(),
+                    "Moves",
+                    dcc.Dropdown(
+                        get_all_moves(),
+                        multi=True,
+                        style={
+                            "color": "black"
+                        },  # otherwise it is displayed white in dark mode
+                        id="search-dropdown-chosen-moves",
                     ),
                 ],
                 id="search-offcanvas-filters",
@@ -168,22 +198,57 @@ def toggle_offcanvas_filters(click_on_button: int, canvas_state: bool) -> bool:
         component_id="search-dropdown-chosen-ability",
         component_property="value",
     ),
+    Input(
+        component_id="search-dropdown-chosen-moves",
+        component_property="value",
+    ),
 )
 def update_store_filtered_pokemon(
-    chosen_types: list[str], chosen_ability: str
+    chosen_types: list[str], chosen_ability: str, chosen_moves: list[str]
 ) -> dict[str, list[str]]:
     filtered_pokemon = []
     pkmn_of_chosen_types = get_all_pokemon_names_of_types(chosen_types)
     pkmn_of_chosen_ability = get_all_pokemon_names_of_ability(chosen_ability)
+    pkmn_of_chosen_moves = get_all_pokemon_names_of_moves(chosen_moves)
     # TODO: there must be a better solution...
-    if chosen_ability and chosen_types:
+    if chosen_ability and chosen_types and pkmn_of_chosen_moves:
         filtered_pokemon = set.intersection(
-            *map(set, [pkmn_of_chosen_types, pkmn_of_chosen_ability])
+            *map(
+                set,
+                [
+                    pkmn_of_chosen_types,
+                    pkmn_of_chosen_ability,
+                    pkmn_of_chosen_moves,
+                ],
+            )
+        )
+    elif chosen_ability and chosen_types:
+        filtered_pokemon = set.intersection(
+            *map(
+                set,
+                [pkmn_of_chosen_types, pkmn_of_chosen_ability],
+            )
+        )
+    elif chosen_ability and pkmn_of_chosen_moves:
+        filtered_pokemon = set.intersection(
+            *map(
+                set,
+                [pkmn_of_chosen_ability, pkmn_of_chosen_moves],
+            )
+        )
+    elif chosen_types and pkmn_of_chosen_moves:
+        filtered_pokemon = set.intersection(
+            *map(
+                set,
+                [pkmn_of_chosen_types, pkmn_of_chosen_moves],
+            )
         )
     elif chosen_ability:
         filtered_pokemon = pkmn_of_chosen_ability
     elif chosen_types:
         filtered_pokemon = pkmn_of_chosen_types
+    elif pkmn_of_chosen_moves:
+        filtered_pokemon = pkmn_of_chosen_moves
     return {"list_of_filtered_pokemon": list(filtered_pokemon)}
 
 
@@ -212,7 +277,19 @@ def update_datatable_filtered_pokemon(
             "name": {
                 "value": f"![]({pkmn.get('sprite')})",
                 "type": "markdown",
-            }
+            },
+            "ability1": {
+                "value": get_text_of_ability(pkmn.get("ability1")),
+                "type": "markdown",
+            },
+            "ability2": {
+                "value": get_text_of_ability(pkmn.get("ability2")),
+                "type": "markdown",
+            },
+            "ability3": {
+                "value": get_text_of_ability(pkmn.get("ability3")),
+                "type": "markdown",
+            },
         }
         for pkmn in data_of_pokemon
     ]
