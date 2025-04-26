@@ -1,4 +1,4 @@
-.PHONY: format lint typecheck check all
+.PHONY: format lint typecheck test check all
 
 # Format code using ruff
 format:
@@ -12,5 +12,9 @@ lint:
 typecheck:
 	uv run pyright
 
+# Run pytest
+test:
+	uv run pytest -v
+
 # Run all checks
-check: format lint typecheck
+check: format lint typecheck test
