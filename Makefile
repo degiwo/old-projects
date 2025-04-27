@@ -12,9 +12,9 @@ lint:
 typecheck:
 	uv run pyright
 
-# Run pytest
+# Run pytest with coverage
 test:
-	uv run pytest -v
+	uv run pytest -v --cov=app --cov-report=term-missing
 
 # Run all checks
 check: format lint typecheck test
