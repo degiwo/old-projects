@@ -2,6 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { FormControl, ReactiveFormsModule, FormGroup } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { environment } from './environment';
 
 @Component({
   selector: 'app-root',
@@ -12,6 +13,7 @@ import { HttpClient } from '@angular/common/http';
 export class App {
   protected readonly title = signal('frontend');
   private http = inject(HttpClient);
+  private apiUrl = environment.apiUrl;
 
   result = new FormGroup({
     score: new FormControl(0),
@@ -21,7 +23,7 @@ export class App {
 
   onSave() {
     console.log(this.result.value);
-    this.http.post('http://localhost:8000/result?score=' + this.result.value.score + '&score_opponent=' + this.result.value.score_opponent + '&name_opponent=' + this.result.value.name_opponent, {}).subscribe(response => {
+    this.http.post(this.apiUrl + '/result?score=' + this.result.value.score + '&score_opponent=' + this.result.value.score_opponent + '&name_opponent=' + this.result.value.name_opponent, {}).subscribe(response => {
       console.log(response);
     });
   }
