@@ -30,7 +30,7 @@ Base = declarative_base()
 class Word(Base):
     __tablename__ = "t_words"
     id = Column(Integer, primary_key=True, index=True)
-    russian = Column(String, nullable=False)
+    russian = Column(String, nullable=False, unique=True)
     german = Column(String, nullable=False)
     transliteration = Column(String, nullable=True)
 

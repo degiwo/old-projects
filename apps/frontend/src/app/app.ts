@@ -20,7 +20,7 @@ export class App {
       }
 
       const data = await response.json();
-      this.responseMessage.set(`${data.russian}, ${data.german}`);
+      this.responseMessage.set(`${data.russian} (${data.transliteration}), ${data.german}`);
     } catch (error) {
       this.responseMessage.set('Error during loading');
     }
