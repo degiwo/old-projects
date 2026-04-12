@@ -1,6 +1,28 @@
 <main class="app-shell">
   <button type="button" (click)="fetchItem()">Next Word</button>
-  <p>{{ responseMessage() }}</p>
+  
+  <div *ngIf="errorMessage()" class="error-message">
+    {{ errorMessage() }}
+  </div>
+  
+  <div class="word-container">
+    <p class="word-text">{{ russian() }} ({{ transliteration() }})</p>
+    
+    <button 
+      type="button" 
+      class="translation-toggle" 
+      (click)="toggleTranslation()"
+      [attr.aria-expanded]="isTranslationExpanded()"
+    >
+      Übersetzung {{ isTranslationExpanded() ? '▼' : '▶' }}
+    </button>
+    
+    @if (isTranslationExpanded()) {
+      <div class="translation-container">
+        {{ german() }}
+      </div>
+      }
+  </div>
 </main>
 
 <router-outlet />
