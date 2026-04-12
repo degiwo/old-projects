@@ -13,16 +13,16 @@ export class App {
 
   protected async fetchItem(): Promise<void> {
     try {
-      const response = await fetch(`${environment.apiUrl}/items/1`);
+      const response = await fetch(`${environment.apiUrl}/words`);
       if (!response.ok) {
-        this.responseMessage.set(`Fehler: ${response.status} ${response.statusText}`);
+        this.responseMessage.set(`Error: ${response.status} ${response.statusText}`);
         return;
       }
 
       const data = await response.json();
-      this.responseMessage.set(`item_id=${data.item_id}, q=${data.q}`);
+      this.responseMessage.set(`${data.russian}, ${data.german}`);
     } catch (error) {
-      this.responseMessage.set('Fehler beim Laden des Items');
+      this.responseMessage.set('Error during loading');
     }
   }
 }

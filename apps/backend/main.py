@@ -1,3 +1,4 @@
+import random
 import os
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException, Depends
@@ -26,10 +27,12 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base = declarative_base()
 
-class Item(Base):
-    __tablename__ = "t_items"
+class Word(Base):
+    __tablename__ = "t_words"
     id = Column(Integer, primary_key=True, index=True)
-    q = Column(String, index=True)
+    russian = Column(String, nullable=False)
+    german = Column(String, nullable=False)
+    transliteration = Column(String, nullable=True)
 
 # Create tables
 Base.metadata.create_all(bind=engine)
@@ -45,9 +48,9 @@ def get_db():
 async def root():
     return {"message": "Hello World"}
 
-@app.get("/items/{item_id}")
-def read_item(item_id: int, db: Session = Depends(get_db)):
-    item = db.query(Item).filter(Item.id == item_id).first()
-    if item is None:
-        raise HTTPException(status_code=404, detail="Item not found")
-    return {"item_id": item.id, "q": item.q}
+@app.get("/words")
+def get_random_word(db: Session = Depends(get_db)):
+    all_words = db.query(Word).all()
+    if not all_words:
+        raise HTTPException(status_code=404, detail="No words found")
+    return random.choice(all_words)
