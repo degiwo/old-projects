@@ -1,5 +1,6 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { environment } from '../environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -12,7 +13,7 @@ export class App {
 
   protected async fetchItem(): Promise<void> {
     try {
-      const response = await fetch('http://127.0.0.1:8000/items/1');
+      const response = await fetch(`${environment.apiUrl}/items/1`);
       if (!response.ok) {
         this.responseMessage.set(`Fehler: ${response.status} ${response.statusText}`);
         return;
