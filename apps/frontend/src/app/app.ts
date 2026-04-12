@@ -8,5 +8,20 @@ import { RouterOutlet } from '@angular/router';
   styleUrl: './app.scss'
 })
 export class App {
-  protected readonly title = signal('frontend');
+  protected readonly responseMessage = signal('');
+
+  protected async fetchItem(): Promise<void> {
+    try {
+      const response = await fetch('http://127.0.0.1:8000/items/1');
+      if (!response.ok) {
+        this.responseMessage.set(`Fehler: ${response.status} ${response.statusText}`);
+        return;
+      }
+
+      const data = await response.json();
+      this.responseMessage.set(`item_id=${data.item_id}, q=${data.q}`);
+    } catch (error) {
+      this.responseMessage.set('Fehler beim Laden des Items');
+    }
+  }
 }
