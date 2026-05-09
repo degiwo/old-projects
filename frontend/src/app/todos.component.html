@@ -1,0 +1,12 @@
+<div style="margin: 2rem;">
+  <h1>Todo App</h1>
+  <input [(ngModel)]="newTitle" placeholder="New todo" />
+  <button (click)="add()" [disabled]="!newTitle">Add</button>
+  <ul>
+    <li *ngFor="let t of todos">
+      <input type="checkbox" [checked]="t.completed" (change)="toggle(t)" />
+      <span [style.text-decoration]="t.completed ? 'line-through' : 'none'">{{ t.title }}</span>
+      <button (click)="delete(t)">Delete</button>
+    </li>
+  </ul>
+</div>
