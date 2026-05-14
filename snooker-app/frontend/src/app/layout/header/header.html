@@ -1,0 +1,11 @@
+<header class="app-header">
+  <div>
+    <a routerLink="/">MyApp</a>
+  </div>
+
+  <nav>
+    @for (item of navItems; track item.route) {
+    <a [routerLink]="item.route" routerLinkActive="active"> {{ item.label }} </a>
+    }
+  </nav>
+</header>

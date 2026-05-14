@@ -1,0 +1,12 @@
+<form class="match-form" [formGroup]="form" (ngSubmit)="submit()" aria-labelledby="match-form-title">
+  <h2 id="match-form-title" class="match-form__title">Match</h2>
+
+  <div class="match-form__row">
+    <label class="match-form__label" for="opponent">Opponent</label>
+    <input id="opponent" class="match-form__input" type="text" formControlName="opponent" aria-describedby="opponent-help opponent-error" />
+  </div>
+
+  <div class="match-form__actions">
+    <button type="submit" class="match-form__submit">Save</button>
+  </div>
+</form>
