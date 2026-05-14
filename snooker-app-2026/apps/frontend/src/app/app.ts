@@ -1,0 +1,32 @@
+import { Component, inject, signal } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
+import { FormControl, ReactiveFormsModule, FormGroup } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
+import { environment } from './environment';
+import {CardComponent} from './components/card/card.component';
+import {ResultForm} from './components/result-form/result-form';
+
+@Component({
+  selector: 'app-root',
+  imports: [RouterOutlet, ReactiveFormsModule, CardComponent, ResultForm],
+  templateUrl: './app.html',
+  styleUrl: './app.scss'
+})
+export class App {
+  protected readonly title = signal('frontend');
+  private http = inject(HttpClient);
+  private apiUrl = environment.apiUrl;
+
+  result = new FormGroup({
+    score: new FormControl(0),
+    score_opponent: new FormControl(0),
+    name_opponent: new FormControl('')
+  });
+
+  onSave() {
+    console.log(this.result.value);
+    this.http.post(this.apiUrl + '/result?score=' + this.result.value.score + '&score_opponent=' + this.result.value.score_opponent + '&name_opponent=' + this.result.value.name_opponent, {}).subscribe(response => {
+      console.log(response);
+    });
+  }
+}
