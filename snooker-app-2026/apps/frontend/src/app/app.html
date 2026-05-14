@@ -1,3 +1,5 @@
+<app-card></app-card>
+
 <form [formGroup]="result" (ngSubmit)="onSave()">
     <label for="score">Your Score:</label>
     <input type="number" formControlName="score">
@@ -7,9 +9,10 @@
 
     <label for="name_opponent">Opponent's Name:</label>
     <input type="text" formControlName="name_opponent">
-    
+
     <button type="submit">Save</button>
 </form>
 
+<app-result-form></app-result-form>
 
 <router-outlet />

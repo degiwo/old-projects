@@ -3,10 +3,12 @@ import { RouterOutlet } from '@angular/router';
 import { FormControl, ReactiveFormsModule, FormGroup } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { environment } from './environment';
+import {CardComponent} from './components/card/card.component';
+import {ResultForm} from './components/result-form/result-form';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, ReactiveFormsModule],
+  imports: [RouterOutlet, ReactiveFormsModule, CardComponent, ResultForm],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })

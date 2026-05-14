@@ -1,3 +1,5 @@
+from loguru import logger
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -12,4 +14,5 @@ app.add_middleware(
 
 @app.post("/result")
 def post_result(score: int, score_opponent: int, name_opponent: str):
+    logger.info(f"Received result: {score} - {score_opponent} against {name_opponent}")
     return {"message": f"Received result: {score} - {score_opponent} against {name_opponent}"}
