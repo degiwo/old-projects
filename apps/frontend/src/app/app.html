@@ -1,0 +1,57 @@
+<main class="app-shell">
+  <div class="controls">
+    <button type="button" (click)="fetchItem()">Next Word</button>
+    
+    <div class="mode-selector">
+      <label>
+        <input 
+          type="radio" 
+          name="mode" 
+          value="ru-de" 
+          [checked]="mode() === 'ru-de'"
+          (change)="mode.set('ru-de')"
+        />
+        RU → DE
+      </label>
+      <label>
+        <input 
+          type="radio" 
+          name="mode" 
+          value="de-ru" 
+          [checked]="mode() === 'de-ru'"
+          (change)="mode.set('de-ru')"
+        />
+        DE → RU
+      </label>
+    </div>
+  </div>
+  
+  @if (errorMessage()) {
+    <div class="error-message">
+      {{ errorMessage() }}
+    </div>
+  }
+  
+  @if (russian()) {
+    <div class="word-container">
+      <p class="word-text">{{ primaryText() }}</p>
+      
+      <button 
+        type="button" 
+        class="translation-toggle" 
+        (click)="toggleTranslation()"
+        [attr.aria-expanded]="isTranslationExpanded()"
+      >
+        {{ translationLabel() }} {{ isTranslationExpanded() ? '▼' : '▶' }}
+      </button>
+      
+      @if (isTranslationExpanded()) {
+        <div class="translation-container">
+          {{ translationText() }}
+        </div>
+      }
+    </div>
+  }
+</main>
+
+<router-outlet />
